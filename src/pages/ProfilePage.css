@@ -1,0 +1,105 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-white);
+  overflow-y: auto;
+}
+
+.profile-page__header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px 8px;
+}
+
+.profile-page__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.profile-page__avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+.profile-page__avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-page__avatar-edit {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white);
+}
+
+.profile-page__avatar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-page__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.profile-page__change-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.profile-page__fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.profile-page__field-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-medium);
+}
+
+.profile-page__field-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+.profile-page__edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.profile-page__edit-btn:hover {
+  background-color: var(--color-bg-default);
+}

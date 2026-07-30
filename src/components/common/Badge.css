@@ -1,0 +1,27 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.badge--default {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.badge--muted {
+  background-color: var(--color-text-muted);
+  color: var(--color-white);
+}
+
+.badge--danger {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+}

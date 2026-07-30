@@ -1,0 +1,126 @@
+.status-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-white);
+}
+
+.status-page__header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px 8px;
+}
+
+.status-page__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.status-page__my-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.status-page__my-status:hover {
+  background-color: var(--color-sidebar-item-hover);
+}
+
+.status-page__my-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.status-page__add-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white);
+}
+
+.status-page__my-content {
+  flex: 1;
+}
+
+.status-page__my-name {
+  display: block;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.status-page__my-time {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.status-page__section {
+  margin-top: 16px;
+}
+
+.status-page__section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  padding: 8px 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-page__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-page__loading {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.status-page__empty-text {
+  padding: 16px 20px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.status-page__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.status-page__item:hover {
+  background-color: var(--color-sidebar-item-hover);
+}
+
+.status-page__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.status-page__item-name {
+  display: block;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.status-page__item-time {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
