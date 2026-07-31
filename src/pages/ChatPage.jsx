@@ -1,5 +1,5 @@
 import { useApp } from '../contexts/AppContext';
-import { useChatMessages } from '../hooks/useChat';
+import { useChats, useChatMessages } from '../hooks/useChat';
 import Avatar from '../components/common/Avatar';
 import EmptyState from '../components/common/EmptyState';
 import MessageBubble from '../components/chat/MessageBubble';
@@ -7,10 +7,15 @@ import MessageInput from '../components/chat/MessageInput';
 import './ChatPage.css';
 
 export default function ChatPage() {
-  const { selectedChatId, chats } = useApp();
+  const { selectedChatId } = useApp();
+const { chats } = useChats();
   const { messages, loading } = useChatMessages(selectedChatId);
 
   const chat = selectedChatId ? chats.find((c) => c.id === selectedChatId) : null;
+
+  console.log("selectedChatId:", selectedChatId);
+console.log("chats:", chats);
+console.log("chat:", chat);
 
   if (!selectedChatId || !chat) {
     return (
