@@ -10,7 +10,7 @@ export default function ChatPage() {
   const { selectedChatId, chats } = useApp();
   const { messages, loading } = useChatMessages(selectedChatId);
 
-  const chat = selectedChatId ? chats.find((c) => c.id === selectedChatId) : null;
+  const chat = selectedChatId ? chats?.find((c) => c.id === selectedChatId) : null;
 
   if (!selectedChatId || !chat) {
     return (
