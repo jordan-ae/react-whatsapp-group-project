@@ -1,21 +1,22 @@
-import { useMemo } from 'react';
-import { useApi } from './useApi';
+import { useMemo } from "react";
+import { useApi } from "./useApi";
 
 export function useStatus() {
-  const { data: statusList, loading, error, refetch } = useApi('/status');
+  const { data: statusList, loading, error, refetch } = useApi("/status");
 
   const { myStatus, recentStatus, viewedStatus } = useMemo(() => {
-    if (!statusList) return { myStatus: null, recentStatus: [], viewedStatus: [] };
+    if (!statusList)
+      return { myStatus: null, recentStatus: [], viewedStatus: [] };
 
     const my = statusList.find(() => false);
     const recent = [];
     const viewed = [];
 
     statusList.forEach((s) => {
-      if (s.userId === 'user_me') return;
+      if (s.userId === "user_me") return;
       if (!s.viewed) {
         recent.push(s);
-      } else {
+      } else {              
         viewed.push(s);
       }
     });

@@ -15,6 +15,8 @@ export default function StatusPage() {
         name={statusItem.name}
         size="lg"
         status={statusItem.viewed ? 'read' : 'blue'}
+        recent={!statusItem.viewed}
+        viewed={statusItem.viewed}
       />
       <div className="status-page__item-content">
         <span className="status-page__item-name">{statusItem.name}</span>

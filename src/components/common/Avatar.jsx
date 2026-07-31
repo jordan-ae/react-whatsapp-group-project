@@ -1,6 +1,6 @@
 import './Avatar.css';
 
-export default function Avatar({ src, name, size = 'md', online, status, onClick }) {
+export default function Avatar({ src, name, size = 'md', online, status, onClick , recent, viewed}) {
   const initials = name
     ? name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
     : '?';
@@ -13,7 +13,7 @@ export default function Avatar({ src, name, size = 'md', online, status, onClick
   const bgColor = colors[colorIndex];
 
   return (
-    <div className={`avatar avatar--${size}`} onClick={onClick}>
+    <div className={`avatar avatar--${size} ${recent ? 'avatar--has-ring': ''} ${viewed ? 'avatar--viewed': ''}`} onClick={onClick} >
       {src ? (
         <img src={src} alt={name} className="avatar__img" />
       ) : (

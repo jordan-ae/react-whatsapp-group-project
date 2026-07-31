@@ -58,6 +58,23 @@
   background-color: var(--color-text-muted);
 }
 
+.avatar--has-ring,
+.avatar--viewed {
+  box-shadow:
+    0 0 0 2.5px var(--bg-main, #ffffff),
+    0 0 0 5px var(--ring-color);
+
+  margin: 2.5px;
+}
+
+.avatar--has-ring {
+  --ring-color: #0fd8ac;
+}
+
+.avatar--viewed {
+  --ring-color: #8696a0; /* Standard WhatsApp muted gray ring */
+}
+
 .avatar__status--online {
   background-color: var(--color-online);
 }
