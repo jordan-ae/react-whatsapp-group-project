@@ -1,10 +1,19 @@
 import Avatar from '../common/Avatar';
 import './SidebarHeader.css';
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '../../contexts/AppContext'
 
 export default function SidebarHeader() {
+  const navigate = useNavigate();
+  const { currentUser } = useApp();
+
   return (
     <div className="sidebar-header">
-      <Avatar name="Alex Rivera" size="md" online />
+      <button className="sidebar-header_avatar-btn"
+      onClick={() => navigate('/profile')}
+      >
+        <Avatar name ={currentUser?.name || 'Alex Rivera'} size="md" online />
+      </button>
       <div className="sidebar-header__actions">
         <button className="sidebar-header__btn" title="Status">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">

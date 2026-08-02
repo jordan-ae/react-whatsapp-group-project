@@ -4,8 +4,10 @@ import './ProfilePage.css';
 
 export default function ProfilePage() {
   const { currentUser } = useApp();
+  //console.log('currentUser:', currentUser)
 
-  if (!currentUser) return null;
+  if (!currentUser)
+    return <p>loading</p>
 
   return (
     <div className="profile-page">
