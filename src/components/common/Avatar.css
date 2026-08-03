@@ -4,6 +4,7 @@
   border-radius: var(--radius-full);
   overflow: hidden;
   cursor: pointer;
+  margin: 2.5px;
 }
 
 .avatar--sm {
@@ -61,10 +62,9 @@
 .avatar--has-ring,
 .avatar--viewed {
   box-shadow:
-    0 0 0 2.5px var(--bg-main, #ffffff),
-    0 0 0 5px var(--ring-color);
-
-  margin: 2.5px;
+    0 0 0  var(--avatar-ring-width) var(--bg-main),
+    0 0 0 var(--avatar-total-offset) var(--ring-color);
+  margin: var(--avatar-gap-width);
 }
 
 .avatar--has-ring {
@@ -72,7 +72,7 @@
 }
 
 .avatar--viewed {
-  --ring-color: #8696a0; /* Standard WhatsApp muted gray ring */
+  --ring-color: #8696a0; 
 }
 
 .avatar__status--online {

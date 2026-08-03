@@ -1,9 +1,9 @@
-import { useApp } from '../contexts/AppContext';
-import { useStatus } from '../hooks/useStatus';
-import Avatar from '../components/common/Avatar';
-import EmptyState from '../components/common/EmptyState';
-import { formatStatusTime } from '../utils/formatDate';
-import './StatusPage.css';
+import { useApp } from "../contexts/AppContext";
+import { useStatus } from "../hooks/useStatus";
+import Avatar from "../components/common/Avatar";
+import EmptyState from "../components/common/EmptyState";
+import { formatStatusTime } from "../utils/formatDate";
+import "./StatusPage.css";
 
 export default function StatusPage() {
   const { currentUser } = useApp();
@@ -14,9 +14,7 @@ export default function StatusPage() {
       <Avatar
         name={statusItem.name}
         size="lg"
-        status={statusItem.viewed ? 'read' : 'blue'}
-        recent={!statusItem.viewed}
-        viewed={statusItem.viewed}
+        ring={statusItem.viewed ? 'viewed' : 'unviewed'}
       />
       <div className="status-page__item-content">
         <span className="status-page__item-name">{statusItem.name}</span>
@@ -35,7 +33,7 @@ export default function StatusPage() {
 
       <div className="status-page__my-status">
         <div className="status-page__my-avatar">
-          <Avatar name={currentUser?.name || 'You'} size="lg" />
+          <Avatar name={currentUser?.name || "You"} size="lg" />
           <div className="status-page__add-btn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
@@ -45,7 +43,7 @@ export default function StatusPage() {
         <div className="status-page__my-content">
           <span className="status-page__my-name">My status</span>
           <span className="status-page__my-time">
-            {myStatus ? formatStatusTime(myStatus.timestamp) : 'No updates'}
+            {myStatus ? formatStatusTime(myStatus.timestamp) : "No updates"}
           </span>
         </div>
       </div>
