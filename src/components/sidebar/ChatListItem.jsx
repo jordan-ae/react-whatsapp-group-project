@@ -4,6 +4,7 @@ import { formatTime } from '../../utils/formatDate';
 import './ChatListItem.css';
 
 export default function ChatListItem({ chat, isActive, onClick }) {
+  const lastMsg = chat.lastMessage;
 
   return (
     <div
