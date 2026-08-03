@@ -4,7 +4,6 @@ import { formatTime } from '../../utils/formatDate';
 import './ChatListItem.css';
 
 export default function ChatListItem({ chat, isActive, onClick }) {
-  const lastMsg = chat.lastMessage;
 
   return (
     <div
@@ -20,15 +19,15 @@ export default function ChatListItem({ chat, isActive, onClick }) {
         <div className="chat-list-item__top">
           <span className="chat-list-item__name">{chat.name}</span>
           {lastMsg && (
-            <span className="chat-list-item__time">{formatTime(lastMsg.timestamp)}</span>
+            <span className="chat-list-item__time">{formatTime(chat.lastMessage?.timestamp)}</span>
           )}
         </div>
         <div className="chat-list-item__bottom">
           <span className="chat-list-item__message">
             {chat.type === 'group' && lastMsg?.senderName && (
-              <span className="chat-list-item__sender">{lastMsg.senderName}: </span>
+              <span className="chat-list-item__sender">{chat.lastMessage.senderName}: </span>
             )}
-            {lastMsg?.text || 'No messages yet'}
+            {chat.lastMessage?.text || 'No messages yet'}
           </span>
           <div className="chat-list-item__meta">
             {chat.muted && (
