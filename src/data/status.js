@@ -7,7 +7,7 @@ const status = [
     userId: 'user_me',
     name: 'Alex Rivera',
     timestamp: '2026-08-03T16:00:00z',
-    Viewed: false,
+    viewed: false,
     items: [
       {
         id: 'status_me_item_1',
