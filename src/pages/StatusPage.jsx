@@ -43,7 +43,7 @@ export default function StatusPage() {
         <div className="status-page__my-content">
           <span className="status-page__my-name">My status</span>
           <span className="status-page__my-time">
-            {myStatus ? formatStatusTime(myStatus.timestamp) : "No updates"}
+            {myStatus ? formatStatusTime(myStatus.timestamp) : "Tap to add status update"}
           </span>
         </div>
       </div>
