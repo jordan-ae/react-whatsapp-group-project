@@ -8,6 +8,7 @@ import './StatusPage.css';
 export default function StatusPage() {
   const { currentUser } = useApp();
   const { myStatus, recentStatus, viewedStatus, loading } = useStatus();
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const renderStatusItem = (statusItem) => (
     <div key={statusItem.id} className="status-page__item">

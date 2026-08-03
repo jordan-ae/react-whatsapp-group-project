@@ -6,8 +6,6 @@ import Avatar from '../common/Avatar';
 import ChatListItem from './ChatListItem';
 import SidebarHeader from './SidebarHeader';
 import './Sidebar.css';
-import { Link } from 'react-router-dom';
-import { useStatus } from '../../hooks/useStatus';
 
 export default function Sidebar() {
   const { activeTab, setActiveTab, searchQuery, setSearchQuery, selectedChatId, setSelectedChatId } = useApp();
@@ -25,8 +23,7 @@ export default function Sidebar() {
 
       <div className="sidebar__tabs">
         {tabs.map((tab) => (
-          <Link
-           to={tab.label}
+          <button
             key={tab.id}
             className={`sidebar__tab ${activeTab === tab.id ? 'sidebar__tab--active' : ''}`}
             onClick={() => {
@@ -35,7 +32,7 @@ export default function Sidebar() {
             }}
           >
             {tab.label}
-          </Link>
+          </button>
         ))}
       </div>
 
