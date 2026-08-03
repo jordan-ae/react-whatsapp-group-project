@@ -1,5 +1,6 @@
 import { useApp } from '../contexts/AppContext';
 import { useStatus } from '../hooks/useStatus';
+import { useState } from 'react';
 import Avatar from '../components/common/Avatar';
 import EmptyState from '../components/common/EmptyState';
 import { formatStatusTime } from '../utils/formatDate';
