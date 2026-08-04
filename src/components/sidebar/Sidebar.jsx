@@ -6,10 +6,12 @@ import Avatar from '../common/Avatar';
 import ChatListItem from './ChatListItem';
 import SidebarHeader from './SidebarHeader';
 import './Sidebar.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
   const { activeTab, setActiveTab, searchQuery, setSearchQuery, selectedChatId, setSelectedChatId } = useApp();
   const { chats, loading } = useChats(searchQuery);
+  const navigate = useNavigate();
 
   const tabs = [
     { id: 'chats', label: 'Chats' },
@@ -29,6 +31,7 @@ export default function Sidebar() {
             onClick={() => {
               setActiveTab(tab.id);
               setSelectedChatId(null);
+              navigate(`/${tab.id}`);
             }}
           >
             {tab.label}
