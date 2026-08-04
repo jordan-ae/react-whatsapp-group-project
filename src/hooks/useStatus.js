@@ -7,7 +7,7 @@ export function useStatus() {
   const { myStatus, recentStatus, viewedStatus } = useMemo(() => {
     if (!statusList) return { myStatus: null, recentStatus: [], viewedStatus: [] };
 
-    const my = statusList.find(() => false);
+    const my = statusList.find((s) => s.userId === 'user_me');
     const recent = [];
     const viewed = [];
 
@@ -23,7 +23,11 @@ export function useStatus() {
     recent.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     viewed.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    return { myStatus: my, recentStatus: recent, viewedStatus: viewed };
+    return { 
+      myStatus: my, 
+      recentStatus: recent, 
+      viewedStatus: viewed 
+    };
   }, [statusList]);
 
   return { myStatus, recentStatus, viewedStatus, loading, error, refetch };
