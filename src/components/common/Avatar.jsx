@@ -1,4 +1,5 @@
 import './Avatar.css';
+import { Link } from 'react-router-dom';
 
 export default function Avatar({ src, name, size = 'md', online, status, onClick }) {
   const initials = name
@@ -14,7 +15,8 @@ export default function Avatar({ src, name, size = 'md', online, status, onClick
 
   return (
     <div className={`avatar avatar--${size}`} onClick={onClick}>
-      {src ? (
+       <Link to="/profile">
+       {src ? (
         <img src={src} alt={name} className="avatar__img" />
       ) : (
         <div className="avatar__fallback" style={{ backgroundColor: bgColor }}>
@@ -26,7 +28,7 @@ export default function Avatar({ src, name, size = 'md', online, status, onClick
       )}
       {status && (
         <span className={`avatar__badge avatar__badge--${status}`} />
-      )}
+      )}</Link>
     </div>
   );
 }
