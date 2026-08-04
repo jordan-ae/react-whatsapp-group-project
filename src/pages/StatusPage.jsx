@@ -1,16 +1,23 @@
-import { useApp } from "../contexts/AppContext";
-import { useStatus } from "../hooks/useStatus";
-import Avatar from "../components/common/Avatar";
-import EmptyState from "../components/common/EmptyState";
-import { formatStatusTime } from "../utils/formatDate";
-import "./StatusPage.css";
+import { useApp } from '../contexts/AppContext';
+import { useStatus } from '../hooks/useStatus';
+import { useState } from 'react';
+import Avatar from '../components/common/Avatar';
+import EmptyState from '../components/common/EmptyState';
+import { formatStatusTime } from '../utils/formatDate';
+import './StatusPage.css';
+import StatusViewer from '../components/status/StatusViewer';
 
 export default function StatusPage() {
   const { currentUser } = useApp();
   const { myStatus, recentStatus, viewedStatus, loading } = useStatus();
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const renderStatusItem = (statusItem) => (
-    <div key={statusItem.id} className="status-page__item">
+    <div 
+      key={statusItem.id} 
+      className="status-page__item"
+      onClick={() => setSelectedStatus(statusItem)}
+    >
       <Avatar
         name={statusItem.name}
         size="lg"
@@ -68,6 +75,13 @@ export default function StatusPage() {
             {viewedStatus.map(renderStatusItem)}
           </div>
         </div>
+      )}
+
+      {selectedStatus && (
+        <StatusViewer
+           status={selectedStatus}
+           onClose={() => setSelectedStatus(null)}
+        />
       )}
     </div>
   );
