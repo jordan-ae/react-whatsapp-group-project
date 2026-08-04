@@ -28,3 +28,64 @@
 .sidebar-header__btn:hover {
   background-color: var(--color-sidebar-item-hover);
 }
+
+
+
+.menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.menu-icon-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.dropdown-menu {
+  position: absolute;
+  left: 100%;       
+  top: 0;          
+  margin-left: 0.5rem; 
+  background-color: #ffffff;
+  min-width: 160px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem 0;
+  z-index: 100;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
