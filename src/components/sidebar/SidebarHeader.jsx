@@ -1,10 +1,14 @@
 import Avatar from '../common/Avatar';
 import './SidebarHeader.css';
+import {useApp} from '../../contexts/AppContext'
 
 export default function SidebarHeader() {
+
+const {currentUser} = useApp()
+
   return (
     <div className="sidebar-header">
-      <Avatar name="Alex Rivera" size="md" online />
+      <Avatar name={currentUser?.name} size="md" online />
       <div className="sidebar-header__actions">
         <button className="sidebar-header__btn" title="Status">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
