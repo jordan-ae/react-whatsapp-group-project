@@ -27,7 +27,11 @@ export default function ProfilePage() {
           </div>
           <div className="profile-page__field">
             <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
+          </div>
+          <div className="profile-page__field">
             <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
           </div>
         </div>
       </div>
