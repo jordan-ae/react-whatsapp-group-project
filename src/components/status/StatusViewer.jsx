@@ -1,5 +1,5 @@
 import "./StatusViewer.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { STATUS_TYPES } from "../../utils/constants";
 import ImageWithFallback from "../common/ImageWithFallback";
 
@@ -26,6 +26,20 @@ export default function StatusViewer({ status, onClose }) {
         setCurrentIndex((prev) => prev - 1);
       }
     };
+
+    // Auto-advance with timer
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        if (currentIndex < status.items.length - 1) {
+          setCurrentIndex ((prev) => prev + 1);
+        } else {
+          onClose();
+        }
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }, [currentIndex, status,onClose]);
 
     return (
         <div className="status-viewer">
