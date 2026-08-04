@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -14,6 +15,14 @@ export default function ChatPage() {
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
     : null;
+
+    const buttomRef = useRef(null)
+
+    useEffect(() => {
+      buttomRef.current?.scrollIntoView({
+        behavior : 'smooth',
+      })
+    }, [messages])
 
   if (!selectedChatId || !chat) {
     return (
@@ -81,6 +90,7 @@ export default function ChatPage() {
             />
           ))
         )}
+        <div ref={buttomRef}></div>
       </div>
 
       <MessageInput />
