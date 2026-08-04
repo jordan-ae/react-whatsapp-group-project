@@ -1,21 +1,37 @@
 import Avatar from '../common/Avatar';
 import Badge from '../common/Badge';
 import { formatTime } from '../../utils/formatDate';
+import { useParams , Link} from "react-router-dom";
 import './ChatListItem.css';
 
-export default function ChatListItem({ chat, isActive, onClick }) {
+export default function ChatListItem({ chat, onClick }) {
   const lastMsg = chat.lastMessage;
 
+  //callt the useparams hook
+  const {chatId} = useParams()
+
+  //comparing the chat with chatId
+  const isActive = chat.id === chatId
+  
+
   return (
-    <div
-      className={`chat-list-item ${isActive ? 'chat-list-item--active' : ''}`}
-      onClick={onClick}
+
+    // {/* using link to display the actaul chat active and ease the  */}
+    <Link 
+    to={`./chat/${chat.id}`}
+    className={`chat-list-item ${isActive ? 'chat-list-item--active' : ''}`}
     >
+
+    {/*  <div
+       className={`chat-list-item ${isActive ? 'chat-list-item--active' : ''}`}
+      onClick={onClick}
+    >  */}
       <Avatar
         name={chat.name}
         size="md"
         status={chat.type === 'group' ? 'group' : undefined}
       />
+      
       <div className="chat-list-item__content">
         <div className="chat-list-item__top">
           <span className="chat-list-item__name">{chat.name}</span>
@@ -40,6 +56,7 @@ export default function ChatListItem({ chat, isActive, onClick }) {
           </div>
         </div>
       </div>
-    </div>
+    {/* </div> */}
+   </Link> 
   );
 }
