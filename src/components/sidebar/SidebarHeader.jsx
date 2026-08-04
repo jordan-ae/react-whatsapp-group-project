@@ -9,10 +9,11 @@ export default function SidebarHeader() {
 
   return (
     <div className="sidebar-header">
-      <button className="sidebar-header_avatar-btn"
+      <button className="sidebar-header__avatar-btn"
+      arial-label="Open your profile"
       onClick={() => navigate('/profile')}
       >
-        <Avatar name ={currentUser?.name || 'Alex Rivera'} size="md" online />
+        <Avatar name ={currentUser?.name} size="md" online />
       </button>
       <div className="sidebar-header__actions">
         <button className="sidebar-header__btn" title="Status">

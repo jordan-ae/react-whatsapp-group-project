@@ -4,10 +4,35 @@ import './ProfilePage.css';
 
 export default function ProfilePage() {
   const { currentUser } = useApp();
-  //console.log('currentUser:', currentUser)
 
-  if (!currentUser)
-    return <p>loading</p>
+  if (!currentUser) {
+    return (
+      <div className="profile-page">
+        <div className="profile-page__header">
+          <h2 className="profile-page__title">Profile</h2>
+        </div>
+
+        <div className="profile-page__avatar-section">
+          <div className="profile-page__skeleton profile-page__skeleton-avatar" />
+        </div>
+
+        <div className="profile-page__fields">
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
+          </div>
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
+          </div>
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="profile-page">
