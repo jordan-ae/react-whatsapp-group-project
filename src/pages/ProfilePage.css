@@ -110,8 +110,8 @@
 }
 
 .profile-page__skeleton-avatar {
-  width: 80px;
-  height: 80px;
+  width: var(--avatar-xl);
+  height: var(--avatar-xl);
   border-radius: var(--radius-full);
   flex-shrink: 0;
 }
