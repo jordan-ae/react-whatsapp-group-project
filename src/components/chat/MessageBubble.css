@@ -123,3 +123,7 @@
 .message-bubble__status--sent {
   color: var(--color-text-muted);
 }
+
+.message-bubble--grouped {
+  margin-top: 2px;
+}
