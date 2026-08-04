@@ -1,0 +1,23 @@
+# CodeRabbit configuration
+#
+# Automated AI review is switched OFF for this repository.
+# This is a teaching sprint — pull requests are reviewed by a human so students
+# get feedback pitched at what they're learning, not a wall of bot comments.
+#
+# Docs: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+reviews:
+  # Do not review pull requests automatically when they are opened or updated.
+  auto_review:
+    enabled: false
+    drafts: false
+  # Suppress the extra noise CodeRabbit posts alongside a review.
+  high_level_summary: false
+  review_status: false
+  poem: false
+  collapse_walkthrough: true
+  sequence_diagrams: false
+
+chat:
+  # Don't reply automatically to comments on PRs.
+  auto_reply: false
