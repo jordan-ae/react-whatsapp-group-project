@@ -8,6 +8,7 @@ export default function ProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (currentUser) {
@@ -15,7 +16,49 @@ export default function ProfilePage() {
     }
   }, [currentUser]);
 
-  if (!currentUser) return null;
+  function validateName() {
+    if (name.trim() === "") {
+      setError("Name cannot be empty.");
+      return false;
+    }
+
+    if (name.length > 25) {
+      setError("Name cannot be more than 25 characters.");
+      return false;
+    }
+
+    setError("");
+    return true;
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="profile-page">
+        <div className="profile-page__header">
+          <h2 className="profile-page__title">Profile</h2>
+        </div>
+
+        <div className="profile-page__avatar-section">
+          <div className="profile-page__skeleton profile-page__skeleton-avatar" />
+        </div>
+
+        <div className="profile-page__fields">
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
+          </div>
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-value" />
+          </div>
+          <div className="profile-page__field">
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="profile-page__skeleton profile-page__skeleton-label" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page">
@@ -47,11 +90,18 @@ export default function ProfilePage() {
 
           <div className="profile-page__field-value">
             {isEditing ? (
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                  onBlur={validateName}
+                />
+
+                {error && <p className="profile-page__error">{error}</p>}
+              </>
             ) : (
               <span>{currentUser.name}</span>
             )}

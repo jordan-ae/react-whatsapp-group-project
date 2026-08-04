@@ -1,6 +1,25 @@
 import { STATUS_TYPES } from '../utils/constants';
 
 const status = [
+
+  {
+    id: 'status_me',
+    userId: 'user_me',
+    name: 'Alex Rivera',
+    timestamp: '2026-08-03T16:00:00z',
+    viewed: false,
+    items: [
+      {
+        id: 'status_me_item_1',
+        type: STATUS_TYPES.TEXT,
+        text: 'Hello everyone!  👋  Excited to start my day',
+        backgroundColor: '#3b82f6',
+        textColor: '#ffffff',
+        timestamp: '2026-07-03T16:00:00Z',
+      },
+    ],
+  },
+
   {
     id: 'status_1',
     userId: 'user_2',

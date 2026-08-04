@@ -103,3 +103,9 @@
 .profile-page__edit-btn:hover {
   background-color: var(--color-bg-default);
 }
+
+.profile-page__error {
+  color: red;
+  font-size: 12px;
+  margin-top: 6px;
+}
