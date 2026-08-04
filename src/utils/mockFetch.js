@@ -1,4 +1,4 @@
-const delay = (ms) => new Promise((res) => setTimeout(res, 3000));
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export const mockFetch = async (url, options = {}) => {
   await delay(200 + Math.random() * 300);
