@@ -52,3 +52,31 @@
   margin-top: 16px;
   text-align: center;
 }
+
+.previous,
+.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.previous {
+  left: 20px;
+}
+
+.next {
+  right: 20px;
+}
+
+.previous:hover,
+.next:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
