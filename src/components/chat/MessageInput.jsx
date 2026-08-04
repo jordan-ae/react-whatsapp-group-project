@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./MessageInput.css";
 import { mockFetch } from "../../utils/mockFetch";
 import { useParams } from "react-router-dom";
-import { useApp } from "../../contexts/AppContext";
 
 export default function MessageInput() {
   const [text, setText] = useState("");
