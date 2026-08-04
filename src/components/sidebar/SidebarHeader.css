@@ -28,3 +28,10 @@
 .sidebar-header__btn:hover {
   background-color: var(--color-sidebar-item-hover);
 }
+
+.sidebar-header__avatar-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
