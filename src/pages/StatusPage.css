@@ -146,3 +146,26 @@
   width: 70%;
   height: 16px;
 }
+
+.profile-page__skeleton {
+  background-color: var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+}
+
+.profile-page__skeleton-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.profile-page__skeleton-label {
+  width: 60px;
+  height: 12px;
+}
+
+.profile-page__skeleton-value {
+  width: 70%;
+  height: 16px;
+  margin-top: 6px;
+}
