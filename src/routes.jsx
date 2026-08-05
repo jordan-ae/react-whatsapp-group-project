@@ -1,4 +1,4 @@
- import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './contexts/AppContext';
 import MainLayout from './layouts/MainLayout';
 import ChatPage from './pages/ChatPage';

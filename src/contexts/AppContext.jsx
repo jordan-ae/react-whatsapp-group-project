@@ -19,9 +19,22 @@ export function AppProvider({ children }) {
     mockFetch("/me").then(setCurrentUser);
   }, []);
 
+  const updateAbout = async (newAbout) => {
+    try {
+      await mockFetch(`/users/${currentUser.id}/profile`, {
+        method: "PUT",
+        body: JSON.stringify({ about: newAbout }),
+      });
+      setCurrentUser((prev) => ({ ...prev, about: newAbout }));
+    } catch (err) {
+      console.error("updateAbout failed:", err);
+    }
+  };
+
   const value = {
     currentUser,
     setCurrentUser,
+    updateAbout,
     activeTab,
     setActiveTab,
     selectedChatId,
