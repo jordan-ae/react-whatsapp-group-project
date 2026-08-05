@@ -6,16 +6,11 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
-//this line was added
-import { useParams } from "react-router-dom";
-import Modal from "../components/common/Modal.jsx";
-import { useState } from "react";
+import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
 
 export default function ChatPage() {
   const { chats } = useChats();
-  //this line was added
-  const { chatId } = useParams();
   //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
@@ -40,6 +35,13 @@ export default function ChatPage() {
       behavior: "smooth",
     });
   }, [messages]);
+
+  const userNames = {}
+  chats.forEach(chat => {
+    if (chat.type === "individual") {
+      userNames[chat.userId] = chat.name
+    }
+  })
 
   if (!selectedChatId || !chat) {
     return (
@@ -138,6 +140,8 @@ export default function ChatPage() {
                   key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
+                  senderName={userNames[msg.senderId]}
+                  isGroup={chat.type === CHAT_TYPES.GROUP}
                 />
               </>
             );
