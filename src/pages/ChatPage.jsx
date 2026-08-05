@@ -75,18 +75,28 @@ export default function ChatPage() {
             subtitle="Start a conversation!"
           />
         ) : (
-          messages.map((msg) => (
-            <MessageBubble
-              key={msg.id}
-              message={msg}
-              isOwn={msg.senderId === 'user_me'}
-            />
-          ))
+          messages.map((msg, index) => {
+            const previousMessage = messages[index - 1];
+
+            const grouped = Boolean(
+              previousMessage &&
+              previousMessage.senderId === msg.senderId
+            );
+
+            return (
+              <MessageBubble
+                key={msg.id}
+                message={msg}
+                isOwn={msg.senderId === 'user_me'}
+                grouped={grouped}
+              />
+            );
+          })
         )}
         <div ref={bottomRef}></div>
       </div>
 
-      <MessageInput />
+      <MessageInput chatId={selectedChatId} />
     </div>
   );
 }
