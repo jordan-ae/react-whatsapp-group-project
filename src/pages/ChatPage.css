@@ -35,6 +35,17 @@
   text-overflow: ellipsis;
 }
 
+.chat-page__date-label {
+  width: fit-content;
+  margin: 12px auto;
+  padding: 6px 12px;
+  background: #d9fdd3;
+  color: #54656f;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .chat-page__header-status {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);

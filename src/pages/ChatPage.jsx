@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
 import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
+import { formatDateLabel } from "../utils/formatDate";
+import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -16,13 +18,20 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
-    const buttomRef = useRef(null)
+  const buttomRef = useRef(null);
 
-    useEffect(() => {
-      buttomRef.current?.scrollIntoView({
-        behavior : 'smooth',
-      })
-    }, [messages])
+  useEffect(() => {
+    buttomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
+  const userNames = {}
+  chats.forEach(chat => {
+    if (chat.type === "individual") {
+      userNames[chat.userId] = chat.name
+    }
+  })
 
   if (!selectedChatId || !chat) {
     return (
@@ -82,13 +91,31 @@ export default function ChatPage() {
             subtitle="Start a conversation!"
           />
         ) : (
-          messages.map((msg) => (
-            <MessageBubble
-              key={msg.id}
-              message={msg}
-              isOwn={msg.senderId === "user_me"}
-            />
-          ))
+          messages.map((msg, index) => {
+            const previous = messages[index - 1];
+
+            const showDate =
+              !previous ||
+              new Date(previous.timestamp).toDateString() !==
+                new Date(msg.timestamp).toDateString();
+
+            return (
+              <Fragment key={msg.id}>
+                {showDate && (
+                  <div className="chat-page__date-label">
+                    {formatDateLabel(msg.timestamp)}
+                  </div>
+                )}
+
+                <MessageBubble
+                  message={msg}
+                  isOwn={msg.senderId === "user_me"}
+                  senderName={userNames[msg.senderId]}
+                  isGroup={chat.type === CHAT_TYPES.GROUP}
+                />
+              </Fragment>
+            );
+          })
         )}
         <div ref={buttomRef}></div>
       </div>
