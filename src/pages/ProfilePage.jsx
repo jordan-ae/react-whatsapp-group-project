@@ -9,10 +9,13 @@ export default function ProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [about, setAbout] = useState("");
 
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
+      setAbout(currentUser.about || "Hey there! I am using WhatsApp Clone.");
     }
   }, [currentUser]);
 
@@ -125,11 +128,20 @@ export default function ProfilePage() {
           <label className="profile-page__field-label">About</label>
 
           <div className="profile-page__field-value">
-            <span>
-              {currentUser.about || "Hey there! I am using WhatsApp Clone"}
-            </span>
+            {isEditingAbout ? (
+              <input
+                type="text"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+              />
+            ) : (
+              <span>{about}</span>
+            )}
 
-            <button className="profile-page__edit-btn">
+            <button
+              className="profile-page__edit-btn"
+              onClick={() => setIsEditingAbout(true)}
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="20"
