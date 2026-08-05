@@ -1,6 +1,7 @@
 import "./StatusViewer.css";
 import { useState } from "react";
 import { STATUS_TYPES } from "../../utils/constants";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 export default function StatusViewer({ status, onClose }) {
    
@@ -67,11 +68,12 @@ export default function StatusViewer({ status, onClose }) {
                   
                     {currentItem.type === STATUS_TYPES.IMAGE && (
                         <div className="status-viewer__image-wrapper">
-                            <img 
-                              src={currentItem.imageUrl || ""}
+                            <ImageWithFallback
+                              src={currentItem.imageUrl}
                               alt={currentItem.caption || "status"}
-                              className="status-viewer__image" 
-                              />
+                              className="status-viewer__image"
+                              fallbackLabel="This status image couldn't be loaded"
+                            />
 
                    <p>{currentItem.caption}</p>
                 </div>
