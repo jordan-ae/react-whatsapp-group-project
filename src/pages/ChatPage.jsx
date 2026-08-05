@@ -7,6 +7,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import "./ChatPage.css";
+import { useEffect, useRef } from "react";
 
 export default function ChatPage() {
   const { selectedChatId } = useApp();
@@ -24,7 +25,6 @@ export default function ChatPage() {
       behavior: "smooth",
     });
   }, [messages]);
-    
 
   if (!selectedChatId || !chat) {
     return (
@@ -119,6 +119,7 @@ export default function ChatPage() {
             <div ref={bottomRef}></div>
           </Fragment>
         )}
+        <div ref={buttomRef}></div>
       </div>
 
       <MessageInput onSent={refetch}/>
