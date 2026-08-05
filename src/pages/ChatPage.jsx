@@ -7,12 +7,26 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import "./ChatPage.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ChatPage() {
   const { selectedChatId } = useApp();
   const { chats } = useChats();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
+
+  const [sentMessages, setSentMessages] = useState([]);
+
+  useEffect(() => {
+    if (messages) {
+      setSentMessages(messages)
+    } else {
+      setSentMessages([])
+    }
+  }, [messages, selectedChatId])
+
+  const handleSent = (newMsg) => {
+    setSentMessages((prev) => [...prev, newMsg])
+  }
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
@@ -80,7 +94,7 @@ export default function ChatPage() {
       <div className="chat-page__messages">
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
-        ) : messages.length === 0 ? (
+        ) : sentMessages.length === 0 ? (
           <EmptyState
             title="No messages yet"
             subtitle="Start a conversation!"
@@ -121,7 +135,7 @@ export default function ChatPage() {
         )}
       </div>
 
-      <MessageInput onSent={refetch}/>
+      <MessageInput onSent={handleSent}/>
     </div>
   );
 }
