@@ -96,7 +96,7 @@ export default function ChatPage() {
         <div ref={bottomRef}></div>
       </div>
 
-      <MessageInput chatId={selectedChatId} />
+      <MessageInput />
     </div>
   );
 }
