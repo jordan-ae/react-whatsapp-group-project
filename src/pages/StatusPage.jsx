@@ -6,11 +6,13 @@ import EmptyState from '../components/common/EmptyState';
 import { formatStatusTime } from '../utils/formatDate';
 import './StatusPage.css';
 import StatusViewer from '../components/status/StatusViewer';
+import Modal from '../common/Modal';
 
 export default function StatusPage() {
   const { currentUser } = useApp();
   const { myStatus, recentStatus, viewedStatus, loading } = useStatus();
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const renderStatusItem = (statusItem) => (
     <div 
@@ -42,9 +44,11 @@ export default function StatusPage() {
         <div className="status-page__my-avatar">
           <Avatar name={currentUser?.name || "You"} size="lg" />
           <div className="status-page__add-btn">
+            <button className="status-add" onClick={() => setShowModal(true)}>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
             </svg>
+            </button>
           </div>
         </div>
         <div className="status-page__my-content">
@@ -83,6 +87,16 @@ export default function StatusPage() {
            onClose={() => setSelectedStatus(null)}
         />
       )}
+
+      {
+        showModal && (
+          <Modal title="add-status" onclose={() => setShowModal(false)}>
+            <div className="status-composer">
+              Add status
+            </div>
+          </Modal>
+        )
+      }
     </div>
   );
 }
