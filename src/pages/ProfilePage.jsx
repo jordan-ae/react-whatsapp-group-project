@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import Avatar from "../components/common/Avatar";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser } = useApp();
+  const { currentUser, setCurrentUser } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -14,6 +15,22 @@ export default function ProfilePage() {
       setName(currentUser.name);
     }
   }, [currentUser]);
+
+  async function handleSave() {
+    await mockFetch(`/users/${currentUser.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name,
+      }),
+    });
+
+    setCurrentUser({
+      ...currentUser,
+      name,
+    });
+
+    setIsEditing(false);
+  }
 
   if (!currentUser) {
     return (
@@ -41,7 +58,7 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -78,6 +95,7 @@ export default function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onBlur={handleSave}
               />
             ) : (
               <span>{currentUser.name}</span>
