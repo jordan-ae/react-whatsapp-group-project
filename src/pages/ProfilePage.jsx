@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import Avatar from "../components/common/Avatar";
+import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
@@ -9,6 +10,7 @@ export default function ProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -74,7 +76,10 @@ export default function ProfilePage() {
       <div className="profile-page__avatar-section">
         <div className="profile-page__avatar-wrapper">
           <Avatar name={currentUser.name} size="xl" />
-          <button className="profile-page__avatar-edit">
+          <button
+            className="profile-page__avatar-edit"
+            onClick={() => setIsModalOpen(true)}
+          >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
               <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
             </svg>
@@ -158,6 +163,14 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Change profile photo"
+      >
+        <p>Photo picker coming</p>
+      </Modal>
     </div>
   );
 }
