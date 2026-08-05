@@ -22,7 +22,7 @@ export default function ChatPage() {
     } else {
       setSentMessages([])
     }
-  }, [messages, selectedChatId])
+  }, [ selectedChatId])
 
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg])
