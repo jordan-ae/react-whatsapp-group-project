@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import Modal from "../components/common/Modal.jsx";
 import { useState } from "react";
 import "./ChatPage.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ChatPage() {
   const { chats } = useChats();
@@ -112,7 +112,7 @@ export default function ChatPage() {
       <div className="chat-page__messages">
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
-        ) : messages.length === 0 ? (
+        ) : sentMessages.length === 0 ? (
           <EmptyState
             title="No messages yet"
             subtitle="Start a conversation!"

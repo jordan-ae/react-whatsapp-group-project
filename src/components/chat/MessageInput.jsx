@@ -8,13 +8,29 @@ export default function MessageInput({onSent}) {
 
   const { selectedChatId } = useApp();
 
-  const handleSend = async () => {
+  const handleSend = async (e) => {
+    if (e && e.preventDefault) e.preventDefault()
     if (!text.trim()) return;
 
+    const messageText = text.trim()
+
+    const updatedMessage = {
+      id: "temp-" + Date.now(),
+      text: messageText,
+      senderId: "user_me",
+      timestamp: new Date().toISOString(),
+    }
+
+    setText("");
+
+    if(onSent) {
+      onSent(updatedMessage)
+    }
+      
     try {
       const result = await mockFetch("/chats/" + selectedChatId + "/messages", {
         method: "POST",
-        body: JSON.stringify({ text: text }),
+        body: JSON.stringify({ text: messageText }),
       });
 
       onSent?.(result)
@@ -23,7 +39,7 @@ export default function MessageInput({onSent}) {
     } catch (error) {
       console.error("Error sending message:", error);
     }
-
+    
   };
 
   const handleKeyDown = (e) => {
