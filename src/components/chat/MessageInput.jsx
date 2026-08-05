@@ -1,18 +1,18 @@
 import { useState } from "react";
 import "./MessageInput.css";
 import { mockFetch } from "../../utils/mockFetch";
-import { useParams } from "react-router-dom";
+import { useApp } from "../../contexts/AppContext";
 
-export default function MessageInput() {
+export default function MessageInput({onSent}) {
   const [text, setText] = useState("");
 
-  const { chatId } = useParams();
+  const { selectedChatId } = useApp();
 
   const handleSend = async ({onSent}) => {
     if (!text.trim()) return;
 
     try {
-      const result = await mockFetch("/chats/" + chatId + "/messages", {
+      const result = await mockFetch("/chats/" + selectedChatId + "/messages", {
         method: "POST",
         body: JSON.stringify({ text: text }),
       });
@@ -21,11 +21,11 @@ export default function MessageInput() {
 
       onSent?.(result)
       setText("");
+      
     } catch (error) {
       console.error("Error sending message:", error);
     }
 
-    console.log("Send message:", text);
   };
 
   const handleKeyDown = (e) => {
