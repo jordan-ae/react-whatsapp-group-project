@@ -93,6 +93,13 @@
   font-style: italic;
 }
 
+.message-bubble__sender {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 4px;
+}
+
 .message-bubble__meta {
   display: flex;
   align-items: center;

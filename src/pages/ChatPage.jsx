@@ -6,6 +6,7 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
+import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -24,6 +25,13 @@ export default function ChatPage() {
       behavior: "smooth",
     });
   }, [messages]);
+
+  const userNames = {}
+  chats.forEach(chat => {
+    if (chat.type === "individual") {
+      userNames[chat.userId] = chat.name
+    }
+  })
 
   if (!selectedChatId || !chat) {
     return (
@@ -103,6 +111,8 @@ export default function ChatPage() {
                   key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
+                  senderName={userNames[msg.senderId]}
+                  isGroup={chat.type === CHAT_TYPES.GROUP}
                 />
               </>
             );

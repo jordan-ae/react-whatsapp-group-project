@@ -2,7 +2,7 @@ import { MESSAGE_TYPES, MESSAGE_STATUS } from '../../utils/constants';
 import { formatMessageTime } from '../../utils/formatDate';
 import './MessageBubble.css';
 
-export default function MessageBubble({ message, isOwn }) {
+export default function MessageBubble({ message, isOwn, senderName, isGroup }) {
   const renderContent = () => {
     switch (message.type) {
       case MESSAGE_TYPES.TEXT:
@@ -81,6 +81,11 @@ export default function MessageBubble({ message, isOwn }) {
 
   return (
     <div className={`message-bubble ${isOwn ? 'message-bubble--own' : 'message-bubble--other'}`}>
+      {isGroup && senderName && !isOwn && (
+        <div className='message-bubble__sender'>
+          {senderName}
+        </div>
+      )}
       {renderContent()}
       <div className="message-bubble__meta">
         <span className="message-bubble__time">{formatMessageTime(message.timestamp)}</span>
