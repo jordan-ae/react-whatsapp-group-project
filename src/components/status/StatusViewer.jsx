@@ -23,7 +23,7 @@ export default function StatusViewer({ status, onClose }) {
         onClose();
       }
     }, 3000);
-
+    
     return () => clearTimeout(timer);
   }, [currentIndex, currentItem, items.length, onClose]);
 
@@ -44,6 +44,7 @@ export default function StatusViewer({ status, onClose }) {
     };
 
     return (
+        // button
         <div className="status-viewer">
             <button 
               className="status-viewer__close"
