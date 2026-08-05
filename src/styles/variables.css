@@ -34,6 +34,10 @@
 
   --color-input-bg: #f0f2f5;
   --color-input-border: #e9edef;
+  --avatar-ring-width: 2.5px;
+  --avatar-gap-width: 2.5px;
+  --avatar-total-offset: 5px;
+  --bg-main: #ffffff;
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
