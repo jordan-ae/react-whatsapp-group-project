@@ -140,6 +140,7 @@ export default function ProfilePage() {
               value={about}
               onChange={(e) => setabout(e.target.value)}
               onBlur={saveAbout}
+              autoFocus
               />
             ) :(
             <span>
