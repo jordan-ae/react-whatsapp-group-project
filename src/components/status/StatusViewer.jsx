@@ -6,7 +6,6 @@ import ImageWithFallback from "../common/ImageWithFallback";
 export default function StatusViewer({ status, onClose }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-
   const items = status?.items?? [];
   const currentItem = items[currentIndex];
 
@@ -88,11 +87,13 @@ export default function StatusViewer({ status, onClose }) {
                             <ImageWithFallback
                               src={currentItem.imageUrl}
                               alt={currentItem.caption || "status"}
-
                               className="status-viewer__image"
                               fallbackLabel="This status image couldn't be loaded"
                             />
+                            
                    <h3 className="status-viewer_image-text">{currentItem.text}</h3>
+
+                  <h3 className="status-viewer__timage-text">{currentItem.text}</h3>
                    <p>{currentItem.caption}</p>
                 </div>
             )}
