@@ -6,15 +6,19 @@ import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser, setCurrentUser } = useApp();
+  const { currentUser, setCurrentUser, updateAbout } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [about, setabout] = useState("");
+
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
+      setabout(currentUser.about || "");
     }
   }, [currentUser]);
 
@@ -32,6 +36,11 @@ export default function ProfilePage() {
     });
 
     setIsEditing(false);
+  }
+
+  async function saveAbout() {
+    await updateAbout(about);
+    setIsEditingAbout(false);
   }
 
   if (!currentUser) {
@@ -130,11 +139,24 @@ export default function ProfilePage() {
           <label className="profile-page__field-label">About</label>
 
           <div className="profile-page__field-value">
+            {isEditingAbout ? (
+              <input
+              type="text"
+              value={about}
+              onChange={(e) => setabout(e.target.value)}
+              onBlur={saveAbout}
+              autoFocus
+              />
+            ) :(
             <span>
               {currentUser.about || "Hey there! I am using WhatsApp Clone"}
             </span>
+            )}
 
-            <button className="profile-page__edit-btn">
+            <button
+              className="profile-page__edit-btn"
+              onClick={() => setIsEditingAbout(true)}
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="20"
