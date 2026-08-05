@@ -7,6 +7,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import "./ChatPage.css";
+import { useEffect, useRef } from "react";
 
 export default function ChatPage() {
   const { selectedChatId } = useApp();
