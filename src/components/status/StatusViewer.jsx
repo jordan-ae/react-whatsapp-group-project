@@ -91,9 +91,7 @@ export default function StatusViewer({ status, onClose }) {
                               fallbackLabel="This status image couldn't be loaded"
                             />
 
-                   <h3 className="status-viewer_image-text">{currentItem.text}</h3>
-
-                  <h3 className="status-viewer__timage-text">{currentItem.text}</h3>
+                  <h3 className="status-viewer__image-text">{currentItem.text}</h3>
                    <p>{currentItem.caption}</p>
                 </div>
             )}
