@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import Modal from "../components/common/Modal.jsx";
 import { useState } from "react";
 import "./ChatPage.css";
+import { useEffect, useRef } from "react";
 
 export default function ChatPage() {
   const { chats } = useChats();
