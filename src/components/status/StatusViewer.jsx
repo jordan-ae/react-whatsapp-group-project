@@ -1,12 +1,30 @@
 import "./StatusViewer.css";
+import { useState } from "react";
 import { STATUS_TYPES } from "../../utils/constants";
 
 export default function StatusViewer({ status, onClose }) {
+   
+  const [currentIndex, setCurrentIndex] = useState(0);
+
     if (!status) return null;
 
-    const currentItem = status?.items?.[0];
+    const currentItem = status?.items?.[currentIndex];
 
     if (!currentItem) return null;
+
+    const handleNext = () => {
+      if (currentIndex < status.items.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else {
+        // onClose();
+      }
+    };
+
+    const handlePrevious = () => {
+      if (currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    };
 
     return (
         <div className="status-viewer">
@@ -16,6 +34,22 @@ export default function StatusViewer({ status, onClose }) {
               >
                 x
             </button>
+
+            <button 
+              className="previous"
+              onClick={handlePrevious}
+              // disabled={currentIndex === 0}
+            >
+              &lt;
+            </button>
+
+            <button 
+               className="next"
+               onClick={handleNext}
+              //  disabled={currentIndex === status.items.length - 1}
+               >
+                &gt;
+               </button>
 
             <h2>{status.name}</h2>
 
