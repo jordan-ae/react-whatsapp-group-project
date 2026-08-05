@@ -1,5 +1,5 @@
 import { MESSAGE_TYPES, MESSAGE_STATUS } from '../../utils/constants';
-import { formatTime } from '../../utils/formatDate';
+import { formatMessageTime } from '../../utils/formatDate';
 import './MessageBubble.css';
 
 export default function MessageBubble({ message, isOwn }) {
@@ -83,7 +83,7 @@ export default function MessageBubble({ message, isOwn }) {
     <div className={`message-bubble ${isOwn ? 'message-bubble--own' : 'message-bubble--other'}`}>
       {renderContent()}
       <div className="message-bubble__meta">
-        <span className="message-bubble__time">{formatTime(message.timestamp)}</span>
+        <span className="message-bubble__time">{formatMessageTime(message.timestamp)}</span>
         {isOwn && (
           <span className={`message-bubble__status message-bubble__status--${message.status}`}>
             {message.status === MESSAGE_STATUS.READ && (
