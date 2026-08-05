@@ -40,21 +40,25 @@ export default function ProfilePage() {
         </div>
 
         <div className="profile-page__avatar-section">
-          <div className="profile-page__skeleton profile-page__skeleton-avatar" />
+          <div className="skeleton skeleton--avatar-xl" />
         </div>
 
         <div className="profile-page__fields">
           <div className="profile-page__field">
-            <div className="profile-page__skeleton profile-page__skeleton-label" />
-            <div className="profile-page__skeleton profile-page__skeleton-value" />
+            <div className="skeleton skeleton--label" />
+            <div className="skeleton skeleton--value" />
           </div>
           <div className="profile-page__field">
-            <div className="profile-page__skeleton profile-page__skeleton-label" />
-            <div className="profile-page__skeleton profile-page__skeleton-value" />
+            <div className="skeleton skeleton--label" />
+            <div className="skeleton skeleton--value" />
           </div>
           <div className="profile-page__field">
-            <div className="profile-page__skeleton profile-page__skeleton-label" />
-            <div className="profile-page__skeleton profile-page__skeleton-label" />
+            <div className="skeleton skeleton--label" />
+            <div className="skeleton skeleton--value" />
+          </div>
+          <div className="profile-page__field">
+            <div className="skeleton skeleton--label" />
+            <div className="skeleton skeleton--value" />
           </div>
         </div>
       </div>
