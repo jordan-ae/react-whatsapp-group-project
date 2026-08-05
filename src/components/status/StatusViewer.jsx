@@ -1,23 +1,39 @@
+import { useState, useEffect } from "react";
 import "./StatusViewer.css";
-import { useState } from "react";
 import { STATUS_TYPES } from "../../utils/constants";
 import ImageWithFallback from "../common/ImageWithFallback";
 
 export default function StatusViewer({ status, onClose }) {
-   
   const [currentIndex, setCurrentIndex] = useState(0);
 
-    if (!status) return null;
+  const items = status?.items?? [];
+  const currentItem = items[currentIndex];
 
-    const currentItem = status?.items?.[currentIndex];
+  // useEffect set timer when the status is opened
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [status]);
+  // Auto-advance timer
+  useEffect(() => {
+    if (!currentItem) return;
+    const timer = setTimeout(() => {
+      if (currentIndex < items.length -1) {
+        setCurrentIndex((prev) => prev + 1);
+      } else {
+        onClose();
+      }
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [currentIndex, currentItem, items.length, onClose]);
 
-    if (!currentItem) return null;
+    if (!status || !currentItem) {
+      return null;
+    }
 
     const handleNext = () => {
       if (currentIndex < status.items.length - 1) {
         setCurrentIndex((prev) => prev + 1);
-      } else {
-        // onClose();
       }
     };
 
@@ -39,7 +55,7 @@ export default function StatusViewer({ status, onClose }) {
             <button 
               className="previous"
               onClick={handlePrevious}
-              // disabled={currentIndex === 0}
+              disabled={currentIndex === 0}
             >
               &lt;
             </button>
@@ -47,7 +63,7 @@ export default function StatusViewer({ status, onClose }) {
             <button 
                className="next"
                onClick={handleNext}
-              //  disabled={currentIndex === status.items.length - 1}
+               disabled={currentIndex == items.length - 1}
                >
                 &gt;
                </button>
