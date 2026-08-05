@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -17,10 +17,10 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
-  const buttomRef = useRef(null);
+  const bottomRef = useRef(null);
 
   useEffect(() => {
-    buttomRef.current?.scrollIntoView({
+    bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
   }, [messages]);
@@ -92,7 +92,7 @@ export default function ChatPage() {
                 new Date(msg.timestamp).toDateString();
 
             return (
-              <>
+              <Fragment key={msg.id}>
                 {showDate && (
                   <div className="chat-page__date-label">
                     {formatDateLabel(msg.timestamp)}
@@ -100,15 +100,14 @@ export default function ChatPage() {
                 )}
 
                 <MessageBubble
-                  key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
                 />
-              </>
+              </Fragment>
             );
           })
         )}
-        <div ref={buttomRef}></div>
+        <div ref={bottomRef}></div>
       </div>
 
       <MessageInput />
