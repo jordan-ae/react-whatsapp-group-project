@@ -127,7 +127,7 @@ export default function ChatPage() {
                   new Date(msg.timestamp).toDateString();
 
             return (
-              <>
+              <Fragment key={msg.id}>
                 {showDate && (
                   <div className="chat-page__date-label">
                     {formatDateLabel(msg.timestamp)}
@@ -135,13 +135,12 @@ export default function ChatPage() {
                 )}
 
                 <MessageBubble
-                  key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
                   senderName={userNames[msg.senderId]}
                   isGroup={chat.type === CHAT_TYPES.GROUP}
                 />
-              </>
+              </Fragment>
             );
           })}
           </Fragment>
