@@ -22,6 +22,19 @@ export default function ChatPage() {
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
 
   const [isCallactive, setCallactive] = useState(false);
+  const [sentMessages, setSentMessages] = useState([]);
+
+  useEffect(() => {
+    if (messages) {
+      setSentMessages(messages)
+    } else {
+      setSentMessages([])
+    }
+  }, [messages, selectedChatId])
+
+  const handleSent = (newMsg) => {
+    setSentMessages((prev) => [...prev, newMsg])
+  }
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
