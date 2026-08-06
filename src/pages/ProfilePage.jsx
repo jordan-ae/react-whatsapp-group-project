@@ -16,7 +16,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setabout(currentUser.about || "Hey there! I am using whatsApp Clone.");
+      setabout(currentUser.about || "");
     }
   }, [currentUser]);
 
