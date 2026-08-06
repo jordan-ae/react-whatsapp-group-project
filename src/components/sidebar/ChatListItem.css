@@ -14,7 +14,7 @@
 
 .chat-list-item--active {
   background-color: var(--color-sidebar-item-active);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 
 .chat-list-item__content {
