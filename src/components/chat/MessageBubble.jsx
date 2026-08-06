@@ -1,5 +1,5 @@
 import { MESSAGE_TYPES, MESSAGE_STATUS } from '../../utils/constants';
-import { formatMessageTime } from '../../utils/formatDate';
+import { formatMessagesTime } from '../../utils/formatDate';
 import './MessageBubble.css';
 
 export default function MessageBubble({ message, isOwn, grouped }) {
@@ -87,7 +87,7 @@ export default function MessageBubble({ message, isOwn, grouped }) {
       {renderContent()}
 
       <div className="message-bubble__meta">
-        <span className="message-bubble__time">{formatMessageTime(message.timestamp)}</span>
+        <span className="message-bubble__time">{formatMessagesTime(message.timestamp)}</span>
         {isOwn && (
           <span
             className={`message-bubble__status message-bubble__status--${message.status}`}
