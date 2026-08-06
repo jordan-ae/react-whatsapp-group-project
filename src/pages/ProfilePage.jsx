@@ -13,12 +13,12 @@ export default function ProfilePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isEditingAbout, setIsEditingAbout] = useState(false);
-  const [about, setabout] = useState("");
+  const [about, setAbout] = useState("");
 
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setabout(currentUser.about || "");
+      setAbout(currentUser.about || "");
     }
   }, [currentUser]);
 
@@ -143,7 +143,7 @@ export default function ProfilePage() {
               <input
               type="text"
               value={about}
-              onChange={(e) => setabout(e.target.value)}
+              onChange={(e) => setAbout(e.target.value)}
               onBlur={saveAbout}
               autoFocus
               />
