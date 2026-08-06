@@ -98,7 +98,7 @@ export const formatDateLabel = (dateString) => {
   });
 };
 
-export const formatMessagesTime = (dateString) => {
+export const formatMessageTime = (dateString) => {
   return new Date(dateString).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
