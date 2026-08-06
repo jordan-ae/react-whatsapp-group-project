@@ -16,7 +16,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setabout(currentUser.about || "");
+      setabout(currentUser.About || "");
     }
   }, [currentUser]);
 
@@ -138,7 +138,7 @@ export default function ProfilePage() {
               <input
               type="text"
               value={about}
-              onChange={(e) => setabout(e.target.value)}
+              onChange={(e) => setAbout(e.target.value)}
               onBlur={saveAbout}
               autoFocus
               />
