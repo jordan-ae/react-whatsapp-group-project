@@ -93,7 +93,7 @@ export default function StatusPage() {
           <Modal 
              isOpen={showModal}
              onClose={() => setShowModal(false)}
-             title="add-status"
+             title="Add GIT ADDstatus"
              >
             <div className="status-composer">
               create your status
