@@ -29,9 +29,9 @@
 }
 
 .status-viewer__text {
-  width: 80%;
+  width: 100%;
   max-width: 500px;
-  min-height: 300px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,15 +42,28 @@
 }
 
 .status-viewer__image {
+  max-height: 70vh;
+  object-fit: contain;
   width: 80vw;
   max-width: 500px;
   border-radius: 12px;
 }
 
+.status-viewer__image-text{
+  color: #ffff;
+  margin-top: 12px;
+  font-size: 20px;
+}
+
 .status-viewer__image-wrapper p {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: white;
   margin-top: 16px;
   text-align: center;
+
 }
 
 .previous,
