@@ -14,6 +14,9 @@ export default function ProfilePage() {
 
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setabout] = useState("");
+  const presetAvatars = ["😀", "😎", "🤖", "🐱", "🐶", "🦊", "🐼", "🐸"];
+
+  const [selectedAvatar, setSelectedAvatar] = useState(presetAvatars[0]);
 
   useEffect(() => {
     if (currentUser) {
@@ -141,16 +144,16 @@ export default function ProfilePage() {
           <div className="profile-page__field-value">
             {isEditingAbout ? (
               <input
-              type="text"
-              value={about}
-              onChange={(e) => setabout(e.target.value)}
-              onBlur={saveAbout}
-              autoFocus
+                type="text"
+                value={about}
+                onChange={(e) => setabout(e.target.value)}
+                onBlur={saveAbout}
+                autoFocus
               />
-            ) :(
-            <span>
-              {currentUser.about || "Hey there! I am using WhatsApp Clone"}
-            </span>
+            ) : (
+              <span>
+                {currentUser.about || "Hey there! I am using WhatsApp Clone"}
+              </span>
             )}
 
             <button
@@ -191,7 +194,28 @@ export default function ProfilePage() {
         onClose={() => setIsModalOpen(false)}
         title="Change profile photo"
       >
-        <p>Photo picker coming</p>
+        <div className="photo-picker">
+          <div className="photo-picker__preview">
+            <div className="photo-picker__avatar">{selectedAvatar}</div>
+          </div>
+
+          <div className="photo-picker__grid">
+            {presetAvatars.map((avatar) => (
+              <button
+                key={avatar}
+                type="button"
+                className={
+                  selectedAvatar === avatar
+                    ? "photo-picker__option photo-picker__option--selected"
+                    : "photo-picker__option"
+                }
+                onClick={() => setSelectedAvatar(avatar)}
+              >
+                {avatar}
+              </button>
+            ))}
+          </div>
+        </div>
       </Modal>
     </div>
   );
