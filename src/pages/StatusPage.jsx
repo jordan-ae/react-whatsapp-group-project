@@ -6,7 +6,7 @@ import EmptyState from '../components/common/EmptyState';
 import { formatStatusTime } from '../utils/formatDate';
 import './StatusPage.css';
 import StatusViewer from '../components/status/StatusViewer';
-import Modal from '../common/Modal';
+import Modal from "../components/common/Modal"
 
 export default function StatusPage() {
   const { currentUser } = useApp();
@@ -90,9 +90,13 @@ export default function StatusPage() {
 
       {
         showModal && (
-          <Modal title="add-status" onclose={() => setShowModal(false)}>
+          <Modal 
+             isOpen={showModal}
+             onClose={() => setShowModal(false)}
+             title="add-status"
+             >
             <div className="status-composer">
-              Add status
+              create your status
             </div>
           </Modal>
         )
