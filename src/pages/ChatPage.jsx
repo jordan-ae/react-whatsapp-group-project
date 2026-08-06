@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -94,31 +94,6 @@ export default function ChatPage() {
                 new Date(previous.timestamp).toDateString() !==
                 new Date(msg.timestamp).toDateString();
 
-<<<<<<< HEAD
-              const grouped =
-                !showDate &&
-                Boolean(previous && previous.senderId === msg.senderId);
-
-              return (
-                <Fragment key={msg.id}>
-                  {showDate && (
-                    <div className="chat-page__date-label">
-                      {formatDateLabel(msg.timestamp)}
-                    </div>
-                  )}
-
-                  <MessageBubble
-                    message={msg}
-                    isOwn={msg.senderId === "user_me"}
-                    grouped={grouped}
-                  />
-                </Fragment>
-              );
-            })}
-
-            <div ref={bottomRef}></div>
-          </Fragment>
-=======
             return (
               <Fragment key={msg.id}>
                 {showDate && (
@@ -133,9 +108,10 @@ export default function ChatPage() {
                 />
               </Fragment>
             );
-          })
->>>>>>> bcb174b (Using single svg path for the ticks)
+          })}
+          </Fragment>
         )}
+        <div ref={bottomRef}></div>
       </div>
 
       <MessageInput onSent={refetch}/>
