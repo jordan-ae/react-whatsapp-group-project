@@ -11,12 +11,12 @@ export default function ProfilePage() {
   const [name, setName] = useState("");
 
   const [isEditingAbout, setIsEditingAbout] = useState(false);
-  const [about, setabout] = useState("");
+  const [about, setAbout] = useState("");
 
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setabout(currentUser.about || "");
+      setabout(currentUser.about || "Hey there! I am using whatsApp Clone.");
     }
   }, [currentUser]);
 
