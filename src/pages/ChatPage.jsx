@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -95,7 +95,7 @@ export default function ChatPage() {
                 new Date(msg.timestamp).toDateString();
 
             return (
-              <Fragment key={msg.id}>
+              <>
                 {showDate && (
                   <div className="chat-page__date-label">
                     {formatDateLabel(msg.timestamp)}
@@ -103,10 +103,11 @@ export default function ChatPage() {
                 )}
 
                 <MessageBubble
+                  key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
                 />
-              </Fragment>
+              </>
             );
           })}
           </Fragment>
