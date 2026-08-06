@@ -16,7 +16,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setabout(currentUser.About || "");
+      setAbout(currentUser.about || "");
     }
   }, [currentUser]);
 
