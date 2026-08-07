@@ -13,7 +13,7 @@ export default function SidebarHeader() {
       aria-label="Open your profile"
       onClick={() => navigate('/profile')}
       >
-        <Avatar name ={currentUser?.name} size="md" online />
+        <Avatar name ={currentUser?.name} src={currentUser?.avatar} size="md" online />
       </button>
       <div className="sidebar-header__actions">
         <button className="sidebar-header__btn" title="Status">
