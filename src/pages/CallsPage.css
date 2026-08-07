@@ -119,3 +119,30 @@
 .calls-page__call-btn:hover {
   background-color: var(--color-primary-light);
 }
+
+.calls-page__new-call {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calls-page__contacts {
+  display: flex;
+  flex-direction: column;
+}
+
+.calls-page__contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.calls-page__contact:hover {
+  background-color: var(--color-bg);
+}
