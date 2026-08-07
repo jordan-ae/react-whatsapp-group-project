@@ -102,7 +102,7 @@ export default function ChatPage() {
                   </div>
                 )}
 
-                <MessageBubbles
+                <MessageBubble
                   key={msg.id}
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
