@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./MessageInput.css";
 import { mockFetch } from "../../utils/mockFetch";
 import { useApp } from "../../contexts/AppContext";
+import { MESSAGE_STATUS } from '../../utils/constants';
 
 export default function MessageInput({onSent}) {
   const [text, setText] = useState("");
@@ -9,7 +10,6 @@ export default function MessageInput({onSent}) {
   const { selectedChatId } = useApp();
 
   const handleSend = async (e) => {
-    if (e && e.preventDefault) e.preventDefault()
     if (!text.trim()) return;
 
     const messageText = text.trim()
@@ -19,6 +19,7 @@ export default function MessageInput({onSent}) {
       text: messageText,
       senderId: "user_me",
       timestamp: new Date().toISOString(),
+      status: MESSAGE_STATUS.SENT
     }
 
     setText("");
@@ -32,9 +33,6 @@ export default function MessageInput({onSent}) {
         method: "POST",
         body: JSON.stringify({ text: messageText }),
       });
-
-      onSent?.(result)
-      setText("");
       
     } catch (error) {
       console.error("Error sending message:", error);

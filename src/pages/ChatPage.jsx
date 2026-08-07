@@ -7,22 +7,14 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import "./ChatPage.css";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export default function ChatPage() {
   const { selectedChatId } = useApp();
   const { chats } = useChats();
-  const { messages, loading, refetch } = useChatMessages(selectedChatId);
+  const { messages, loading } = useChatMessages(selectedChatId);
 
   const [sentMessages, setSentMessages] = useState([]);
-
-  useEffect(() => {
-    if (messages) {
-      setSentMessages(messages)
-    } else {
-      setSentMessages([])
-    }
-  }, [messages, selectedChatId])
 
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg])
@@ -34,11 +26,13 @@ export default function ChatPage() {
 
   const bottomRef = useRef(null);
 
+  const allMessages = [...messages, ...sentMessages];
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [messages]);
+  }, [allMessages]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -94,14 +88,14 @@ export default function ChatPage() {
       <div className="chat-page__messages">
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
-        ) : sentMessages.length === 0 ? (
+        ) : allMessages.length === 0 ? (
           <EmptyState
             title="No messages yet"
             subtitle="Start a conversation!"
           />
         ) : (
           <Fragment>
-            {messages.map((msg, index) => {
+            {allMessages.map((msg, index) => {
               const previous = messages[index - 1];
 
               const showDate =
@@ -123,7 +117,7 @@ export default function ChatPage() {
 
                   <MessageBubble
                     message={msg}
-                    isOwn={msg.senderId === "user_me"}
+                    isOwn={msg.senderId === "user_me" || msg.senderId === "Me"}
                     grouped={grouped}
                   />
                 </Fragment>
