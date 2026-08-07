@@ -41,8 +41,9 @@
   right: 0;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  background-color: #00a884;
+  border-radius: var(--color-full);
+  background-color: var(--color-primary);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
