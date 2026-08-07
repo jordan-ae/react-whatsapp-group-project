@@ -18,17 +18,44 @@
 }
 
 .calls-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 4px 20px 12px;
 }
 
-.calls-page__create {
-  display: flex;
+.calls-page__create,
+.calls-page__new-call {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--color-primary-dark);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
-  padding: 8px 0;
+  padding: 10px 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.calls-page__create {
+  color: var(--color-primary-dark);
+  background-color: transparent;
+}
+
+.calls-page__create:hover,
+.calls-page__create:focus-visible {
+  background-color: var(--color-bg);
+}
+
+.calls-page__new-call {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.calls-page__new-call:hover,
+.calls-page__new-call:focus-visible {
+  background-color: var(--color-primary-dark);
 }
 
 .calls-page__list {
@@ -118,4 +145,31 @@
 
 .calls-page__call-btn:hover {
   background-color: var(--color-primary-light);
+}
+
+.calls-page__new-call {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calls-page__contacts {
+  display: flex;
+  flex-direction: column;
+}
+
+.calls-page__contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.calls-page__contact:hover {
+  background-color: var(--color-bg);
 }
