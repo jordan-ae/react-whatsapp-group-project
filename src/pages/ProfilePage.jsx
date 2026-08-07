@@ -1,4 +1,4 @@
-import { useState, useEffect, } from "react";
+import { useState, useEffect } from "react";
 import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import Avatar from "../components/common/Avatar";

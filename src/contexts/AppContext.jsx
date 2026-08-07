@@ -39,7 +39,7 @@ export function AppProvider({ children }) {
       });
       setCurrentUser((prev) => ({ ...prev, avatar: newAvatarUrl }));
     } catch (err) {
-      console.error("updateAbout failed:", err);
+      console.error("updateAvatar failed:", err);
     }
   };
 
