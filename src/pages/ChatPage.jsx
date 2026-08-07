@@ -1,16 +1,29 @@
-import { useApp } from '../contexts/AppContext';
-import { useChatMessages } from '../hooks/useChat';
-import Avatar from '../components/common/Avatar';
-import EmptyState from '../components/common/EmptyState';
-import MessageBubble from '../components/chat/MessageBubble';
-import MessageInput from '../components/chat/MessageInput';
-import './ChatPage.css';
+import { Fragment, useEffect, useRef } from "react";
+import { useApp } from "../contexts/AppContext";
+import { useChats, useChatMessages } from "../hooks/useChat";
+import Avatar from "../components/common/Avatar";
+import EmptyState from "../components/common/EmptyState";
+import MessageBubble from "../components/chat/MessageBubble";
+import MessageInput from "../components/chat/MessageInput";
+import { formatDateLabel } from "../utils/formatDate";
+import "./ChatPage.css";
 
 export default function ChatPage() {
-  const { selectedChatId, chats } = useApp();
-  const { messages, loading } = useChatMessages(selectedChatId);
+  const { selectedChatId } = useApp();
+  const { chats } = useChats();
+  const { messages, loading, refetch } = useChatMessages(selectedChatId);
 
-  const chat = selectedChatId ? chats.find((c) => c.id === selectedChatId) : null;
+  const chat = selectedChatId
+    ? chats.find((c) => c.id === selectedChatId)
+    : null;
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -18,8 +31,18 @@ export default function ChatPage() {
         <EmptyState
           icon={
             <svg viewBox="0 0 303 172" width="240" height="136" fill="none">
-              <path d="M229.565 82.347c0-34.29-27.8-62.09-62.09-62.09-34.291 0-62.09 27.8-62.09 62.09 0 34.29 27.799 62.09 62.09 62.09 34.29 0 62.09-27.8 62.09-62.09z" fill="#00a884" opacity=".1"/>
-              <path d="M167.475 40.257c-23.253 0-42.09 18.837-42.09 42.09 0 23.252 18.837 42.09 42.09 42.09 23.252 0 42.09-18.838 42.09-42.09 0-23.253-18.838-42.09-42.09-42.09zm0 76.38c-18.896 0-34.29-15.394-34.29-34.29 0-18.895 15.394-34.29 34.29-34.29 18.895 0 34.29 15.395 34.29 34.29 0 18.896-15.395 34.29-34.29 34.29z" fill="#00a884" opacity=".3"/>
+              <path d="M229.565 82.347c0-34.29-27.8-62.09-62.09-62.09-34.291 0-62.09 27.8-62.09 62.09 0 34.29 27.799 62.09 62.09 62.09 34.29 0 62.09-27.8 62.09-62.09z" fill="#00a884" opacity=".1" />
+              <path d="M167.475 40.257c-23.253 0-42.09 18.837-42.09 42.09 0 23.252 18.837 42.09 42.09 42.09 23.252 0 42.09-18.838 42.09-42.09 0-23.253-18.838-42.09-42.09-42.09zm0 76.38c-18.896 0-34.29-15.394-34.29-34.29 0-18.895 15.394-34.29 34.29-34.29 18.895 0 34.29 15.395 34.29 34.29 0 18.896-15.395 34.29-34.29 34.29z" fill="#00a884" opacity=".3" />
+              <path
+                d="M229.565 82.347c0-34.29-27.8-62.09-62.09-62.09-34.291 0-62.09 27.8-62.09 62.09 0 34.29 27.799 62.09 62.09 62.09 34.29 0 62.09-27.8 62.09-62.09z"
+                fill="#00a884"
+                opacity=".1"
+              />
+              <path
+                d="M167.475 40.257c-23.253 0-42.09 18.837-42.09 42.09 0 23.252 18.837 42.09 42.09 42.09 23.252 0 42.09-18.838 42.09-42.09 0-23.253-18.838-42.09-42.09-42.09zm0 76.38c-18.896 0-34.29-15.394-34.29-34.29 0-18.895 15.394-34.29 34.29-34.29 18.895 0 34.29 15.395 34.29 34.29 0 18.896-15.395 34.29-34.29 34.29z"
+                fill="#00a884"
+                opacity=".3"
+              />
             </svg>
           }
           title="WhatsApp Clone"
@@ -36,7 +59,7 @@ export default function ChatPage() {
         <div className="chat-page__header-info">
           <span className="chat-page__header-name">{chat.name}</span>
           <span className="chat-page__header-status">
-            {chat.online ? 'online' : 'offline'}
+            {chat.online ? "online" : "offline"}
           </span>
         </div>
         <div className="chat-page__header-actions">
@@ -57,19 +80,47 @@ export default function ChatPage() {
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
         ) : messages.length === 0 ? (
-          <EmptyState title="No messages yet" subtitle="Start a conversation!" />
+          <EmptyState
+            title="No messages yet"
+            subtitle="Start a conversation!"
+          />
         ) : (
-          messages.map((msg) => (
-            <MessageBubble
-              key={msg.id}
-              message={msg}
-              isOwn={msg.senderId === 'user_me'}
-            />
-          ))
+          <Fragment>
+            {messages.map((msg, index) => {
+              const previous = messages[index - 1];
+
+              const showDate =
+                !previous ||
+                new Date(previous.timestamp).toDateString() !==
+                new Date(msg.timestamp).toDateString();
+
+              const grouped =
+                !showDate &&
+                Boolean(previous && previous.senderId === msg.senderId);
+
+              return (
+                <Fragment key={msg.id}>
+                  {showDate && (
+                    <div className="chat-page__date-label">
+                      {formatDateLabel(msg.timestamp)}
+                    </div>
+                  )}
+
+                  <MessageBubble
+                    message={msg}
+                    isOwn={msg.senderId === "user_me"}
+                    grouped={grouped}
+                  />
+                </Fragment>
+              );
+            })}
+
+            <div ref={bottomRef}></div>
+          </Fragment>
         )}
       </div>
 
-      <MessageInput />
+      <MessageInput onSent={refetch}/>
     </div>
   );
 }

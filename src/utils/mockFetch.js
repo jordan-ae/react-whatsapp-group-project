@@ -59,6 +59,7 @@ export const mockFetch = async (url, options = {}) => {
 
   if (method === 'POST') {
     const parsed = body ? JSON.parse(body) : {};
+    const [base] = url.split('?');
 
     if (base.endsWith('/messages')) {
       return {

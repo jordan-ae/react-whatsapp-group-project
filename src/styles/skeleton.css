@@ -1,0 +1,22 @@
+.skeleton {
+  background-color: var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+}
+
+.skeleton--avatar-xl {
+  width: var(--avatar-xl);
+  height: var(--avatar-xl);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.skeleton--label {
+  width: 60px;
+  height: 12px;
+}
+
+.skeleton--value {
+  width: 70%;
+  height: 16px;
+  margin-top: 6px;
+}

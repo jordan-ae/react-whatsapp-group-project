@@ -1,63 +1,48 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../../contexts/AppContext';
-import { useChats } from '../../hooks/useChat';
-import SearchBar from '../common/SearchBar';
-import Badge from '../common/Badge';
-import Avatar from '../common/Avatar';
-import ChatListItem from './ChatListItem';
 import SidebarHeader from './SidebarHeader';
+import { SIDEBAR_SECTIONS, getActiveSection } from './sections';
 import './Sidebar.css';
 
+/**
+ * Reusable sidebar shell: profile header + tab bar + the active section's panel.
+ *
+ * The shell owns the shared chrome only. The list body is owned by each
+ * section's Panel (see `sections.js`), so teams manage their own content
+ * independently and the shell stays generic. The active section is derived from
+ * the current route, so it stays correct on deep-links and refreshes.
+ */
 export default function Sidebar() {
-  const { activeTab, setActiveTab, searchQuery, setSearchQuery, selectedChatId, setSelectedChatId } = useApp();
-  const { chats, loading } = useChats(searchQuery);
+  const { setActiveTab, setSelectedChatId } = useApp();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const tabs = [
-    { id: 'chats', label: 'Chats' },
-    { id: 'calls', label: 'Calls' },
-    { id: 'status', label: 'Status' },
-  ];
+  const activeSection = getActiveSection(pathname);
+  const ActivePanel = activeSection.Panel;
 
   return (
     <aside className="sidebar">
       <SidebarHeader />
 
-      <div className="sidebar__tabs">
-        {tabs.map((tab) => (
+      <nav className="sidebar__tabs" aria-label="Sidebar sections">
+        {SIDEBAR_SECTIONS.map((section) => (
           <button
-            key={tab.id}
-            className={`sidebar__tab ${activeTab === tab.id ? 'sidebar__tab--active' : ''}`}
+            key={section.id}
+            className={`sidebar__tab ${
+              activeSection.id === section.id ? 'sidebar__tab--active' : ''
+            }`}
             onClick={() => {
-              setActiveTab(tab.id);
+              setActiveTab(section.id);
               setSelectedChatId(null);
+              navigate(section.path);
             }}
           >
-            {tab.label}
+            {section.label}
           </button>
         ))}
-      </div>
+      </nav>
 
-      <SearchBar
-        value={searchQuery}
-        onChange={setSearchQuery}
-        placeholder="Search or start new chat"
-      />
-
-      <div className="sidebar__list">
-        {loading ? (
-          <div className="sidebar__loading">Loading...</div>
-        ) : chats.length === 0 ? (
-          <div className="sidebar__empty">No chats found</div>
-        ) : (
-          chats.map((chat) => (
-            <ChatListItem
-              key={chat.id}
-              chat={chat}
-              isActive={selectedChatId === chat.id}
-              onClick={() => setSelectedChatId(chat.id)}
-            />
-          ))
-        )}
-      </div>
+      <ActivePanel />
     </aside>
   );
 }
