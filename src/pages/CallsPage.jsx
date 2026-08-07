@@ -1,12 +1,48 @@
+import { useState } from 'react'; 
 import { useCalls } from '../hooks/useCalls';
 import Avatar from '../components/common/Avatar';
 import EmptyState from '../components/common/EmptyState';
+import Modal from '../components/common/Modal'; 
 import { formatTime, formatDuration } from '../utils/formatDate';
 import { CALL_DIRECTIONS } from '../utils/constants';
 import './CallsPage.css';
 
 export default function CallsPage() {
   const { calls, loading } = useCalls();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [callLink, setCallLink] = useState('');
+
+  const generateFallbackId = () => {
+    return Math.random().toString(36).substring(2, 10);
+  };
+
+  const handleOpenModal = () => {
+    const randomId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID().slice(0, 8)
+      : generateFallbackId();
+
+    setCallLink(`https://whatsapp-clone.dev{randomId}`);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCreateModalOpen(false);
+    setCopied(false); 
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(callLink);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (err) {
+      console.error('Clipboard action blocked or failed:', err);
+      setCopied(false);
+    }
+  };
 
   return (
     <div className="calls-page">
@@ -15,7 +51,7 @@ export default function CallsPage() {
       </div>
 
       <div className="calls-page__actions">
-        <button className="calls-page__create">
+        <button className="calls-page__create" onClick={handleOpenModal}>
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
             <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
           </svg>
@@ -88,6 +124,26 @@ export default function CallsPage() {
           ))
         )}
       </div>
+
+      <Modal 
+        isOpen={isCreateModalOpen} 
+        onClose={handleCloseModal} 
+        title="Create call link"
+      >
+        <div className="create-link-modal-content">
+          <p>Share a link to invite people to this WhatsApp call.</p>
+          
+          <div className="create-link-modal__link-box">
+            <span className="create-link-modal__link-text">{callLink}</span>
+            <button 
+              className="create-link-modal__copy-btn" 
+              onClick={handleCopyLink}
+            >
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
