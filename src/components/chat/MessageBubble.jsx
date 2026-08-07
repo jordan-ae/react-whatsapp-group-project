@@ -2,7 +2,7 @@ import { MESSAGE_TYPES, MESSAGE_STATUS } from '../../utils/constants';
 import { formatMessageTime } from '../../utils/formatDate';
 import './MessageBubble.css';
 
-export default function MessageBubble({ message, isOwn, grouped }) {
+export default function MessagesBubble({ message, isOwn, grouped }) {
   const renderContent = () => {
     switch (message.type) {
       case MESSAGE_TYPES.TEXT:
