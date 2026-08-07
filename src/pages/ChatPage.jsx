@@ -11,7 +11,7 @@ import "./ChatPage.css";
 export default function ChatPage() {
   const { selectedChatId } = useApp();
   const { chats } = useChats();
-  const { messages, loading } = useChatMessages(selectedChatId);
+  const { messages, loading, refetch } = useChatMessages(selectedChatId);
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
@@ -33,6 +33,16 @@ export default function ChatPage() {
             <svg viewBox="0 0 303 172" width="240" height="136" fill="none">
               <path d="M229.565 82.347c0-34.29-27.8-62.09-62.09-62.09-34.291 0-62.09 27.8-62.09 62.09 0 34.29 27.799 62.09 62.09 62.09 34.29 0 62.09-27.8 62.09-62.09z" fill="#00a884" opacity=".1" />
               <path d="M167.475 40.257c-23.253 0-42.09 18.837-42.09 42.09 0 23.252 18.837 42.09 42.09 42.09 23.252 0 42.09-18.838 42.09-42.09 0-23.253-18.838-42.09-42.09-42.09zm0 76.38c-18.896 0-34.29-15.394-34.29-34.29 0-18.895 15.394-34.29 34.29-34.29 18.895 0 34.29 15.395 34.29 34.29 0 18.896-15.395 34.29-34.29 34.29z" fill="#00a884" opacity=".3" />
+              <path
+                d="M229.565 82.347c0-34.29-27.8-62.09-62.09-62.09-34.291 0-62.09 27.8-62.09 62.09 0 34.29 27.799 62.09 62.09 62.09 34.29 0 62.09-27.8 62.09-62.09z"
+                fill="#00a884"
+                opacity=".1"
+              />
+              <path
+                d="M167.475 40.257c-23.253 0-42.09 18.837-42.09 42.09 0 23.252 18.837 42.09 42.09 42.09 23.252 0 42.09-18.838 42.09-42.09 0-23.253-18.838-42.09-42.09-42.09zm0 76.38c-18.896 0-34.29-15.394-34.29-34.29 0-18.895 15.394-34.29 34.29-34.29 18.895 0 34.29 15.395 34.29 34.29 0 18.896-15.395 34.29-34.29 34.29z"
+                fill="#00a884"
+                opacity=".3"
+              />
             </svg>
           }
           title="WhatsApp Clone"
@@ -110,7 +120,7 @@ export default function ChatPage() {
         )}
       </div>
 
-      <MessageInput />
+      <MessageInput onSent={refetch}/>
     </div>
   );
 }
