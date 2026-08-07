@@ -6,7 +6,7 @@ import ImageWithFallback from "../common/ImageWithFallback";
 export default function StatusViewer({ status, onClose }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const items = status?.items?? [];
+  const items = status?.items ?? [];
   const currentItem = items[currentIndex];
 
   // useEffect set timer when the status is opened
@@ -63,7 +63,7 @@ export default function StatusViewer({ status, onClose }) {
             <button 
                className="next"
                onClick={handleNext}
-               disabled={currentIndex == items.length - 1}
+               disabled={currentIndex === items.length - 1}
                >
                 &gt;
                </button>

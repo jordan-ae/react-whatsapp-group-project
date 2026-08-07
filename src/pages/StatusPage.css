@@ -41,13 +41,12 @@
   right: 0;
   width: 24px;
   height: 24px;
-  border-radius: var(--color-full);
+  border-radius: var(--radius-full);
   background-color: var(--color-primary);
-  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
+  border: 2px solid var(--color-white);
   cursor: pointer;
   padding: 0;
 }
