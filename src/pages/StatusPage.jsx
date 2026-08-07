@@ -44,7 +44,12 @@ export default function StatusPage() {
           <Avatar name={currentUser?.name || "You"} size="lg" />
           <div className="status-page__add-btn">
             <button className="status-add" onClick={() => setShowModal(true)} aria-label="Add a status update">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+            <svg 
+               viewBox="0 0 24 24" 
+               width="16" 
+               height="16" 
+               fill="white"
+               >
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
             </svg>
             </button>
