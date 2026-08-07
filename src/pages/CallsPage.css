@@ -142,11 +142,12 @@
   font-size: var(--font-size-sm);
   color: var(--color-text);
   word-break: break-all;
+  
 }
 
 .create-link-modal__copy-btn {
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-white); 
   border: none;
   padding: 8px 16px;
   font-size: var(--font-size-sm);
@@ -156,6 +157,7 @@
   white-space: nowrap;
   min-width: 80px;
 }
+
 .create-link-modal__copy-btn:hover {
   background-color: var(--color-primary-dark);
 }

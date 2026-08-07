@@ -22,7 +22,7 @@ export default function CallsPage() {
       ? crypto.randomUUID().slice(0, 8)
       : generateFallbackId();
 
-    setCallLink(`https://whatsapp-clone.dev{randomId}`);
+    setCallLink(`https://call.whatsapp-clone.dev/${randomId}`);
     setIsCreateModalOpen(true);
   };
 
