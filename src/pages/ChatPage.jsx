@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import Modal from "../components/common/Modal.jsx";
 import { useState } from "react";
 import "./ChatPage.css";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export default function ChatPage() {
   const { chats } = useChats();
@@ -23,14 +23,6 @@ export default function ChatPage() {
 
   const [isCallactive, setCallactive] = useState(false);
   const [sentMessages, setSentMessages] = useState([]);
-
-  useEffect(() => {
-    if (messages) {
-      setSentMessages(messages)
-    } else {
-      setSentMessages([])
-    }
-  }, [messages, selectedChatId])
 
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg])
@@ -53,7 +45,7 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [messages]);
+  }, [allMessages]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -125,14 +117,14 @@ export default function ChatPage() {
       <div className="chat-page__messages">
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
-        ) : sentMessages.length === 0 ? (
+        ) : allMessages.length === 0 ? (
           <EmptyState
             title="No messages yet"
             subtitle="Start a conversation!"
           />
         ) : (
           <Fragment>
-            {messages.map((msg, index) => {
+            {allMessages.map((msg, index) => {
               const previous = messages[index - 1];
 
               const showDate =
