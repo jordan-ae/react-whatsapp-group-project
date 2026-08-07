@@ -8,7 +8,7 @@ import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import "./ChatPage.css";
 
-export default functions ChatPage() {
+export default function ChatPage() {
   const { selectedChatId } = useApp();
   const { chats } = useChats();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
