@@ -8,7 +8,7 @@ export default function MessageInput({onSent}) {
 
   const { selectedChatId } = useApp();
 
-  const handleSend = async ({onSent}) => {
+  const handleSend = async () => {
     if (!text.trim()) return;
 
     try {
@@ -16,8 +16,6 @@ export default function MessageInput({onSent}) {
         method: "POST",
         body: JSON.stringify({ text: text }),
       });
-
-      console.log(result);
 
       onSent?.(result)
       setText("");
