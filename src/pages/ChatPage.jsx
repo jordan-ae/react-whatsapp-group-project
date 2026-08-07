@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
