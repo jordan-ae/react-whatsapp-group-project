@@ -7,7 +7,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 //this line was added
-import { useParams } from "react-router-dom"; //
+import { useParams } from "react-router-dom";
 import "./ChatPage.css";
 
 export default function ChatPage() {
