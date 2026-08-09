@@ -1,17 +1,33 @@
-import { useState } from 'react';
-import './MessageInput.css';
+import { useState } from "react";
+import "./MessageInput.css";
+import { mockFetch } from "../../utils/mockFetch";
+import { useApp } from "../../contexts/AppContext";
 
-export default function MessageInput() {
-  const [text, setText] = useState('');
+export default function MessageInput({onSent}) {
+  const [text, setText] = useState("");
 
-  const handleSend = () => {
+  const { selectedChatId } = useApp();
+
+  const handleSend = async () => {
     if (!text.trim()) return;
-    console.log('Send message:', text);
-    setText('');
+
+    try {
+      const result = await mockFetch("/chats/" + selectedChatId + "/messages", {
+        method: "POST",
+        body: JSON.stringify({ text: text }),
+      });
+
+      onSent?.(result)
+      setText("");
+      
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -29,16 +45,21 @@ export default function MessageInput() {
           <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-3.31-2.69-6-6-6S3 1.69 3 5v12.5c0 4.42 3.58 8 8 8s8-3.58 8-8V6h-2.5z" />
         </svg>
       </button>
-      <input
+      <textarea
         type="text"
         className="message-input__field"
         placeholder="Type a message"
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
+        rows={1}
       />
       {text.trim() ? (
-        <button className="message-input__btn message-input__btn--send" onClick={handleSend} title="Send">
+        <button
+          className="message-input__btn message-input__btn--send"
+          onClick={handleSend}
+          title="Send"
+        >
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
           </svg>

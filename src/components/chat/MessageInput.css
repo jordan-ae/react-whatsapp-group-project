@@ -35,6 +35,8 @@
   font-size: var(--font-size-md);
   color: var(--color-text);
   border: 1px solid var(--color-input-border);
+  resize: none;
+  overflow-y: auto;
 }
 
 .message-input__field:focus {
