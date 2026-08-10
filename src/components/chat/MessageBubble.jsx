@@ -82,7 +82,7 @@ export default function MessageBubble({ message, isOwn, grouped, isGroup, sender
   return (
     <div className={`message-bubble ${isOwn ? 'message-bubble--own' : 'message-bubble--other'}`}>
       {isGroup && senderName && !isOwn && !grouped && (
-        <div className='message-bubble__sender'>
+        <div className="message-bubble__sender">
           {senderName}
         </div>
       )}
