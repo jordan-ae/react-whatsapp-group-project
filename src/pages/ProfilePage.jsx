@@ -194,10 +194,10 @@ export default function ProfilePage() {
 
       <div className="profile-page__settings">
         {settingsRows.map((row) => (
-          <div className="profile-page__settings-row" key={row.id}>
+          <label className="profile-page__settings-row" key={row.id}>
             <span className="profile-page__settings-label">{row.label}</span>
-            <input type="checkbox" disabled aria-label={row.label} />
-            </div>
+            <input type="checkbox" checked={false} disabled readOnly aria-label={row.label} />
+            </label>
         ))}
       </div>
 
