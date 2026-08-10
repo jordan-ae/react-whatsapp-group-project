@@ -2,11 +2,7 @@ import { MESSAGE_TYPES, MESSAGE_STATUS } from '../../utils/constants';
 import { formatMessageTime } from '../../utils/formatDate';
 import './MessageBubble.css';
 
-<<<<<<< HEAD
-export default function MessageBubble({ message, isOwn, grouped }) {
-=======
-export default function MessageBubble({ message, isOwn, senderName, isGroup }) {
->>>>>>> e9daa2e (Displaying the sender names only for group chats)
+export default function MessageBubble({ message, isOwn, grouped, isGroup, senderName }) {
   const renderContent = () => {
     switch (message.type) {
       case MESSAGE_TYPES.TEXT:
@@ -85,8 +81,8 @@ export default function MessageBubble({ message, isOwn, senderName, isGroup }) {
 
   return (
     <div className={`message-bubble ${isOwn ? 'message-bubble--own' : 'message-bubble--other'}`}>
-      {isGroup && senderName && !isOwn && (
-        <div className='message-bubble__sender'>
+      {isGroup && senderName && !isOwn && !grouped && (
+        <div className="message-bubble__sender">
           {senderName}
         </div>
       )}
