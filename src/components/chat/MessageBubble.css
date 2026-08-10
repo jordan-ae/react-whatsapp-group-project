@@ -116,6 +116,15 @@
   color: var(--color-status-read);
 }
 
+.message-bubble__status svg {
+  width: 12px;
+  height: 12px;
+}
+
+.message-bubble__status svg:last-child {
+  margin-left: -5px;
+}
+
 .message-bubble__status--delivered {
   color: var(--color-text-muted);
 }

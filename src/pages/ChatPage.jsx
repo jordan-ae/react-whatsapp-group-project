@@ -126,30 +126,25 @@ export default function ChatPage() {
                 new Date(previous.timestamp).toDateString() !==
                   new Date(msg.timestamp).toDateString();
 
-              const grouped =
-                !showDate &&
-                Boolean(previous && previous.senderId === msg.senderId);
+            return (
+              <>
+                {showDate && (
+                  <div className="chat-page__date-label">
+                    {formatDateLabel(msg.timestamp)}
+                  </div>
+                )}
 
-              return (
-                <Fragment key={msg.id}>
-                  {showDate && (
-                    <div className="chat-page__date-label">
-                      {formatDateLabel(msg.timestamp)}
-                    </div>
-                  )}
-
-                  <MessageBubble
-                    message={msg}
-                    isOwn={msg.senderId === "user_me"}
-                    grouped={grouped}
-                  />
-                </Fragment>
-              );
-            })}
-
-            <div ref={bottomRef}></div>
+                <MessageBubble
+                  key={msg.id}
+                  message={msg}
+                  isOwn={msg.senderId === "user_me"}
+                />
+              </>
+            );
+          })}
           </Fragment>
         )}
+        <div ref={bottomRef}></div>
       </div>
 
       <MessageInput onSent={refetch} />
