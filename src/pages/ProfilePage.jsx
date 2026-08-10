@@ -15,6 +15,12 @@ export default function ProfilePage() {
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setAbout] = useState("");
 
+  const settingsRows = [
+    { id: "privacy", label: "Privacy" },
+    { id: "notifications", label: "Notifications" },
+    { id: "theme", label: "Theme" },
+  ];
+
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
@@ -184,6 +190,15 @@ export default function ProfilePage() {
             <span>{currentUser.email}</span>
           </div>
         </div>
+      </div>
+
+      <div className="profile-page__settings">
+        {settingsRows.map((row) => (
+          <div className="profile-page__settings-row" key={row.id}>
+            <span className="profile-page__settings-label">{row.label}</span>
+            <input type="checkbox" disabled aria-label={row.label} />
+            </div>
+        ))}
       </div>
 
       <Modal
