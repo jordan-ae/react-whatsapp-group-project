@@ -31,10 +31,23 @@ export function AppProvider({ children }) {
     }
   };
 
+  const updateAvatar = async (newAvatarUrl) => {
+    try {
+      await mockFetch(`/users/${currentUser.id}/profile`, {
+        method: "PUT",
+        body: JSON.stringify({ avatar: newAvatarUrl }),
+      });
+      setCurrentUser((prev) => ({ ...prev, avatar: newAvatarUrl }));
+    } catch (err) {
+      console.error("updateAvatar failed:", err);
+    }
+  };
+
   const value = {
     currentUser,
     setCurrentUser,
     updateAbout,
+    updateAvatar,
     activeTab,
     setActiveTab,
     selectedChatId,

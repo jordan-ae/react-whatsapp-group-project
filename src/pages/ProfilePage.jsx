@@ -84,7 +84,7 @@ export default function ProfilePage() {
 
       <div className="profile-page__avatar-section">
         <div className="profile-page__avatar-wrapper">
-          <Avatar name={currentUser.name} size="xl" />
+          <Avatar name={currentUser.name} src={currentUser?.avatar} size="xl" />
           <button
             className="profile-page__avatar-edit"
             onClick={() => setIsModalOpen(true)}
