@@ -121,7 +121,7 @@
 }
 
 .status-progress-bar.active .status-progress-bar__fill {
-  animation: fillProgress 3s linear forwards;
+  animation: fillProgress var(--fill-ms) linear forwards;
 }
 
 .status-progress-bar.complete .status-progress-bar__fill {

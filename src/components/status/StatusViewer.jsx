@@ -9,6 +9,8 @@ export default function StatusViewer({ status, onClose }) {
   const items = status?.items ?? [];
   const currentItem = items[currentIndex];
 
+  const DURATION_MS = 3000;
+
   // useEffect set timer when the status is opened
   useEffect(() => {
     setCurrentIndex(0);
@@ -22,7 +24,7 @@ export default function StatusViewer({ status, onClose }) {
       } else {
         onClose();
       }
-    }, 3000);
+    }, DURATION_MS);
     
     return () => clearTimeout(timer);
   }, [currentIndex, currentItem, items.length, onClose]);
@@ -42,7 +44,7 @@ export default function StatusViewer({ status, onClose }) {
         setCurrentIndex((prev) => prev - 1);
       }
     };
-
+    
     return (
 
         <div className="status-viewer">
@@ -56,8 +58,8 @@ export default function StatusViewer({ status, onClose }) {
 
             return (
 
-              <div key={index} className ={`status-progress-bar  ${isActive ? "active" : ""} ${isComplete ? "complete" : ""}`}>
-              <div className="status-progress-bar__fill"/>
+              <div key={index} className={`status-progress-bar ${isActive ? "active" : ""} ${isComplete ? "complete" : ""}`}>
+              <div className="status-progress-bar__fill" style={isActive ? {"--fill-ms": `${DURATION_MS}ms` }: undefined}/>
               </div>
             )              
          })}
@@ -101,7 +103,7 @@ export default function StatusViewer({ status, onClose }) {
                     </div>
                     
                   )}
-                  
+
                     {currentItem.type === STATUS_TYPES.IMAGE && (
                         <div className="status-viewer__image-wrapper">
                             <ImageWithFallback
