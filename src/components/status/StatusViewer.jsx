@@ -44,7 +44,25 @@ export default function StatusViewer({ status, onClose }) {
     };
 
     return (
+
         <div className="status-viewer">
+          <div className="status-progress-bar-container">
+
+          {items.map((_, index) => {
+
+            const isActive = index === currentIndex;
+            
+            const isComplete = index < currentIndex;
+
+            return (
+
+              <div key={index} className ={`status-progress-bar  ${isActive ? "active" : ""} ${isComplete ? "complete" : ""}`}>
+              <div className="status-progress-bar__fill"/>
+              </div>
+            )              
+         })}
+
+          </div>
             <button 
               className="status-viewer__close"
               onClick={onClose}
@@ -71,6 +89,7 @@ export default function StatusViewer({ status, onClose }) {
             <h2>{status.name}</h2>
 
             {currentItem.type === STATUS_TYPES.TEXT && (
+              
                 <div
                   className="status-viewer__text"
                   style={{
@@ -80,6 +99,7 @@ export default function StatusViewer({ status, onClose }) {
                 >
                     {currentItem.text}
                     </div>
+                    
                   )}
                   
                     {currentItem.type === STATUS_TYPES.IMAGE && (
