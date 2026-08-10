@@ -59,7 +59,7 @@ export default function StatusViewer({ status, onClose }) {
             return (
 
               <div key={index} className={`status-progress-bar ${isActive ? "active" : ""} ${isComplete ? "complete" : ""}`}>
-              <div className="status-progress-bar__fill" style={isActive ? {"--fill-ms": `${DURATION_MS}ms` }: undefined}/>
+              <div key={isActive ? currentIndex : index } className="status-progress-bar__fill" style={isActive ? {"--fill-ms": `${DURATION_MS}ms` }: undefined}/>
               </div>
             )              
          })}
@@ -116,6 +116,7 @@ export default function StatusViewer({ status, onClose }) {
                   <h3 className="status-viewer__image-text">{currentItem.text}</h3>
                    <p>{currentItem.caption}</p>
                 </div>
+                
             )}
         </div>
     );
