@@ -29,7 +29,7 @@ export default function MessageInput({onSent}) {
     }
       
     try {
-      const result = await mockFetch("/chats/" + selectedChatId + "/messages", {
+      await mockFetch("/chats/" + selectedChatId + "/messages", {
         method: "POST",
         body: JSON.stringify({ text: messageText }),
       });
@@ -71,7 +71,7 @@ export default function MessageInput({onSent}) {
       {text.trim() ? (
         <button
           className="message-input__btn message-input__btn--send"
-          onClick={handleSend}
+          onClick={() => handleSend()}
           title="Send"
         >
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">

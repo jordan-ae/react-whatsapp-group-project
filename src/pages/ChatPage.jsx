@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import Modal from "../components/common/Modal.jsx";
 import { useState } from "react";
 import "./ChatPage.css";
-import { useState } from "react";
+
 
 export default function ChatPage() {
   const { chats } = useChats();
@@ -19,10 +19,12 @@ export default function ChatPage() {
   const { chatId } = useParams();
   //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
-  const { messages, loading, refetch } = useChatMessages(selectedChatId);
+  const { messages, loading  } = useChatMessages(selectedChatId);
 
   const [isCallactive, setCallactive] = useState(false);
   const [sentMessages, setSentMessages] = useState([]);
+
+  const allMessages = [...messages, ...sentMessages];
 
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg])
@@ -42,10 +44,14 @@ export default function ChatPage() {
   }, [chatId, selectedChatId, setSelectedChatId]);
 
   useEffect(() => {
+    setSentMessages([]);
+  }, [selectedChatId]);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [allMessages]);
+  }, [messages, sentMessages]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -153,7 +159,7 @@ export default function ChatPage() {
         <div ref={bottomRef}></div>
       </div>
 
-      <MessageInput onSent={refetch} />
+      <MessageInput onSent={handleSent} />
       {isCallactive && (
         <Modal
           isOpen={isCallactive}
