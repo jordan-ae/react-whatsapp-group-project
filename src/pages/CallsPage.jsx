@@ -65,6 +65,7 @@ export default function CallsPage() {
       {selectedCall ? (
         <CallScreen call={selectedCall} onEnd={handleEndCall} />
       ) : (
+      <>
       <div className="calls-page__actions">
         <button className="calls-page__create"
          type="button" 
@@ -136,43 +137,7 @@ export default function CallsPage() {
           </div>
         )}
       </Modal>
-
-      <Modal isOpen={isPickerOpen} onClose={() => setIsPickerOpen(false)} title="Select a contact">
-        {usersLoading ? (
-          <div className="calls-page__loading">Loading contacts...</div>
-        ) : (
-          <div className="calls-page__contacts">
-            {safeUsers.map((user) => (
-              <div key={user.id} className="calls-page__contact">
-                <div className="calls-page__contact-info">
-                  <Avatar
-                    name={user.name}
-                    size="md"
-                  />
-                  <span>{user.name}</span>
-                </div>
-
-                <div className="calls-page__contact-actions">
-                  <button
-                    type="button"
-                    className="calls-page__contact-btn calls-page__contact-btn--voice"
-                    onClick={() => handleStartCall(user, 'voice')}
-                  >
-                    Voice
-                  </button>
-                  <button
-                    type="button"
-                    className="calls-page__contact-btn calls-page__contact-btn--video"
-                    onClick={() => handleStartCall(user, 'video')}
-                  >
-                    Video
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Modal>
+      </>
       )}
     </div>
   );
