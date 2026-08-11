@@ -47,9 +47,15 @@ export default function CallsPage() {
 
   const safeCalls = Array.isArray(calls) ? calls : [];
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [selectedCall, setSelectedCall] = useState(null);
 
   const { data: users, loading: usersLoading } = useApi('/users');
   const safeUsers = Array.isArray(users) ? users : [];
+
+  const handleStartCall = (user, type) => {
+    setSelectedCall({ user, type });
+    setIsPickerOpen(false);
+  };
 
   return (
     <div className="calls-page">
@@ -175,18 +181,32 @@ export default function CallsPage() {
         ) : (
           <div className="calls-page__contacts">
             {safeUsers.map((user) => (
-              <button
-                key={user.id}
-                className="calls-page__contact"
-                type="button"
-              >
-                <Avatar
-                  name={user.name}
-                  size="md"
-                />
+              <div key={user.id} className="calls-page__contact">
+                <div className="calls-page__contact-info">
+                  <Avatar
+                    name={user.name}
+                    size="md"
+                  />
+                  <span>{user.name}</span>
+                </div>
 
-                <span>{user.name}</span>
-              </button>
+                <div className="calls-page__contact-actions">
+                  <button
+                    type="button"
+                    className="calls-page__contact-btn calls-page__contact-btn--voice"
+                    onClick={() => handleStartCall(user, 'voice')}
+                  >
+                    Voice
+                  </button>
+                  <button
+                    type="button"
+                    className="calls-page__contact-btn calls-page__contact-btn--video"
+                    onClick={() => handleStartCall(user, 'video')}
+                  >
+                    Video
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         )}
