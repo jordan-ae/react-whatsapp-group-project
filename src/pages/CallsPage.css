@@ -21,7 +21,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 4px 20px 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border, #e9edef);
 }
 
 .calls-page__create,
@@ -45,7 +46,7 @@
 
 .calls-page__create:hover,
 .calls-page__create:focus-visible {
-  background-color: var(--color-bg);
+  background-color: var(--color-bg, #f0f2f5);
 }
 
 .calls-page__new-call {
@@ -58,93 +59,10 @@
   background-color: var(--color-primary-dark);
 }
 
-.calls-page__list {
-  flex: 1;
-  overflow-y: auto;
-}
-
 .calls-page__loading {
   padding: 32px;
   text-align: center;
   color: var(--color-text-muted);
-}
-
-.calls-page__item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.calls-page__item:hover {
-  background-color: var(--color-sidebar-item-hover);
-}
-
-.calls-page__item-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.calls-page__item-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.calls-page__item-name {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.calls-page__item-time {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.calls-page__item-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 2px;
-}
-
-.calls-page__item-type {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-.calls-page__missed {
-  color: var(--color-danger);
-}
-
-.calls-page__missed-text {
-  color: var(--color-danger);
-}
-
-.calls-page__duration {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.calls-page__call-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.calls-page__call-btn:hover {
-  background-color: var(--color-primary-light);
 }
 
 .create-link-modal-content p {
@@ -169,7 +87,6 @@
   font-size: var(--font-size-sm);
   color: var(--color-text);
   word-break: break-all;
-  
 }
 
 .create-link-modal__copy-btn {
@@ -247,4 +164,9 @@
 .calls-page__contact-btn:hover,
 .calls-page__contact-btn:focus-visible {
   filter: brightness(0.95);
+}
+
+.calls-page button:focus-visible {
+  outline: 2px solid var(--color-primary, #00a884);
+  outline-offset: 2px;
 }
