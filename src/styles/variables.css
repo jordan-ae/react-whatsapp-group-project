@@ -63,6 +63,8 @@
 
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
+
+  --color-toggle-off: #cfd8dc;
 }
 
 [data-theme="dark"] {
@@ -95,6 +97,8 @@
 
   --color-input-bg: #2a3942;
   --color-input-border: #2a3942;
+
+  --color-toggle-off: #4a5a65;
 
   --bd-main: #111b21;
 }

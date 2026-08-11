@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
+import { useTheme } from "../contexts/ThemeContext";
 import Avatar from "../components/common/Avatar";
 import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
@@ -14,6 +15,7 @@ export default function ProfilePage() {
 
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setAbout] = useState("");
+  const { theme, toggleTheme } = useTheme();
 
   const settingsRows = [
     { id: "privacy", label: "Privacy" },
@@ -194,10 +196,18 @@ export default function ProfilePage() {
 
       <div className="profile-page__settings">
         {settingsRows.map((row) => (
-          <div className="profile-page__settings-row" key={row.id}>
+          <label className="profile-page__settings-row" key={row.id}>
             <span className="profile-page__settings-label">{row.label}</span>
-            <input type="checkbox" disabled aria-label={row.label} />
-            </div>
+            {row.id === "theme" ? (
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+            ) :(
+              <input type="checkbox" disabled aria-label={row.label} />
+            )}
+            </label>
         ))}
       </div>
 
