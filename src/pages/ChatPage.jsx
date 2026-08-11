@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -14,6 +14,7 @@ export default function ChatPage() {
   //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
+  const { searchQuery, setSearchQuery } = useState("")
 
   const [isCallactive, setCallactive] = useState(false);
 
@@ -42,6 +43,10 @@ export default function ChatPage() {
       userNames[chat.userId] = chat.name
     }
   })
+
+  const filteredMessages = messages.filter((message) => 
+  message.text?.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   if (!selectedChatId || !chat) {
     return (
@@ -87,6 +92,14 @@ export default function ChatPage() {
           <span className="chat-page__header-status">
             {chat.online ? "online" : "offline"}
           </span>
+          <div>
+            <input
+             type="text"
+             placeholder="Search Message"
+             value={searchQuery}
+             onChange={(e) => 
+              setSearchQuery(e.target.value)} />
+          </div>
         </div>
         <div className="chat-page__header-actions">
           <button
@@ -120,8 +133,8 @@ export default function ChatPage() {
           />
         ) : (
           <Fragment>
-            {messages.map((msg, index) => {
-              const previous = messages[index - 1];
+            {filteredMessages.map((msg, index) => {
+              const previous = filteredMessages[index - 1];
 
               const showDate =
                 !previous ||
