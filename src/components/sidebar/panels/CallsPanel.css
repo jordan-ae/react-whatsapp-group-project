@@ -63,7 +63,6 @@
   color: var(--color-text-secondary, #667781);
 }
 
-/* MISSED CALL HIGHLIGHT COLORS */
 .calls-panel__icon--missed,
 .calls-panel__item-type--missed {
   color: var(--color-danger, #ea0038) !important;
