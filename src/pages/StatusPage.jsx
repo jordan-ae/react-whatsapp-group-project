@@ -5,7 +5,8 @@ import Avatar from '../components/common/Avatar';
 import { formatStatusTime } from '../utils/formatDate';
 import './StatusPage.css';
 import StatusViewer from '../components/status/StatusViewer';
-import Modal from "../components/common/Modal"
+import Modal from '../components/common/Modal';
+import TextStatusComposer from "../components/status/TextStatusComposer";
 
 export default function StatusPage() {
   const { currentUser } = useApp();
@@ -96,10 +97,11 @@ export default function StatusPage() {
              isOpen={showModal}
              onClose={() => setShowModal(false)}
              title="New status"
+             fullScreen
              >
-            <div className="status-composer">
-              create your status
-            </div>
+            <TextStatusComposer
+              onClose={() => setShowModal(false)}
+            />
           </Modal>
     </div>
   );

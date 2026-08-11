@@ -1,0 +1,96 @@
+.text-status-composer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.text-status-composer__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.text-status-composer__header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.text-status-composer__close {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.text-status-composer__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.text-status-composer__content textarea {
+  width: min(700px, 90%);
+  min-height: 200px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-size: 32px;
+  line-height: 1.4;
+}
+
+.text-status-composer__content textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.text-status-composer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.text-status-composer__colors {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.text-status-composer__color {
+  width: 36px;
+  height: 36px;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.text-status-composer__color:hover {
+  transform: scale(1.1);
+}
+
+.text-status-composer__color-button {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.text-status-composer__preview {
+  display: none;
+}
