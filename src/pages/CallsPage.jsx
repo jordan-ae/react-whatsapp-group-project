@@ -6,7 +6,6 @@ import './CallsPage.css';
 
 export default function CallsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [callLink, setCallLink] = useState('');
 
@@ -41,7 +40,6 @@ export default function CallsPage() {
     }
   };
 
-  const safeCalls = Array.isArray(calls) ? calls : [];
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [selectedCall, setSelectedCall] = useState(null);
 
