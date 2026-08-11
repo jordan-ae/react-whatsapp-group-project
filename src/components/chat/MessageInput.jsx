@@ -2,28 +2,42 @@ import { useState } from "react";
 import "./MessageInput.css";
 import { mockFetch } from "../../utils/mockFetch";
 import { useApp } from "../../contexts/AppContext";
+import { MESSAGE_STATUS } from '../../utils/constants';
 
 export default function MessageInput({onSent}) {
   const [text, setText] = useState("");
 
   const { selectedChatId } = useApp();
 
-  const handleSend = async () => {
+  const handleSend = async (e) => {
     if (!text.trim()) return;
 
-    try {
-      const result = await mockFetch("/chats/" + selectedChatId + "/messages", {
-        method: "POST",
-        body: JSON.stringify({ text: text }),
-      });
+    const messageText = text.trim()
 
-      onSent?.(result)
-      setText("");
+    const updatedMessage = {
+      id: "temp-" + Date.now(),
+      text: messageText,
+      senderId: "user_me",
+      timestamp: new Date().toISOString(),
+      status: MESSAGE_STATUS.SENT
+    }
+
+    setText("");
+
+    if(onSent) {
+      onSent(updatedMessage)
+    }
+      
+    try {
+      await mockFetch("/chats/" + selectedChatId + "/messages", {
+        method: "POST",
+        body: JSON.stringify({ text: messageText }),
+      });
       
     } catch (error) {
       console.error("Error sending message:", error);
     }
-
+    
   };
 
   const handleKeyDown = (e) => {
@@ -57,7 +71,7 @@ export default function MessageInput({onSent}) {
       {text.trim() ? (
         <button
           className="message-input__btn message-input__btn--send"
-          onClick={handleSend}
+          onClick={() => handleSend()}
           title="Send"
         >
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
