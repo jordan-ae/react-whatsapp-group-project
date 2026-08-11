@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApi } from '../hooks/useApi';
 import Modal from '../components/common/Modal';
 import Avatar from '../components/common/Avatar';
+import CallScreen from '../components/calls/CallScreen';
 import './CallsPage.css';
 
 export default function CallsPage() {
@@ -51,12 +52,19 @@ export default function CallsPage() {
     setIsPickerOpen(false);
   };
 
+  const handleEndCall = () => {
+    setSelectedCall(null);
+  };
+
   return (
     <div className="calls-page">
       <div className="calls-page__header">
         <h2 className="calls-page__title">Calls</h2>
       </div>
 
+      {selectedCall ? (
+        <CallScreen call={selectedCall} onEnd={handleEndCall} />
+      ) : (
       <div className="calls-page__actions">
         <button className="calls-page__create"
          type="button" 
@@ -128,6 +136,44 @@ export default function CallsPage() {
           </div>
         )}
       </Modal>
+
+      <Modal isOpen={isPickerOpen} onClose={() => setIsPickerOpen(false)} title="Select a contact">
+        {usersLoading ? (
+          <div className="calls-page__loading">Loading contacts...</div>
+        ) : (
+          <div className="calls-page__contacts">
+            {safeUsers.map((user) => (
+              <div key={user.id} className="calls-page__contact">
+                <div className="calls-page__contact-info">
+                  <Avatar
+                    name={user.name}
+                    size="md"
+                  />
+                  <span>{user.name}</span>
+                </div>
+
+                <div className="calls-page__contact-actions">
+                  <button
+                    type="button"
+                    className="calls-page__contact-btn calls-page__contact-btn--voice"
+                    onClick={() => handleStartCall(user, 'voice')}
+                  >
+                    Voice
+                  </button>
+                  <button
+                    type="button"
+                    className="calls-page__contact-btn calls-page__contact-btn--video"
+                    onClick={() => handleStartCall(user, 'video')}
+                  >
+                    Video
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Modal>
+      )}
     </div>
   );
 }
