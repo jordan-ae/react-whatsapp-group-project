@@ -20,6 +20,7 @@ export default function ChatPage() {
 
   const [isCallActive, setCallActive] = useState(false);
   const [sentMessages, setSentMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   const allMessages = [...messages, ...sentMessages];
   const bottomRef = useRef(null);
@@ -54,6 +55,16 @@ export default function ChatPage() {
       userNames[chat.userId] = chat.name
     }
   })
+  
+  useEffect(() => {
+    if (selectedChatId) {
+      setIsTyping(true);
+      const timer = setTimeout(() => {
+        setIsTyping(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedChatId]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -87,7 +98,7 @@ export default function ChatPage() {
         <div className="chat-page__header-info">
           <span className="chat-page__header-name">{chat.name}</span>
           <span className="chat-page__header-status">
-            {chat.online ? "online" : "offline"}
+            {isTyping ? "typing…" : chat.online ? "online" : "offline"}
           </span>
         </div>
         <div className="chat-page__header-actions">
