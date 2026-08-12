@@ -10,8 +10,8 @@ import TextStatusComposer from "../components/status/TextStatusComposer";
 
 export default function StatusPage() {
   const { currentUser } = useApp();
-  const { myStatus, recentStatus, viewedStatus, loading } = useStatus();
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const { myStatus, refetch } = useStatus();
+  const [selectedStatus, setSelectedStatus] = useState(null );
   const [showModal, setShowModal] = useState(false);
 
   const renderStatusItem = (statusItem) => (
@@ -36,11 +36,11 @@ export default function StatusPage() {
 
   return (
     <div className="status-page">
-      <div className="status-page__header">
+      {/* <div className="status-page__header">
         <h2 className="status-page__title">Status</h2>
-      </div>
+      </div> */}
 
-      <div className="status-page__my-status">
+      {/* <div className="status-page__my-status">
         <div className="status-page__my-avatar">
           <Avatar name={currentUser?.name || "You"} size="lg" />
           <div className="status-page__add-btn">
@@ -62,9 +62,9 @@ export default function StatusPage() {
             {myStatus ? formatStatusTime(myStatus.timestamp) : "Tap to add status update"}
           </span>
         </div>
-      </div>
+      </div> */}
 
-      <div className="status-page__section">
+      {/* <div className="status-page__section">
         <h3 className="status-page__section-title">Recent updates</h3>
         <div className="status-page__list">
           {loading ? (
@@ -75,16 +75,16 @@ export default function StatusPage() {
             recentStatus.map(renderStatusItem)
           )}
         </div>
-      </div>
+      </div> */}
 
-      {viewedStatus.length > 0 && (
+      {/* {viewedStatus.length > 0 && (
         <div className="status-page__section">
           <h3 className="status-page__section-title">Viewed updates</h3>
           <div className="status-page__list">
             {viewedStatus.map(renderStatusItem)}
           </div>
         </div>
-      )}
+      )} */}
 
       {selectedStatus && (
         <StatusViewer
@@ -101,6 +101,7 @@ export default function StatusPage() {
              >
             <TextStatusComposer
               onClose={() => setShowModal(false)}
+              onPosted={refetch}
             />
           </Modal>
     </div>

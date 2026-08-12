@@ -94,3 +94,23 @@
 .text-status-composer__preview {
   display: none;
 }
+
+.text-status-composer__post-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+  background: white;
+  color: #25d366;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.text-status-composer__post-button:hover {
+  opacity: 0.9;
+}
+
+.text-status-composer__post-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
