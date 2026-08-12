@@ -9,6 +9,8 @@ export default function StatusViewer({ status, onClose }) {
   const items = status?.items ?? [];
   const currentItem = items[currentIndex];
 
+  const DURATION_MS = 3000;
+
   // useEffect set timer when the status is opened
   useEffect(() => {
     setCurrentIndex(0);
@@ -22,7 +24,7 @@ export default function StatusViewer({ status, onClose }) {
       } else {
         onClose();
       }
-    }, 3000);
+    }, DURATION_MS);
     
     return () => clearTimeout(timer);
   }, [currentIndex, currentItem, items.length, onClose]);
@@ -42,9 +44,27 @@ export default function StatusViewer({ status, onClose }) {
         setCurrentIndex((prev) => prev - 1);
       }
     };
-
+    
     return (
+
         <div className="status-viewer">
+          <div className="status-progress-bar-container">
+
+          {items.map((_, index) => {
+
+            const isActive = index === currentIndex;
+            
+            const isComplete = index < currentIndex;
+
+            return (
+
+              <div key={index} className={`status-progress-bar ${isActive ? "active" : ""} ${isComplete ? "complete" : ""}`}>
+              <div key={isActive ? currentIndex : index } className="status-progress-bar__fill" style={isActive ? {"--fill-ms": `${DURATION_MS}ms` }: undefined}/>
+              </div>
+            )              
+         })}
+
+          </div>
             <button 
               className="status-viewer__close"
               onClick={onClose}
@@ -71,6 +91,7 @@ export default function StatusViewer({ status, onClose }) {
             <h2>{status.name}</h2>
 
             {currentItem.type === STATUS_TYPES.TEXT && (
+              
                 <div
                   className="status-viewer__text"
                   style={{
@@ -80,8 +101,9 @@ export default function StatusViewer({ status, onClose }) {
                 >
                     {currentItem.text}
                     </div>
+                    
                   )}
-                  
+
                     {currentItem.type === STATUS_TYPES.IMAGE && (
                         <div className="status-viewer__image-wrapper">
                             <ImageWithFallback
@@ -94,6 +116,7 @@ export default function StatusViewer({ status, onClose }) {
                   <h3 className="status-viewer__image-text">{currentItem.text}</h3>
                    <p>{currentItem.caption}</p>
                 </div>
+                
             )}
         </div>
     );
