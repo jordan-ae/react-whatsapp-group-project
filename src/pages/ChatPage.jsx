@@ -7,6 +7,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import { CHAT_TYPES } from "../utils/constants";
+import Modal from "../components/common/Modal";
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -14,9 +15,11 @@ export default function ChatPage() {
   //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
-  const { searchQuery, setSearchQuery } = useState("")
 
   const [isCallactive, setCallactive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchResultRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
@@ -24,12 +27,16 @@ export default function ChatPage() {
 
   const bottomRef = useRef(null);
 
-  // this line was added
-  useEffect(() => {
-    if (chatId && chatId !== selectedChatId) {
-      setSelectedChatId(chatId);
-    }
-  }, [chatId, selectedChatId, setSelectedChatId]);
+  const searchMatches = searchQuery
+    ? messages
+        .map((message, index) => ({
+          message,
+          index,
+        }))
+        .filter(({ message }) =>
+          message.text?.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+    : [];
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
@@ -37,16 +44,82 @@ export default function ChatPage() {
     });
   }, [messages]);
 
-  const userNames = {}
-  chats.forEach(chat => {
+  const userNames = {};
+  chats.forEach((chat) => {
     if (chat.type === "individual") {
-      userNames[chat.userId] = chat.name
+      userNames[chat.userId] = chat.name;
     }
-  })
+  });
 
-  const filteredMessages = messages.filter((message) => 
-  message.text?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  useEffect(() => {
+    if (searchMatches.length > 0) {
+      searchResultRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [searchMatches.length]);
+  useEffect(() => {
+  const container = messagesContainerRef.current;
+
+  if (!container || !searchQuery.trim()) return;
+
+  const walker = document.createTreeWalker(
+    container,
+    NodeFilter.SHOW_TEXT
+  );
+
+  const textNodes = [];
+
+  let node;
+
+  while ((node = walker.nextNode())) {
+    textNodes.push(node);
+  }
+
+  const escapedQuery = searchQuery.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+
+  const regex = new RegExp(`\\b${escapedQuery}\\b`, "gi");
+
+  textNodes.forEach((textNode) => {
+    const text = textNode.textContent;
+
+    if (!regex.test(text)) return;
+
+    regex.lastIndex = 0;
+
+    const fragment = document.createDocumentFragment();
+
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      fragment.appendChild(
+        document.createTextNode(
+          text.slice(lastIndex, match.index)
+        )
+      );
+
+      const highlight = document.createElement("mark");
+
+      highlight.className = "message-search-highlight";
+      highlight.textContent = match[0];
+
+      fragment.appendChild(highlight);
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    fragment.appendChild(
+      document.createTextNode(text.slice(lastIndex))
+    );
+
+    textNode.parentNode.replaceChild(fragment, textNode);
+  });
+}, [searchQuery, messages]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -92,16 +165,25 @@ export default function ChatPage() {
           <span className="chat-page__header-status">
             {chat.online ? "online" : "offline"}
           </span>
-          <div>
-            <input
-             type="text"
-             placeholder="Search Message"
-             value={searchQuery}
-             onChange={(e) => 
-              setSearchQuery(e.target.value)} />
-          </div>
         </div>
         <div className="chat-page__header-actions">
+          <div className="chat-page__search">
+  <input
+    type="text"
+    placeholder="Search messages"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
+
+  {searchQuery && (
+    <button
+      className="chat-page__search-clear"
+      onClick={() => setSearchQuery("")}
+    >
+      X
+    </button>
+  )}
+</div>
           <button
             className="chat-page__header-btn"
             title="Voice call"
@@ -123,7 +205,7 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <div className="chat-page__messages">
+      <div className="chat-page__messages" ref={messagesContainerRef}>
         {loading ? (
           <div className="chat-page__loading">Loading messages...</div>
         ) : messages.length === 0 ? (
@@ -133,37 +215,51 @@ export default function ChatPage() {
           />
         ) : (
           <Fragment>
-            {filteredMessages.map((msg, index) => {
-              const previous = filteredMessages[index - 1];
+            {messages.map((msg, index) => {
+              const previous = messages[index - 1];
 
               const showDate =
                 !previous ||
                 new Date(previous.timestamp).toDateString() !==
                   new Date(msg.timestamp).toDateString();
 
-            return (
-              <Fragment key={msg.id}>
-                {showDate && (
-                  <div className="chat-page__date-label">
-                    {formatDateLabel(msg.timestamp)}
-                  </div>
-                )}
+              const isSearchMatch = searchMatches.some(
+  ({ index: matchIndex }) => matchIndex === index
+);
 
-                <MessageBubble
-                  message={msg}
-                  isOwn={msg.senderId === "user_me"}
-                  senderName={userNames[msg.senderId]}
-                  isGroup={chat.type === CHAT_TYPES.GROUP}
-                />
-              </Fragment>
-            );
-          })}
+              return (
+                <Fragment key={msg.id}>
+                  {showDate && (
+                    <div className="chat-page__date-label">
+                      {formatDateLabel(msg.timestamp)}
+                    </div>
+                  )}
+
+                  <div
+                    ref={isSearchMatch ? searchResultRef : null}
+                    className={`message-search-wrapper ${
+                      msg.senderId === "user_me"
+                        ? "message-search-wrapper--own"
+                        : ""
+                    }`}
+                  >
+                    <MessageBubble
+                      message={msg}
+                      isOwn={msg.senderId === "user_me"}
+                      senderName={userNames[msg.senderId]}
+                      isGroup={chat.type === CHAT_TYPES.GROUP}
+                    />
+                  </div>
+                </Fragment>
+              );
+            })}
           </Fragment>
         )}
         <div ref={bottomRef}></div>
       </div>
 
       <MessageInput onSent={refetch} />
+
       {isCallactive && (
         <Modal
           isOpen={isCallactive}
