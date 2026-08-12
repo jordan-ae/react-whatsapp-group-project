@@ -21,6 +21,15 @@ export default function ProfilePage() {
     { id: "theme", label: "Theme" },
   ];
 
+  const presetColors = ["#ff6b6b","#4ecdc4", "#45b7d1", "#bb8fce", "#f7dc6f", "#dda0dd", "#ffeaa7", "#96ceb4"]
+  const presetEmojis = ["😀", "😎", "🐱", "🐶", "🦊", "🐼", "🐸", "🤖"];
+
+  const presetAvatars = [
+    ...presetColors.map((value) => ({ type: "color", value })),
+    ...presetEmojis.map((value) => ({type: "emoji", value }))
+  ]
+  const [newAvatarUrl, setNewAvatarUrl] = useState(presetAvatars[0]);
+
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
@@ -206,7 +215,34 @@ export default function ProfilePage() {
         onClose={() => setIsModalOpen(false)}
         title="Change profile photo"
       >
-        <p>Photo picker coming</p>
+        <div className="photo-picker">
+          <div className="photo-picker__preview">
+            <div
+              className="photo-picker__avatar"
+              style={newAvatarUrl.type === "color" ? { backgroundColor: newAvatarUrl.value } : {}}
+            >
+                {newAvatarUrl.type === "emoji" ? newAvatarUrl.value : null}
+            </div>
+          </div>
+
+          <div className="photo-picker__grid">
+            {presetAvatars.map((option, index) => (
+              <button
+                key={index}
+                type="button"
+                className={
+                  newAvatarUrl.value === option.value
+                    ? "photo-picker__option photo-picker__option--selected"
+                    : "photo-picker__option"
+                }
+                style={option.type === "color" ? {backgroundColor: option.value } : {}}
+                onClick={() => setNewAvatarUrl(option)}
+              >
+                {option.type === "emoji" ? option.value : null}
+              </button>
+            ))}
+          </div>
+        </div>
       </Modal>
     </div>
   );
