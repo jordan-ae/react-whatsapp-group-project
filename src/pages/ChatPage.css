@@ -186,3 +186,51 @@
   margin: 0;
   line-height: 1.5;
 }
+
+.chat-page__info-section--list {
+  padding: 14px 0 !important; /* Removes padding sides to expand row background */
+}
+
+.chat-page__info-section--list label {
+  padding: 0 30px;
+}
+
+.chat-page__participant-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.chat-page__participant-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-page__participant-item:hover {
+  background-color: #f5f6f6;
+}
+
+.chat-page__participant-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.chat-page__participant-name {
+  font-size: 15px;
+  color: #111b21;
+  font-weight: 400;
+}
+
+.chat-page__participant-about {
+  font-size: 13px;
+  color: #667781;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

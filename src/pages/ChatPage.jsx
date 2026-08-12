@@ -14,7 +14,6 @@ import "./ChatPage.css";
 export default function ChatPage() {
   const { chats } = useChats();
   const { chatId } = useParams();
-  //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
   const [infoOpen, setInfoOpen] = useState(false);
