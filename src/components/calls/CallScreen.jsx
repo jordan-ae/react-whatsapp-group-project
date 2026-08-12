@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 import { useEffect, useState } from 'react';
->>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
 import Avatar from '../common/Avatar';
 import './CallScreen.css';
 
@@ -9,8 +6,6 @@ export default function CallScreen({ call, onEnd }) {
   if (!call) return null;
   const { user, type } = call;
 
-<<<<<<< HEAD
-=======
   const [seconds, setSeconds] = useState(0);
   const [muted, setMuted] = useState(false);
 
@@ -25,31 +20,29 @@ export default function CallScreen({ call, onEnd }) {
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
   };
 
->>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
   return (
     <div className="call-screen">
       <div className="call-screen__header">
         <Avatar name={user.name} size="lg" />
         <div className="call-screen__info">
           <span className="call-screen__title">In call with {user.name}</span>
-          <span className="call-screen__subtitle">{type === 'video' ? 'Video call' : 'Voice call'} in progress</span>
+          <span className="call-screen__subtitle">
+            {type === 'video' ? 'Video call' : 'Voice call'} in progress
+          </span>
         </div>
       </div>
 
-<<<<<<< HEAD
-      <button type="button" className="call-screen__end-btn" onClick={onEnd}>
-        End
-      </button>
-=======
       <div className="call-screen__meta">
-        <span className="call-screen__timer" aria-live="polite">{formatTime(seconds)}</span>
+        <span className="call-screen__timer" aria-live="polite">
+          {formatTime(seconds)}
+        </span>
       </div>
 
       <div className="call-screen__controls">
         <button
           type="button"
           className={`call-screen__control-btn call-screen__mute ${muted ? 'is-muted' : ''}`}
-          onClick={() => setMuted((v) => !v)}
+          onClick={() => setMuted((value) => !value)}
           aria-pressed={muted}
           title={muted ? 'Unmute' : 'Mute'}
         >
@@ -60,7 +53,6 @@ export default function CallScreen({ call, onEnd }) {
           End
         </button>
       </div>
->>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
     </div>
   );
 }
