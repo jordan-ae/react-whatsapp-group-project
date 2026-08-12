@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { useEffect, useState } from 'react';
+>>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
 import Avatar from '../common/Avatar';
 import './CallScreen.css';
 
@@ -5,6 +9,23 @@ export default function CallScreen({ call, onEnd }) {
   if (!call) return null;
   const { user, type } = call;
 
+<<<<<<< HEAD
+=======
+  const [seconds, setSeconds] = useState(0);
+  const [muted, setMuted] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const formatTime = (s) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  };
+
+>>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
   return (
     <div className="call-screen">
       <div className="call-screen__header">
@@ -15,9 +36,31 @@ export default function CallScreen({ call, onEnd }) {
         </div>
       </div>
 
+<<<<<<< HEAD
       <button type="button" className="call-screen__end-btn" onClick={onEnd}>
         End
       </button>
+=======
+      <div className="call-screen__meta">
+        <span className="call-screen__timer" aria-live="polite">{formatTime(seconds)}</span>
+      </div>
+
+      <div className="call-screen__controls">
+        <button
+          type="button"
+          className={`call-screen__control-btn call-screen__mute ${muted ? 'is-muted' : ''}`}
+          onClick={() => setMuted((v) => !v)}
+          aria-pressed={muted}
+          title={muted ? 'Unmute' : 'Mute'}
+        >
+          {muted ? 'Unmute' : 'Mute'}
+        </button>
+
+        <button type="button" className="call-screen__control-btn call-screen__end-btn" onClick={onEnd}>
+          End
+        </button>
+      </div>
+>>>>>>> dde23b8 (feat(call-screen): add timer, mute toggle, and controls)
     </div>
   );
 }
