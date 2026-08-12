@@ -129,6 +129,12 @@ export default function ChatPage() {
                 new Date(previous.timestamp).toDateString() !==
                   new Date(msg.timestamp).toDateString();
 
+              // A message is "grouped" when it continues a run from the same
+              // sender. A date separator always breaks the run.
+              const grouped =
+                !showDate &&
+                Boolean(previous && previous.senderId === msg.senderId);
+
             return (
               <Fragment key={msg.id}>
                 {showDate && (
@@ -140,6 +146,7 @@ export default function ChatPage() {
                 <MessageBubble
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
+                  grouped={grouped}
                   senderName={userNames[msg.senderId]}
                   isGroup={chat.type === CHAT_TYPES.GROUP}
                 />
