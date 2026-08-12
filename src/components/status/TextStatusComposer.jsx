@@ -1,37 +1,11 @@
 import { useState } from "react";
 import "./TextStatusComposer.css";
 import { STATUS_COLORS } from "../../utils/constants";
-import { mockFetch } from "../../utils/mockFetch";
 
-export default function TextStatusComposer({ onClose, onPosted }) {
+export default function TextStatusComposer({ onClose }) {
   const [statusText, setStatusText] = useState("");
   const [backgroundColor, setBackgroundColor] = useState("#25d366");
   const [showColors, setShowColors] = useState(false);
-  const [isPosting, setIsPosting] = useState(false);
-
-  const handlePost = async () => {
-    if (!statusText.trim()) {
-      return;
-    }
-    setIsPosting(true);
-    try {
-      await mockFetch("/status", {
-        method: "Post",
-        body: JSON.stringify({
-          text: statusText,
-          backgroundColor,
-        }),
-      });
-      if (onPosted) {
-        await onPosted();
-      }
-      onClose();
-    } catch (error) {
-      console.error("Failed to post status:", error);
-    } finally {
-      setIsPosting(false);
-    }
-  };
 
   return (
     <div
@@ -83,15 +57,6 @@ export default function TextStatusComposer({ onClose, onPosted }) {
           aria-label="Choose background color"
         >
           🎨
-        </button>
-
-        <button
-         type="button"
-         className="text-status-composer__post-button"
-         onClick={handlePost}
-         disabled={!statusText.trim() || isPosting}
-        >
-          {isPosting ? "Posting..." : "Post"}
         </button>
       </div>
     </div>
