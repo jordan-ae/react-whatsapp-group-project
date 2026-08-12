@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -8,6 +8,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import { CHAT_TYPES } from "../utils/constants";
+import Modal from "../components/common/Modal";
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -36,6 +37,8 @@ export default function ChatPage() {
       setSelectedChatId(chatId);
     }
   }, [chatId, selectedChatId, setSelectedChatId]);
+
+  
 
   useEffect(() => {
     setSentMessages([]);
