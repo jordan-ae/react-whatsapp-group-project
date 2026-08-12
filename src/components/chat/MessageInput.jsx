@@ -2,42 +2,245 @@ import { useState } from "react";
 import "./MessageInput.css";
 import { mockFetch } from "../../utils/mockFetch";
 import { useApp } from "../../contexts/AppContext";
-import { MESSAGE_STATUS } from '../../utils/constants';
+import { MESSAGE_STATUS } from "../../utils/constants";
 
-export default function MessageInput({onSent}) {
+export default function MessageInput({ onSent }) {
   const [text, setText] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
+  const Emojis = [
+    "😀",
+    "😃",
+    "😄",
+    "😁",
+    "😆",
+    "😅",
+    "😂",
+    "🤣",
+    "☺️",
+    "😊",
+    "😇",
+    "🙂",
+    "🙃",
+    "😉",
+    "😌",
+    "😍",
+    "🥰",
+    "😘",
+    "😗",
+    "😙",
+    "😚",
+    "😋",
+    "😛",
+    "😝",
+    "😜",
+    "🤪",
+    "🤨",
+    "🧐",
+    "🤓",
+    "😎",
+    "🤩",
+    "🥳",
+    "🔥",
+    "🙂‍↕️",
+    "😏",
+    "😒",
+    "🙂‍↔️",
+    "😞",
+    "😔",
+    "😟",
+    "😕",
+    "🙁",
+    "☹️",
+    "😣",
+    "😖",
+    "😫",
+    "😩",
+    "🥺",
+    "😢",
+    "😭",
+    "😤",
+    "😠",
+    "😡",
+    "🤬",
+    "🤯",
+    "😳",
+    "🥵",
+    "🥶",
+    "😶‍🌫️",
+    "😱",
+    "😨",
+    "😰",
+    "😥",
+    "😓",
+    "🤗",
+    "🤔",
+    "🤭",
+    "🤫",
+    "🤥",
+    "😶",
+    "😐",
+    "😑",
+    "😬",
+    "🙄",
+    "😯",
+    "😦",
+    "😧",
+    "😮",
+    "😲",
+    "🥱",
+    "😴",
+    "🤤",
+    "😪",
+    "😮‍💨",
+    "😵",
+    "😵‍💫",
+    "🤐",
+    "🥴",
+    "🤢",
+    "🤮",
+    "🤧",
+    "😷",
+    "🤒",
+    "🤕",
+    "🤑",
+    "🤠",
+    "😈",
+    "👿",
+    "💀",
+    "💩",
+    "☠️",
+    "👻",
+    "🙌",
+    "👏",
+    "🤝",
+    "👍",
+    "👎",
+    "👊",
+    "✊",
+    "🤛",
+    "🤜",
+    "🤞",
+    "✌️",
+    "🤟",
+    "🤘",
+    "👌",
+    "🤏",
+    "👈",
+    "👉",
+    "👆",
+    "👇",
+    "☝️",
+    "✋",
+    "🤚",
+    "🖐️",
+    "🖖",
+    "👋",
+    "💪",
+    "🦾",
+    "🖕",
+    "🐶",
+    "🐱",
+    "🐭",
+    "🐹",
+    "🐰",
+    "🦊",
+    "🐼",
+    "🐻",
+    "🐯",
+    "🦁",
+    "🐬",
+    "🐳",
+    "🐋",
+    "🫍",
+    "🦈",
+    "🍀",
+    "🌕",
+    "🌖",
+    "🌗",
+    "🌘",
+    "🌑",
+    "🌒",
+    "🌓",
+    "🌔",
+    "🌔",
+    "⌚",
+    "📱",
+    "📲",
+    "💻",
+    "🖥️",
+    "🖨️",
+    "🖱️",
+    "🖲️",
+    "🕹️",
+    "🗜️",
+    "💽",
+    "❤️",
+    "💔",
+    "💔",
+    "❤️‍🩹",
+    "❤️‍🔥",
+    "💓",
+    "💝",
+    "♈",
+    "♈",
+    "♉",
+    "♊",
+    "♋",
+    "♌",
+    "♍",
+    "♎",
+    "♏",
+    "♐",
+    "♑",
+    "♒",
+    "♓",
+    "🆔",
+    "⚛️",
+    "🔞",
+    "⭕",
+    "🇨🇲",
+    "🇦🇶",
+  ];
+
+  function ShowEmoji(emoji) {
+    setText((prev) => prev + emoji);
+  }
 
   const { selectedChatId } = useApp();
 
   const handleSend = async (e) => {
     if (!text.trim()) return;
 
-    const messageText = text.trim()
+    const messageText = text.trim();
 
     const updatedMessage = {
       id: "temp-" + Date.now(),
       text: messageText,
       senderId: "user_me",
       timestamp: new Date().toISOString(),
-      status: MESSAGE_STATUS.SENT
-    }
+      status: MESSAGE_STATUS.SENT,
+    };
 
     setText("");
 
-    if(onSent) {
-      onSent(updatedMessage)
+    if (onSent) {
+      onSent(updatedMessage);
     }
-      
+
     try {
       await mockFetch("/chats/" + selectedChatId + "/messages", {
         method: "POST",
         body: JSON.stringify({ text: messageText }),
       });
-      
     } catch (error) {
       console.error("Error sending message:", error);
     }
-    
+
+    // onSent?.(result);
+    // setText("");
+    // } catch (error) {
+    //   console.error("Error sending message:", error);
+    // }
   };
 
   const handleKeyDown = (e) => {
@@ -49,11 +252,30 @@ export default function MessageInput({onSent}) {
 
   return (
     <div className="message-input">
-      <button className="message-input__btn" title="Emoji">
+      <button
+        className="message-input__btn"
+        title="Emoji"
+        onClick={() => setShowEmoji((prev) => !prev)}
+      >
         <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
           <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm-7 0c0 .83-.67 1.5-1.5 1.5S6 11.83 6 11s.67-1.5 1.5-1.5S9 10.17 9 11zm3.5 6.5c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5z" />
         </svg>
       </button>
+
+      {showEmoji && (
+        <div className="emoji-picker">
+          {Emojis.map((emoji) => (
+            <button
+              key={emoji}
+              className="emoji-picker__item"
+              onClick={() => ShowEmoji(emoji)}
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+      )}
+
       <button className="message-input__btn" title="Attach">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
           <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-3.31-2.69-6-6-6S3 1.69 3 5v12.5c0 4.42 3.58 8 8 8s8-3.58 8-8V6h-2.5z" />
