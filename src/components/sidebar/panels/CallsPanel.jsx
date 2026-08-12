@@ -24,7 +24,7 @@ export default function CallsPanel() {
 
   const filteredGroups = safeCalls.filter((group) => {
     if (activeTab === 'missed') {
-      return group.latestCall?.direction === CALL_DIRECTIONS.MISSED;
+      return group.calls?.some((call) => call.direction === CALL_DIRECTIONS.MISSED);
     }
     return true;
   });
@@ -83,6 +83,15 @@ export default function CallsPanel() {
               <div 
                 className={`calls-panel__item ${isExpanded ? 'calls-panel__item--expanded' : ''}`}
                 onClick={() => setExpandedContactId(isExpanded ? null : group.userId)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setExpandedContactId(isExpanded ? null : group.userId);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
                 style={{ cursor: 'pointer' }}
               >
                 <Avatar name={group.name} size="md" />
@@ -90,12 +99,12 @@ export default function CallsPanel() {
                 <div className="calls-panel__item-content">
                   <div className="calls-panel__item-top">
                     <span className="calls-panel__item-name">{group.name}</span>
-                    <span className="calls-page__item-time">
+                    <span className="calls-panel__item-time">
                       {formatTime(group.latestCall.timestamp)}
                     </span>
                   </div>
                   
-                  <div className="calls-page__item-type">
+                  <div className="calls-panel__item-type-container">
                     <div className="calls-panel__item-meta">
                       {(() => {
                         const { direction } = group.latestCall;
