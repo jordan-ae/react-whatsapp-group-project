@@ -77,6 +77,11 @@ export default function CallsPanel() {
       <div className="calls-panel__log-list">
         {filteredGroups.map((group) => {
           const isExpanded = expandedContactId === group.userId;
+          const nestedListId = `nested-list-${group.userId}`;
+
+          const displayCall = activeTab === 'missed'
+            ? (group.calls?.find((call) => call.direction === CALL_DIRECTIONS.MISSED) || group.latestCall)
+            : group.latestCall;
 
           return (
             <div key={group.userId} className="calls-panel__log-group">
@@ -92,6 +97,7 @@ export default function CallsPanel() {
                 role="button"
                 tabIndex={0}
                 aria-expanded={isExpanded}
+                aria-controls={nestedListId}
                 style={{ cursor: 'pointer' }}
               >
                 <Avatar name={group.name} size="md" />
@@ -99,15 +105,15 @@ export default function CallsPanel() {
                 <div className="calls-panel__item-content">
                   <div className="calls-panel__item-top">
                     <span className="calls-panel__item-name">{group.name}</span>
-                    <span className="calls-panel__item-time">
-                      {formatTime(group.latestCall.timestamp)}
+                    <span className="calls-page__item-time">
+                      {formatTime(displayCall.timestamp)}
                     </span>
                   </div>
                   
-                  <div className="calls-panel__item-type-container">
+                  <div className="calls-page__item-type">
                     <div className="calls-panel__item-meta">
                       {(() => {
-                        const { direction } = group.latestCall;
+                        const { direction } = displayCall;
                         const DirectionIcon = DIRECTION_ICONS[direction] ?? ArrowRight;
                         const isMissed = direction === CALL_DIRECTIONS.MISSED;
                         return (
@@ -119,8 +125,8 @@ export default function CallsPanel() {
                         );
                       })()}
 
-                      <span className={`calls-panel__item-type ${group.latestCall.direction === CALL_DIRECTIONS.MISSED ? 'calls-panel__item-type--missed' : ''}`}>
-                        {group.latestCall.type === 'video' ? 'Video call' : 'Voice call'}
+                      <span className={`calls-panel__item-type ${displayCall.direction === CALL_DIRECTIONS.MISSED ? 'calls-panel__item-type--missed' : ''}`}>
+                        {displayCall.type === 'video' ? 'Video call' : 'Voice call'}
                       </span>
                     </div>
                   </div>
@@ -128,7 +134,7 @@ export default function CallsPanel() {
               </div>
 
               {isExpanded && group.calls && (
-                <div className="calls-panel__nested-list">
+                <div id={nestedListId} className="calls-panel__nested-list">
                   {group.calls.map((sub, idx) => {
                     const SubIcon = DIRECTION_ICONS[sub.direction] ?? ArrowRight;
                     const isSubMissed = sub.direction === CALL_DIRECTIONS.MISSED;
