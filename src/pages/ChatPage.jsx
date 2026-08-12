@@ -7,6 +7,7 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
+import Modal from "../components/common/Modal";
 import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
 
