@@ -8,7 +8,6 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import { CHAT_TYPES } from "../utils/constants";
-import Modal from "../components/common/Modal";
 import "./ChatPage.css";
 
 export default function ChatPage() {
