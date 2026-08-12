@@ -7,15 +7,9 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
-<<<<<<< HEAD
-import Modal from "../components/common/Modal";
-import { CHAT_TYPES } from "../utils/constants";
-=======
-import { useParams } from "react-router-dom";
 import Modal from "../components/common/Modal.jsx";
-import { useState } from "react";
+import { CHAT_TYPES } from "../utils/constants.js";
 import users from "../data/users.js";
->>>>>>> 856fe75 (diplay exact contact info and)
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -29,7 +23,7 @@ export default function ChatPage() {
   const [sentMessages, setSentMessages] = useState([]);
 
   const allMessages = [...messages, ...sentMessages];
-  const bottomRef = useRef(null);
+  // const bottomRef = useRef(null);
 
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg]);
@@ -39,8 +33,6 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
-<<<<<<< HEAD
-=======
   let User = null;
 
   if (chat && chat.type !== "group") {
@@ -49,7 +41,6 @@ export default function ChatPage() {
 
   const bottomRef = useRef(null);
 
->>>>>>> 856fe75 (diplay exact contact info and)
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
