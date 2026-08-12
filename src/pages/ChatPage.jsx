@@ -7,8 +7,15 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
+<<<<<<< HEAD
 import Modal from "../components/common/Modal";
 import { CHAT_TYPES } from "../utils/constants";
+=======
+import { useParams } from "react-router-dom";
+import Modal from "../components/common/Modal.jsx";
+import { useState } from "react";
+import users from "../data/users.js";
+>>>>>>> 856fe75 (diplay exact contact info and)
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -32,6 +39,17 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
+<<<<<<< HEAD
+=======
+  let User = null;
+
+  if (chat && chat.type !== "group") {
+    User = users.find((u) => u.id === chat.userId) || null;
+  }
+
+  const bottomRef = useRef(null);
+
+>>>>>>> 856fe75 (diplay exact contact info and)
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
@@ -207,12 +225,20 @@ export default function ChatPage() {
 
             <div className="chat-page__info-section">
               <label>Phone number</label>
-              <p>{chat.phone || "No phone number available"}</p>
+              <p>
+                {chat.type === "group"
+                  ? "phone number not available"
+                  : User.phone || "phone number not available"}
+              </p>
             </div>
 
             <div className="chat-page__info-section">
               <label>About</label>
-              <p>{chat.about || "Hey there! I am using WhatsApp."}</p>
+              <p>
+                {chat.type === "group"
+                  ? "Morning to every member of the group"
+                  : User.about || "Hey i am using whatsapp"}
+              </p>
             </div>
           </div>
         </div>
