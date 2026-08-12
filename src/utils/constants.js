@@ -40,3 +40,13 @@ export const MESSAGE_STATUS = {
   READ: 'read',
   FAILED: 'failed',
 };
+
+export const STATUS_COLORS = [
+  "#25d366",
+  "#128cfe",
+  "#34b7f1",
+  "#6c6b6b",
+  "#ff6b0b",
+  "#79554b",
+  "#607d8b",
+];
