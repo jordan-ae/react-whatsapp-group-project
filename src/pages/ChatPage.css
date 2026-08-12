@@ -45,6 +45,38 @@
   justify-content: flex-end;
 }
 
+.message-search-highlight {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+.chat-page__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-page__search input {
+  width: 250px;
+  height: 36px;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: white;
+  color: var(--color-text);
+}
+
+.chat-page__search-clear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+}
+
 .chat-page__date-label {
   width: fit-content;
   margin: 12px auto;

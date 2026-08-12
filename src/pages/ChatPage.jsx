@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import { Search, X } from "lucide-react";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
@@ -17,25 +18,32 @@ export default function ChatPage() {
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
 
   const [isCallactive, setCallactive] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const searchResultRef = useRef(null);
-  const messagesContainerRef = useRef(null);
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
   const bottomRef = useRef(null);
+  const searchResultRefs = useRef([]);
+  const messagesContainerRef = useRef(null);
 
-  const searchMatches = searchQuery
+  const searchMatches = searchQuery.trim()
     ? messages
         .map((message, index) => ({
           message,
           index,
         }))
-        .filter(({ message }) =>
-          message.text?.toLowerCase().includes(searchQuery.toLowerCase()),
-        )
+        .filter(({ message }) => {
+          const escapedQuery = searchQuery
+            .trim()
+            .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+          const regex = new RegExp(`\\b${escapedQuery}\\b`, "i");
+
+          return regex.test(message.text || "");
+        })
     : [];
 
   useEffect(() => {
@@ -52,74 +60,120 @@ export default function ChatPage() {
   });
 
   useEffect(() => {
-    if (searchMatches.length > 0) {
-      searchResultRef.current?.scrollIntoView({
+    if (!searchQuery.trim() || searchMatches.length === 0) return;
+
+    const firstMatchIndex = searchMatches[0].index;
+
+    const element = searchResultRefs.current[firstMatchIndex];
+
+    if (element) {
+      element.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
-  }, [searchMatches.length]);
+  }, [searchQuery, searchMatches.length]);
+
   useEffect(() => {
-  const container = messagesContainerRef.current;
+    const container = messagesContainerRef.current;
 
-  if (!container || !searchQuery.trim()) return;
+    if (!container) return;
 
-  const walker = document.createTreeWalker(
-    container,
-    NodeFilter.SHOW_TEXT
-  );
-
-  const textNodes = [];
-
-  let node;
-
-  while ((node = walker.nextNode())) {
-    textNodes.push(node);
-  }
-
-  const escapedQuery = searchQuery.replace(
-    /[.*+?^${}()|[\]\\]/g,
-    "\\$&"
-  );
-
-  const regex = new RegExp(`\\b${escapedQuery}\\b`, "gi");
-
-  textNodes.forEach((textNode) => {
-    const text = textNode.textContent;
-
-    if (!regex.test(text)) return;
-
-    regex.lastIndex = 0;
-
-    const fragment = document.createDocumentFragment();
-
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(text)) !== null) {
-      fragment.appendChild(
-        document.createTextNode(
-          text.slice(lastIndex, match.index)
-        )
-      );
-
-      const highlight = document.createElement("mark");
-
-      highlight.className = "message-search-highlight";
-      highlight.textContent = match[0];
-
-      fragment.appendChild(highlight);
-
-      lastIndex = match.index + match[0].length;
-    }
-
-    fragment.appendChild(
-      document.createTextNode(text.slice(lastIndex))
+    // Remove previous highlights
+    const oldHighlights = container.querySelectorAll(
+      ".message-search-highlight",
     );
 
-    textNode.parentNode.replaceChild(fragment, textNode);
-  });
-}, [searchQuery, messages]);
+    oldHighlights.forEach((highlight) => {
+      const textNode = document.createTextNode(highlight.textContent);
+
+      highlight.parentNode.replaceChild(textNode, highlight);
+    });
+
+    // If search is empty, stop here
+    if (!searchQuery.trim()) return;
+
+    const escapedQuery = searchQuery
+      .trim()
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // Match the COMPLETE word only
+    const regex = new RegExp(`\\b${escapedQuery}\\b`, "gi");
+
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+
+    const textNodes = [];
+
+    let node;
+
+    while ((node = walker.nextNode())) {
+      // Don't search inside an existing highlight
+      if (node.parentElement?.closest("mark")) {
+        continue;
+      }
+
+      textNodes.push(node);
+    }
+
+    textNodes.forEach((textNode) => {
+      const text = textNode.textContent;
+
+      regex.lastIndex = 0;
+
+      if (!regex.test(text)) {
+        return;
+      }
+
+      regex.lastIndex = 0;
+
+      const fragment = document.createDocumentFragment();
+
+      let lastIndex = 0;
+      let match;
+
+      while ((match = regex.exec(text)) !== null) {
+        // Text before match
+        fragment.appendChild(
+          document.createTextNode(text.slice(lastIndex, match.index)),
+        );
+
+        // Highlight exact word
+        const highlight = document.createElement("mark");
+
+        highlight.className = "message-search-highlight";
+        highlight.textContent = match[0];
+
+        fragment.appendChild(highlight);
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Text after final match
+      fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+
+      textNode.parentNode.replaceChild(fragment, textNode);
+    });
+
+    // Cleanup when searchQuery changes
+    return () => {
+      const highlights = container.querySelectorAll(
+        ".message-search-highlight",
+      );
+
+      highlights.forEach((highlight) => {
+        const textNode = document.createTextNode(highlight.textContent);
+
+        highlight.parentNode.replaceChild(textNode, highlight);
+      });
+
+      container.normalize();
+    };
+  }, [searchQuery, messages]);
+
+  useEffect(() => {
+    setSearchQuery("");
+    setIsSearchOpen(false);
+  }, [selectedChatId]);
 
   if (!selectedChatId || !chat) {
     return (
@@ -167,23 +221,38 @@ export default function ChatPage() {
           </span>
         </div>
         <div className="chat-page__header-actions">
-          <div className="chat-page__search">
-  <input
-    type="text"
-    placeholder="Search messages"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
+          {!isSearchOpen && (
+            <button
+              className="chat-page__header-btn"
+              title="Search messages"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search size={22} />
+            </button>
+          )}
 
-  {searchQuery && (
-    <button
-      className="chat-page__search-clear"
-      onClick={() => setSearchQuery("")}
-    >
-      X
-    </button>
-  )}
-</div>
+          {isSearchOpen && (
+            <div className="chat-page__search">
+              <input
+                type="text"
+                placeholder="Search messages"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+
+              <button
+                className="chat-page__search-clear"
+                title="Close search"
+                onClick={() => {
+                  setSearchQuery("");
+                  setIsSearchOpen(false);
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+          )}
           <button
             className="chat-page__header-btn"
             title="Voice call"
@@ -224,8 +293,8 @@ export default function ChatPage() {
                   new Date(msg.timestamp).toDateString();
 
               const isSearchMatch = searchMatches.some(
-  ({ index: matchIndex }) => matchIndex === index
-);
+                ({ index: matchIndex }) => matchIndex === index,
+              );
 
               return (
                 <Fragment key={msg.id}>
@@ -236,7 +305,11 @@ export default function ChatPage() {
                   )}
 
                   <div
-                    ref={isSearchMatch ? searchResultRef : null}
+                    ref={(element) => {
+                      if (isSearchMatch) {
+                        searchResultRefs.current[index] = element;
+                      }
+                    }}
                     className={`message-search-wrapper ${
                       msg.senderId === "user_me"
                         ? "message-search-wrapper--own"
