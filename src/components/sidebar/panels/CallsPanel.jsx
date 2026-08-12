@@ -1,8 +1,18 @@
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import { useCalls } from '../../../hooks/useCalls';
 import Avatar from '../../common/Avatar';
 import { formatTime } from '../../../utils/formatDate';
 import { CALL_DIRECTIONS } from '../../../utils/constants';
 import './CallsPanel.css';
+
+// A missed call is an *incoming* call that wasn't answered, so it shares the
+// incoming arrow — the red `--missed` class carries the difference, not a
+// different direction.
+const DIRECTION_ICONS = {
+  [CALL_DIRECTIONS.INCOMING]: ArrowDownLeft,
+  [CALL_DIRECTIONS.OUTGOING]: ArrowUpRight,
+  [CALL_DIRECTIONS.MISSED]: ArrowDownLeft,
+};
 
 export default function CallsPanel() {
   const { calls, loading } = useCalls();
@@ -36,22 +46,20 @@ export default function CallsPanel() {
             
             <div className="calls-panel__item-bottom">
               <div className="calls-panel__item-meta">
-                {group.latestCall.direction === CALL_DIRECTIONS.INCOMING && (
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" className="calls-panel__icon">
-                    <path d="M19 15l-6-6-4 4-4-4" />
-                  </svg>
-                )}
-                {group.latestCall.direction === CALL_DIRECTIONS.OUTGOING && (
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" className="calls-panel__icon">
-                    <path d="M5 9l6 6 4-4 4 4" />
-                  </svg>
-                )}
-                {group.latestCall.direction === CALL_DIRECTIONS.MISSED && (
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" className="calls-panel__icon calls-panel__icon--missed">
-                    <path d="M19 15l-6-6-4 4-4-4" />
-                  </svg>
-                )}
-                
+                {(() => {
+                  const { direction } = group.latestCall;
+                  const DirectionIcon = DIRECTION_ICONS[direction] ?? ArrowDownLeft;
+                  const isMissed = direction === CALL_DIRECTIONS.MISSED;
+                  return (
+                    <DirectionIcon
+                      size={14}
+                      className={`calls-panel__icon ${isMissed ? 'calls-panel__icon--missed' : ''}`}
+                      aria-hidden="true"
+                    />
+                  );
+                })()}
+
+
                 <span className={`calls-panel__item-type ${group.latestCall.direction === CALL_DIRECTIONS.MISSED ? 'calls-panel__item-type--missed' : ''}`}>
                   {group.latestCall.type === 'video' ? 'Video call' : 'Voice call'}
                 </span>
