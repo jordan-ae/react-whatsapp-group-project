@@ -30,23 +30,23 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   cursor: pointer;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
 .calls-page__create {
   color: var(--color-primary-dark);
-  background-color: transparent;
+  background-color: rgba(0, 168, 132, 0.08);
 }
 
 .calls-page__create:hover,
 .calls-page__create:focus-visible {
-  background-color: var(--color-bg, #f0f2f5);
+  background-color: rgba(0, 168, 132, 0.14);
 }
 
 .calls-page__new-call {
@@ -57,6 +57,13 @@
 .calls-page__new-call:hover,
 .calls-page__new-call:focus-visible {
   background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.calls-page__create svg,
+.calls-page__new-call svg {
+  width: 18px;
+  height: 18px;
 }
 
 .calls-page__loading {
@@ -143,12 +150,12 @@
 
 .calls-page__contact-btn {
   border: none;
-  border-radius: var(--radius-md);
-  padding: 8px 12px;
-  font-size: var(--font-size-sm);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
 .calls-page__contact-btn--voice {
@@ -164,6 +171,7 @@
 .calls-page__contact-btn:hover,
 .calls-page__contact-btn:focus-visible {
   filter: brightness(0.95);
+  transform: translateY(-1px);
 }
 
 .calls-page button:focus-visible {
