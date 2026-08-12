@@ -4,7 +4,7 @@ import { mockFetch } from "../../utils/mockFetch";
 import { useApp } from "../../contexts/AppContext";
 import { MESSAGE_STATUS } from "../../utils/constants";
 
-export default function MessageInput({ onSen }) {
+export default function MessageInput({ onSent }) {
   const [text, setText] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const Emojis = [
