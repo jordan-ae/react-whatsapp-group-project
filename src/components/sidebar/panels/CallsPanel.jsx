@@ -97,7 +97,7 @@ export default function CallsPanel() {
                 role="button"
                 tabIndex={0}
                 aria-expanded={isExpanded}
-                aria-controls={nestedListId}
+                aria-controls={isExpanded ? nestedListId : undefined}
                 style={{ cursor: 'pointer' }}
               >
                 <Avatar name={group.name} size="md" />
@@ -105,12 +105,12 @@ export default function CallsPanel() {
                 <div className="calls-panel__item-content">
                   <div className="calls-panel__item-top">
                     <span className="calls-panel__item-name">{group.name}</span>
-                    <span className="calls-page__item-time">
+                    <span className="calls-panel__item-time">
                       {formatTime(displayCall.timestamp)}
                     </span>
                   </div>
                   
-                  <div className="calls-page__item-type">
+                  <div className="calls-panel__item-bottom">
                     <div className="calls-panel__item-meta">
                       {(() => {
                         const { direction } = displayCall;
