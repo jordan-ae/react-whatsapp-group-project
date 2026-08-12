@@ -1,18 +1,20 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useApp } from "../contexts/AppContext";
 import { useChats, useChatMessages } from "../hooks/useChat";
 import Avatar from "../components/common/Avatar";
 import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
-import Modal from "../components/common/Modal.jsx";
 import { formatDateLabel } from "../utils/formatDate";
+import Modal from "../components/common/Modal";
+import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
 
 export default function ChatPage() {
   const { chats } = useChats();
   const { chatId } = useParams();
+  //this line was added
   const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading } = useChatMessages(selectedChatId);
 
@@ -36,6 +38,8 @@ export default function ChatPage() {
     }
   }, [chatId, selectedChatId, setSelectedChatId]);
 
+  
+
   useEffect(() => {
     setSentMessages([]);
   }, [selectedChatId]);
@@ -43,6 +47,13 @@ export default function ChatPage() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, sentMessages]);
+
+  const userNames = {}
+  chats.forEach(chat => {
+    if (chat.type === "individual") {
+      userNames[chat.userId] = chat.name
+    }
+  })
 
   if (!selectedChatId || !chat) {
     return (
@@ -118,20 +129,23 @@ export default function ChatPage() {
                 new Date(previous.timestamp).toDateString() !==
                   new Date(msg.timestamp).toDateString();
 
-              return (
-                <Fragment key={msg.id}>
-                  {showDate && (
-                    <div className="chat-page__date-label">
-                      {formatDateLabel(msg.timestamp)}
-                    </div>
-                  )}
-                  <MessageBubble
-                    message={msg}
-                    isOwn={msg.senderId === "user_me"}
-                  />
-                </Fragment>
-              );
-            })}
+            return (
+              <Fragment key={msg.id}>
+                {showDate && (
+                  <div className="chat-page__date-label">
+                    {formatDateLabel(msg.timestamp)}
+                  </div>
+                )}
+
+                <MessageBubble
+                  message={msg}
+                  isOwn={msg.senderId === "user_me"}
+                  senderName={userNames[msg.senderId]}
+                  isGroup={chat.type === CHAT_TYPES.GROUP}
+                />
+              </Fragment>
+            );
+          })}
           </Fragment>
         )}
         <div ref={bottomRef}></div>
