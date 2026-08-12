@@ -15,7 +15,7 @@ export default function ChatPage() {
   const { chats } = useChats();
   const { chatId } = useParams();
   //this line was added
-  const { selectedChatId, setSelectedChatId } = useApp();
+  const { selectedChatId, setSelectedChatId, markChatRead } = useApp();
   const { messages, loading } = useChatMessages(selectedChatId);
 
   const [isCallActive, setCallActive] = useState(false);
@@ -37,7 +37,8 @@ export default function ChatPage() {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
     }
-  }, [chatId, selectedChatId, setSelectedChatId]);
+    if (chatId) markChatRead(chatId);
+  }, [chatId, selectedChatId, setSelectedChatId, markChatRead]);
 
   
 
