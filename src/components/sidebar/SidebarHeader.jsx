@@ -1,7 +1,7 @@
 import Avatar from '../common/Avatar';
 import './SidebarHeader.css';
-import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../contexts/AppContext'
+import { useNavigate } from 'react-router-dom';
 
 export default function SidebarHeader() {
   const navigate = useNavigate();
