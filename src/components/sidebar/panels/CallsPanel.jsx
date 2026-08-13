@@ -75,8 +75,8 @@ export default function CallsPanel() {
       </div>
 
       <div className="calls-panel__log-list">
-        {filteredGroups.map((group, groupIdx) => {
-          const uniqueGroupId = `${group.userId}-${groupIdx}`;
+        {filteredGroups.map((group) => {
+          const uniqueGroupId = group.latestCall.id;
           const isExpanded = expandedContactId === uniqueGroupId;
           const nestedListId = `nested-list-${uniqueGroupId}`;
 
