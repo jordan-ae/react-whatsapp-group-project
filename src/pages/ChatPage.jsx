@@ -36,6 +36,8 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
+  // const bottomRef = useRef(null);
+
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
