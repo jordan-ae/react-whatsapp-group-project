@@ -35,20 +35,18 @@ export default function ProfilePage() {
     const trimmedName = name.trim();
     if (trimmedName === "") {
       setNameError("Name cannot be empty");
-      setTimeout(() => setNmameError(""), 2000);
-      return; 
+      return "empty";
     }
 
     if (trimmedName.length > 20) {
       setNameError("Name cannot exceed 20 characters");
-      setTimeout(() => setNmameError(""), 2000);
-      return;
+      return "too_long";
     }
 
     setNameError("");
-
     await updateName(trimmedName);
     setIsEditing(false);
+    return "success";
   }
 
   function handleCancelEdit() {
@@ -134,17 +132,17 @@ export default function ProfilePage() {
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
-                    if (nameError) setNameError(""); // Clear error while typing
+                    if (nameError) setNameError("");
                   }}
-                  onBlur={() =>{
-                    const trimmed = name.trim();
-                    if (trimmed === "" || trimmed.length > 20) {
-                      handleCancelEdit();
-                    } else {
-                      handleSave();
+                  onBlur={async () => {
+                    const result = await handleSave();
+
+                    if (result === "empty" || result === "too_long") {
+                      setTimeout(() => {
+                        handleCancelEdit();
+                      }, 2000);
                     }
                   }}
-
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSave();
                     if (e.key === 'Escape') handleCancelEdit();

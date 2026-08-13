@@ -163,11 +163,11 @@
 }
 
 .profile-page__input--error {
-  border-bottom-color: #ea0038 !important;
+  border-bottom-color: var(--color-danger, #ea0038);
 }
 
 .profile-page__error-text {
-  color: #ea0038;
+  color: var(--color-danger, #ea0038);
   font-size: 12px;
   margin-top: 4px;
   font-weight: var(--font-weight-medium, 500);
