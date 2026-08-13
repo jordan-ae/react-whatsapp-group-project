@@ -9,6 +9,7 @@ import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import Modal from "../components/common/Modal";
 import { CHAT_TYPES } from "../utils/constants";
+import users from "../data/users.js";
 import "./ChatPage.css";
 
 export default function ChatPage() {
@@ -36,7 +37,11 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
-  // const bottomRef = useRef(null);
+  let User = null;
+
+  if (chat && chat.type !== "group") {
+    User = users.find((u) => u.id === chat.userId) || null;
+  }
 
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
@@ -216,12 +221,20 @@ export default function ChatPage() {
 
             <div className="chat-page__info-section">
               <label>Phone number</label>
-              <p>{chat.phone || "No phone number available"}</p>
+              <p>
+                {chat.type === "group"
+                  ? "phone number not available"
+                  : User.phone || "phone number not available"}
+              </p>
             </div>
 
             <div className="chat-page__info-section">
               <label>About</label>
-              <p>{chat.about || "Hey there! I am using WhatsApp."}</p>
+              <p>
+                {chat.type === "group"
+                  ? "Morning to every member of the group"
+                  : User.about || "Hey i am using whatsapp"}
+              </p>
             </div>
           </div>
         </div>
