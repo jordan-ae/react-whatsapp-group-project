@@ -7,7 +7,7 @@ import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser, setCurrentUser, updateName, updateAbout } = useApp();
+  const { currentUser, setCurrentUser, updateName, updateAbout, updateAvatar } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
