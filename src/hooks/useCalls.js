@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
 import { useApi } from './useApi';
+import { useApp } from '../contexts/AppContext';
 
 export function useCalls() {
   const { data: calls, loading, error, refetch } = useApi('/calls');
+  const { loggedCalls } = useApp();
 
   const groupedCalls = useMemo(() => {
-    if (!calls) return [];
+    const all = [...loggedCalls, ...(calls ?? [])];
+    if (all.length === 0) return [];
 
     const grouped = {};
-    calls.forEach((call) => {
+    all.forEach((call) => {
       if (!grouped[call.userId]) {
         grouped[call.userId] = [];
       }
@@ -22,7 +25,7 @@ export function useCalls() {
       calls: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
       latestCall: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0],
     }));
-  }, [calls]);
+  }, [calls, loggedCalls]);
 
   const sortedCalls = useMemo(() => {
     return [...groupedCalls].sort(
