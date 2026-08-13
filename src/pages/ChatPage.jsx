@@ -17,8 +17,6 @@ export default function ChatPage() {
   const { chatId } = useParams();
 
   const { selectedChatId, setSelectedChatId, markChatRead } = useApp();
-  // const { messages, loading } = useChatMessages(selectedChatId);
-  // const { selectedChatId, setSelectedChatId } = useApp();
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
   const [infoOpen, setInfoOpen] = useState(false);
 
@@ -38,7 +36,6 @@ export default function ChatPage() {
     : null;
 
   let User = null;
-
   if (chat && chat.type !== "group") {
     User = users.find((u) => u.id === chat.userId) || null;
   }
@@ -99,6 +96,7 @@ export default function ChatPage() {
       </div>
     );
   }
+
   return (
     <div className="chat-page">
       <div className="chat-page__header" onClick={() => setInfoOpen(!infoOpen)}>
@@ -146,31 +144,27 @@ export default function ChatPage() {
             subtitle="Start a conversation!"
           />
         ) : (
-          <Fragment>
-            {allMessages.map((msg, index) => {
-              const previous = allMessages[index - 1];
-              const showDate =
-                !previous ||
-                new Date(previous.timestamp).toDateString() !==
-                  new Date(msg.timestamp).toDateString();
+          allMessages.map((msg, index) => {
+            const previous = allMessages[index - 1];
+            const showDate =
+              !previous ||
+              new Date(previous.timestamp).toDateString() !==
+                new Date(msg.timestamp).toDateString();
 
-              return (
-                <>
-                  {showDate && (
-                    <div className="chat-page__date-label">
-                      {formatDateLabel(msg.timestamp)}
-                    </div>
-                  )}
-
-                  <MessageBubble
-                    key={msg.id}
-                    message={msg}
-                    isOwn={msg.senderId === "user_me"}
-                  />
-                </>
-              );
-            })}
-          </Fragment>
+            return (
+              <Fragment key={msg.id}>
+                {showDate && (
+                  <div className="chat-page__date-label">
+                    {formatDateLabel(msg.timestamp)}
+                  </div>
+                )}
+                <MessageBubble
+                  message={msg}
+                  isOwn={msg.senderId === "user_me"}
+                />
+              </Fragment>
+            );
+          })
         )}
         <div ref={bottomRef}></div>
       </div>
@@ -205,7 +199,11 @@ export default function ChatPage() {
                 height="24"
                 fill="currentColor"
               >
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 
+                         10.59 12 5 17.59 6.41 19 12 13.41 
+                         17.59 19 19 17.59 13.41 12z"
+                />
               </svg>
             </button>
           </div>
@@ -224,7 +222,7 @@ export default function ChatPage() {
               <p>
                 {chat.type === "group"
                   ? "phone number not available"
-                  : User.phone || "phone number not available"}
+                  : User?.phone || "phone number not available"}
               </p>
             </div>
 
@@ -233,7 +231,7 @@ export default function ChatPage() {
               <p>
                 {chat.type === "group"
                   ? "Morning to every member of the group"
-                  : User.about || "Hey i am using whatsapp"}
+                  : User?.about || "Hey I am using WhatsApp"}
               </p>
             </div>
           </div>
