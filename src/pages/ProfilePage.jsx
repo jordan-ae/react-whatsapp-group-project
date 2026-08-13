@@ -25,7 +25,9 @@ export default function ProfilePage() {
     ...presetColors.map((value) => ({ type: "color", value })),
     ...presetEmojis.map((value) => ({ type: "emoji", value })),
   ];
-  const [newAvatarUrl, setNewAvatarUrl] = useState(presetAvatars[0]);
+  const [newAvatarUrl, setNewAvatarUrl] = useState(
+    presetAvatars.find((option) => option.value === currentUser?.avatar) || presetAvatars[0]
+  );
 
   const settingsRows = [
     { id: "privacy", label: "Privacy" },
@@ -66,9 +68,7 @@ export default function ProfilePage() {
   }
 
   async function handleApplyAvatar() {
-    console.log('1. handleApplyAvatar called, newAvatarUrl:', newAvatarUrl);
     await updateAvatar(newAvatarUrl.value);
-    console.log('2. updateAvatar finished');
     setIsModalOpen(false);
   }
 
@@ -116,7 +116,12 @@ export default function ProfilePage() {
           <Avatar name={currentUser.name} src={currentUser?.avatar} size="xl" />
           <button
             className="profile-page__avatar-edit"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setNewAvatarUrl(
+                presetAvatars.find((option) => option.value === currentUser?.avatar) || presetAvatars[0]
+              );
+              setIsModalOpen(true);
+            }}
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
               <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />

@@ -18,15 +18,17 @@ export default function AvatarPicker({ presetAvatars, newAvatarUrl, onSelect, on
             key={index}
             type="button"
             className={
-              newAvatarUrl.value === option.value
-                ? "photo-picker__option photo-picker__option--selected"
-                : "photo-picker__option"
+                newAvatarUrl.value === option.value
+                    ? "photo-picker__option photo-picker__option--selected"
+                    : "photo-picker__option"
             }
             style={option.type === "color" ? { backgroundColor: option.value } : {}}
+            aria-pressed={newAvatarUrl.value === option.value}
+            aria-label={option.type === "color" ? `Select color ${option.value}` : `Select emoji ${option.value}`}
             onClick={() => onSelect(option)}
-          >
+        >
             {option.type === "emoji" ? option.value : null}
-          </button>
+        </button>
         ))}
       </div>
 
