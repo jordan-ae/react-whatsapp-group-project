@@ -3,12 +3,16 @@ import Badge from "../common/Badge";
 import { formatTime } from "../../utils/formatDate";
 import { useParams, Link } from "react-router-dom";
 import "./ChatListItem.css";
+import { useApp } from "../../contexts/AppContext";
 
 export default function ChatListItem({ chat, onClick }) {
   const lastMsg = chat.lastMessage;
   const { chatId } = useParams();
+  const { readChatIds } = useApp();
 
   const isActive = chat.id === chatId;
+
+  const unread = readChatIds.has(chat.id) ? 0 : chat.unreadCount;
 
   return (
     <Link
@@ -66,7 +70,8 @@ export default function ChatListItem({ chat, onClick }) {
               </svg>
             )}
 
-            {chat.unreadCount > 0 && <Badge count={chat.unreadCount} />}
+            {/* {chat.unreadCount > 0 && <Badge count={chat.unreadCount} />} */}
+            {unread > 0 && <Badge count={unread} />}
           </div>
         </div>
       </div>

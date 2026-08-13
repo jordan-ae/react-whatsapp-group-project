@@ -129,9 +129,9 @@
   position: relative;
   width: 44px;
   height: 24px;
-  background-color: var(--color-border-strong);
+  background-color: var(--color-toggle-off);
   border-radius: var(--radius-full);
-  cursor: not-allowed;
+  cursor: pointer;
   outline: none;
   transition: background-color var(--transition-fast);
 }
@@ -159,4 +159,5 @@
 
 .profile-page__settings-row input[type="checkbox"]:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
 }
