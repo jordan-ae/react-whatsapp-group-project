@@ -101,14 +101,14 @@ export default function CallScreen({ contact, type, onEnd }) {
   };
 
   const handleCameraToggle = () => {
-    const videoTrack = streamRef.current?.getVideoTracks()[0];
+  const videoTrack = streamRef.current?.getVideoTracks()[0];
 
-    if (videoTrack) {
-      videoTrack.enabled = !isCameraOn;
-    }
+  if (!videoTrack) return;
 
-    setIsCameraOn((prev) => !prev);
-  };
+  videoTrack.enabled = !videoTrack.enabled;
+
+  setIsCameraOn(videoTrack.enabled);
+};
 
   const handleSwitch = () => {
     setIsSelfMain((prev) => !prev);
@@ -142,29 +142,29 @@ export default function CallScreen({ contact, type, onEnd }) {
           ========================= */}
 
           <div
-            className={`call-screen__self-video ${
-              isSelfMain ? "is-main" : "is-small"
-            }`}
-            onClick={handleSwitch}
-          >
-            {isCameraOn ? (
-              <video
-                ref={mainVideoRef}
-                className="call-screen__camera-video"
-                autoPlay
-                playsInline
-                muted
-              />
-            ) : (
-              <div className="call-screen__camera-off">
-                <Avatar
-                  name="You"
-                  size={isSelfMain ? "xl" : "lg"}
-                />
-                <span>Camera off</span>
-              </div>
-            )}
-          </div>
+  className={`call-screen__self-video ${
+    isSelfMain ? "is-main" : "is-small"
+  }`}
+  onClick={handleSwitch}
+>
+  <video
+    ref={mainVideoRef}
+    className="call-screen__camera-video"
+    autoPlay
+    playsInline
+    muted
+  />
+
+  {!isCameraOn && (
+    <div className="call-screen__camera-off">
+      <Avatar
+        name="You"
+        size={isSelfMain ? "xl" : "lg"}
+      />
+      <span>Camera off</span>
+    </div>
+  )}
+</div>
 
           {/* =========================
               SARAH

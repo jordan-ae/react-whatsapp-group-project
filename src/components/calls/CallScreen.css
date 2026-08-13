@@ -196,6 +196,9 @@
 ========================= */
 
 .call-screen__camera-off {
+  position: absolute;
+  inset: 0;
+
   width: 100%;
   height: 100%;
 
@@ -209,9 +212,12 @@
 
   background: #333;
 
-  text-align: center;
-}
+  color: white;
 
+  text-align: center;
+
+  z-index: 2;
+}
 
 /* =========================
    CALL INFO
