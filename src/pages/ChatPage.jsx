@@ -9,14 +9,16 @@ import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
 import Modal from "../components/common/Modal";
 import { CHAT_TYPES } from "../utils/constants";
+import users from "../data/users.js";
 import "./ChatPage.css";
 
 export default function ChatPage() {
   const { chats } = useChats();
   const { chatId } = useParams();
-  //this line was added
+
   const { selectedChatId, setSelectedChatId, markChatRead } = useApp();
-  const { messages, loading } = useChatMessages(selectedChatId);
+  const { messages, loading, refetch } = useChatMessages(selectedChatId);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const [isCallActive, setCallActive] = useState(false);
   const [sentMessages, setSentMessages] = useState([]);
@@ -33,14 +35,17 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
+  let User = null;
+  if (chat && chat.type !== "group") {
+    User = users.find((u) => u.id === chat.userId) || null;
+  }
+
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
     }
     if (chatId) markChatRead(chatId);
   }, [chatId, selectedChatId, setSelectedChatId, markChatRead]);
-
-  
 
   useEffect(() => {
     setSentMessages([]);
@@ -50,13 +55,13 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, sentMessages]);
 
-  const userNames = {}
-  chats.forEach(chat => {
+  const userNames = {};
+  chats.forEach((chat) => {
     if (chat.type === "individual") {
-      userNames[chat.userId] = chat.name
+      userNames[chat.userId] = chat.name;
     }
-  })
-  
+  });
+
   useEffect(() => {
     if (selectedChatId) {
       setIsTyping(true);
@@ -94,7 +99,7 @@ export default function ChatPage() {
 
   return (
     <div className="chat-page">
-      <div className="chat-page__header">
+      <div className="chat-page__header" onClick={() => setInfoOpen(!infoOpen)}>
         <Avatar name={chat.name} size="md" />
         <div className="chat-page__header-info">
           <span className="chat-page__header-name">{chat.name}</span>
@@ -106,7 +111,10 @@ export default function ChatPage() {
           <button
             className="chat-page__header-btn"
             title="Voice call"
-            onClick={() => setCallActive(true)}
+            onClick={(event) => {
+              event.stopPropagation();
+              setCallActive(true);
+            }}
           >
             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
               <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
@@ -115,7 +123,10 @@ export default function ChatPage() {
           <button
             className="chat-page__header-btn"
             title="Video call"
-            onClick={() => setCallActive(true)}
+            onClick={(event) => {
+              event.stopPropagation();
+              setCallActive(true);
+            }}
           >
             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
               <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
@@ -133,19 +144,12 @@ export default function ChatPage() {
             subtitle="Start a conversation!"
           />
         ) : (
-          <Fragment>
-            {allMessages.map((msg, index) => {
-              const previous = allMessages[index - 1];
-              const showDate =
-                !previous ||
-                new Date(previous.timestamp).toDateString() !==
-                  new Date(msg.timestamp).toDateString();
-
-              // A message is "grouped" when it continues a run from the same
-              // sender. A date separator always breaks the run.
-              const grouped =
-                !showDate &&
-                Boolean(previous && previous.senderId === msg.senderId);
+          allMessages.map((msg, index) => {
+            const previous = allMessages[index - 1];
+            const showDate =
+              !previous ||
+              new Date(previous.timestamp).toDateString() !==
+                new Date(msg.timestamp).toDateString();
 
             return (
               <Fragment key={msg.id}>
@@ -154,18 +158,13 @@ export default function ChatPage() {
                     {formatDateLabel(msg.timestamp)}
                   </div>
                 )}
-
                 <MessageBubble
                   message={msg}
                   isOwn={msg.senderId === "user_me"}
-                  grouped={grouped}
-                  senderName={userNames[msg.senderId]}
-                  isGroup={chat.type === CHAT_TYPES.GROUP}
                 />
               </Fragment>
             );
-          })}
-          </Fragment>
+          })
         )}
         <div ref={bottomRef}></div>
       </div>
@@ -183,6 +182,60 @@ export default function ChatPage() {
             <p>{chat.online ? "Ringing..." : "Unavailable"}</p>
           </div>
         </Modal>
+      )}
+
+      {infoOpen && (
+        <div className="chat-page__info-panel">
+          <div className="chat-page__info-header">
+            <h3>Contact info</h3>
+            <button
+              className="chat-page__info-close"
+              onClick={() => setInfoOpen(false)}
+              title="Close panel"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 
+                         10.59 12 5 17.59 6.41 19 12 13.41 
+                         17.59 19 19 17.59 13.41 12z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div className="chat-page__info-body">
+            <div className="chat-page__info-avatar-wrap">
+              <Avatar name={chat.name} size="xl" />
+              <h2>{chat.name}</h2>
+              <span className="chat-page__info-subtext">
+                {chat.online ? "Online" : "Offline"}
+              </span>
+            </div>
+
+            <div className="chat-page__info-section">
+              <label>Phone number</label>
+              <p>
+                {chat.type === "group"
+                  ? "phone number not available"
+                  : User?.phone || "phone number not available"}
+              </p>
+            </div>
+
+            <div className="chat-page__info-section">
+              <label>About</label>
+              <p>
+                {chat.type === "group"
+                  ? "Morning to every member of the group"
+                  : User?.about || "Hey I am using WhatsApp"}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
