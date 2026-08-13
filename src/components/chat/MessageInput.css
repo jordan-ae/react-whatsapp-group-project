@@ -46,3 +46,31 @@
 .message-input__field::placeholder {
   color: var(--color-text-muted);
 }
+
+.message-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.reply-preview {
+  display: flex;
+  align-items: center;
+  background: var(--color-bg-muted);
+  border-left: 3px solid var(--color-accent);
+  padding: 4px 8px;
+}
+
+.reply-content {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reply-cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+}
+

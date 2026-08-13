@@ -48,6 +48,13 @@ const messages = {
       senderId: 'user_me',
       timestamp: '2026-07-30T08:38:00Z',
       status: MESSAGE_STATUS.READ,
+      replyTo: {
+        id: 'm_1_3',
+        senderId: 'user_2',
+        authorName: 'Sarah Chen',
+        type: 'text',
+        text: 'How about that new Italian place on 5th?…'
+      }
     },
     {
       id: 'm_1_6',

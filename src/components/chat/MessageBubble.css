@@ -143,3 +143,27 @@
 .message-bubble--grouped {
   margin-top: 2px;
 }
+
+.message-bubble__quoted {
+  background: var(--color-bg-chat-alt);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+}
+
+.message-bubble__quoted-content {
+  font-size: 0.9em;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-bubble__actions {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.message-bubble:hover .message-bubble__actions {
+  opacity: 1;
+}
