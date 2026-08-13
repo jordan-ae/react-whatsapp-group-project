@@ -60,6 +60,7 @@
   --z-header: 20;
   --z-modal: 100;
   --z-toast: 200;
+  --z-status: 300;
 
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
