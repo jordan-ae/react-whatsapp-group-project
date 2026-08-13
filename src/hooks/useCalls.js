@@ -10,28 +10,33 @@ export function useCalls() {
     const all = [...loggedCalls, ...(calls ?? [])];
     if (all.length === 0) return [];
 
-    const grouped = {};
-    all.forEach((call) => {
-      if (!grouped[call.userId]) {
-        grouped[call.userId] = [];
+    const sortedAll = [...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    const result = [];
+    let currentGroup = null;
+
+    sortedAll.forEach((call) => {
+      if (
+        currentGroup &&
+        currentGroup.userId === call.userId &&
+        currentGroup.latestCall.type === call.type &&
+        currentGroup.latestCall.direction === call.direction
+      ) {
+        currentGroup.calls.push(call);
+      } else {
+        currentGroup = {
+          userId: call.userId,
+          name: call.name,
+          avatar: call.avatar,
+          calls: [call],
+          latestCall: call,
+        };
+        result.push(currentGroup);
       }
-      grouped[call.userId].push(call);
     });
 
-    return Object.entries(grouped).map(([userId, userCalls]) => ({
-      userId,
-      name: userCalls[0].name,
-      avatar: userCalls[0].avatar,
-      calls: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
-      latestCall: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0],
-    }));
+    return result;
   }, [calls, loggedCalls]);
 
-  const sortedCalls = useMemo(() => {
-    return [...groupedCalls].sort(
-      (a, b) => new Date(b.latestCall.timestamp) - new Date(a.latestCall.timestamp)
-    );
-  }, [groupedCalls]);
-
-  return { calls: sortedCalls, loading, error, refetch };
+  return { calls: groupedCalls, loading, error, refetch };
 }
