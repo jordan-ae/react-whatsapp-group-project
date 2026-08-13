@@ -69,7 +69,6 @@ export default function CallsPanel() {
           type="button"
           className={`calls-panel__tab-btn ${activeTab === 'missed' ? 'active' : ''}`}
           onClick={() => setActiveTab('missed')}
-          onClick={() => setActiveTab('missed')}
         >
           Missed
         </button>
