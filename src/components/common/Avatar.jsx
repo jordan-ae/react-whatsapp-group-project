@@ -15,8 +15,8 @@ export default function Avatar({ src, name, size = 'md', online, status, onClick
   const bgColor = colors[colorIndex];
 
   const isColorHex = src && src.startsWith('#');
-  const isEmoji = src && !isColorHex && /\p{Emoji}/u.test(src);
-  const isImageUrl = src && !isColorHex && !isEmoji;
+  const isEmoji = src && !isColorHex && /^\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*$/u.test(src);
+  const isImageUrl = src && !isColorHex && !isEmoji && (src.startsWith('http') || src.startsWith('data:') || src.startsWith('/'));
   
   return (
     <div className={`avatar avatar--${size} ${ring ? 'avatar--has-ring' : ''} ${ring === 'viewed' ? 'avatar--viewed' : ''}`} onClick={onClick}>
