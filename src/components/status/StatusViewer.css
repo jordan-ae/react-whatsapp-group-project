@@ -1,95 +1,309 @@
 .status-viewer {
   position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+  z-index: var(--z-status);
+}
+
+.status-viewer__top-scrim {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: black;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 0000;
+  height: 150px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+  pointer-events: none;
+  z-index: 2;
 }
 
-.status-viewer h2 {
-  color: white;
-  margin-bottom: 20px;
+.status-viewer__progress {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  gap: 4px;
+  z-index: 5;
+}
+
+.status-viewer__progress-segment {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.status-viewer__progress-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+}
+
+.status-viewer__progress-fill--active {
+  background: #fff;
+  transform: scaleX(0);
+  animation-name: statusProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.status-viewer__progress-fill--complete {
+  background: #fff;
+  transform: scaleX(1);
+}
+
+.status-viewer__progress-fill--upcoming {
+  background: transparent;
+
+  transform: scaleX(0);
+}
+
+@keyframes statusProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.status-viewer__header {
+  position: absolute;
+  top: 28px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+}
+
+.status-viewer__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.status-viewer__user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.status-viewer__name {
+  overflow: hidden;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-viewer__time {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
 }
 
 .status-viewer__close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   border: none;
-  background: transparent;
-  color: white;
-  font-size: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.status-viewer__close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.status-viewer__close:active {
+  transform: scale(0.95);
+}
+
+.status-viewer__content {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
 }
 
 .status-viewer__text {
-  width: 100%;
-  max-width: 500px;
-  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 24px;
-  text-align: center;
+  justify-content: center;
+  width: min(700px, 90vw);
+  min-height: 400px;
+  max-height: 75vh;
+  padding: 60px 40px;
   border-radius: 12px;
-  padding: 20px;
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: center;
+  word-break: break-word;
+}
+
+.status-viewer__image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(850px, 90vw);
+  max-height: 85vh;
+  text-align: center;
 }
 
 .status-viewer__image {
-  max-height: 70vh;
+  display: block;
+  width: auto;
+  max-width: 90vw;
+  max-height: 72vh;
   object-fit: contain;
-  width: 80vw;
-  max-width: 500px;
-  border-radius: 12px;
 }
 
-.status-viewer__image-text{
-  color: #ffff;
-  margin-top: 12px;
-  font-size: 20px;
+.status-viewer__image-text {
+  margin: 14px 20px 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.status-viewer__image-wrapper p {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  margin-top: 16px;
-  text-align: center;
-
+.status-viewer__image-caption {
+  margin: 6px 20px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  line-height: 1.4;
 }
 
-.previous,
-.next {
+.status-viewer__navigation {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: 45px;
-  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 24px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
   cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+
+  z-index: 5;
 }
 
-.previous {
+
+.status-viewer__navigation--previous {
   left: 20px;
 }
 
-.next {
+.status-viewer__navigation--next {
   right: 20px;
 }
 
-.previous:hover,
-.next:hover {
-  background: rgba(0, 0, 0, 0.8);
+.status-viewer__navigation:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.status-viewer__navigation:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.status-viewer__navigation:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .status-viewer__progress {
+    top: 10px;
+    left: 8px;
+    right: 8px;
+    gap: 3px;
+  }
+
+
+  .status-viewer__header {
+    top: 22px;
+    left: 12px;
+    right: 12px;
+  }
+
+
+  .status-viewer__close {
+    width: 38px;
+    height: 38px;
+  }
+
+
+  .status-viewer__navigation {
+    width: 44px;
+    height: 44px;
+  }
+
+
+  .status-viewer__navigation--previous {
+    left: 8px;
+  }
+
+
+  .status-viewer__navigation--next {
+    right: 8px;
+  }
+
+
+  .status-viewer__text {
+    width: 90vw;
+    min-height: 55vh;
+    padding: 40px 25px;
+    border-radius: 8px;
+    font-size: 24px;
+  }
+
+
+  .status-viewer__image {
+    max-width: 94vw;
+    max-height: 70vh;
+  }
 }

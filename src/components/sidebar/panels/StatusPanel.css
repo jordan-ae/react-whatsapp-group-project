@@ -1,15 +1,11 @@
 .status-panel {
   display: flex;
   flex-direction: column;
-
   flex: 1;
   min-height: 0;
-
   padding-bottom: 12px;
-
   overflow-y: auto;
   overflow-x: hidden;
-
   scrollbar-width: thin;
   scrollbar-color: rgba(128, 128, 128, 0.35) transparent;
 }
@@ -38,7 +34,6 @@
 .status-panel__heading {
   margin: 0;
   padding: 16px 20px 8px;
-
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
@@ -54,17 +49,12 @@
 .status-panel__item {
   display: flex;
   align-items: center;
-
   width: 100%;
   min-height: 72px;
-
   padding: 8px 16px;
-
   border: 0;
   background: transparent;
-
   cursor: pointer;
-
   transition:
     background-color 0.18s ease,
     transform 0.18s ease;
@@ -91,28 +81,20 @@
   position: absolute;
   right: -2px;
   bottom: -2px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 22px;
   height: 22px;
-
   padding: 0;
-
   border: 2px solid var(--background-primary);
   border-radius: 50%;
-
   background: #25d366;
   color: white;
-
   font-size: 17px;
   font-weight: 500;
   line-height: 1;
-
   cursor: pointer;
-
   transition:
     transform 0.18s ease,
     background-color 0.18s ease;
@@ -137,18 +119,15 @@
 
 .status-panel__name {
   overflow: hidden;
-
   color: var(--text-primary);
   font-size: 15px;
   font-weight: 500;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .status-panel__time {
   margin-top: 4px;
-
   color: var(--text-secondary);
   font-size: 13px;
 }
@@ -156,7 +135,6 @@
 .sidebar__loading,
 .sidebar__empty {
   padding: 28px 20px;
-
   color: var(--text-secondary);
   font-size: 14px;
   text-align: center;
