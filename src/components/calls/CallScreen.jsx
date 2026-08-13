@@ -3,22 +3,23 @@ import Avatar from '../common/Avatar';
 import './CallScreen.css';
 
 export default function CallScreen({ call, onEnd }) {
-  if (!call) return null;
-  const { user, type } = call;
-
   const [seconds, setSeconds] = useState(0);
   const [muted, setMuted] = useState(false);
 
   useEffect(() => {
+    if (!call) return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [call]);
 
   const formatTime = (s) => {
     const m = Math.floor(s / 60);
     const sec = s % 60;
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
   };
+
+  if (!call) return null;
+  const { user, type } = call;
 
   return (
     <div className="call-screen">
