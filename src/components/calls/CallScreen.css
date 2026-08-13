@@ -1,83 +1,220 @@
 .call-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: fixed;
+  inset: 0;
 
-  text-align: center;
-  background: #222;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
 
-  z-index: 1;
+  z-index: 999999;
+
+  background: #111;
+  color: white;
+
+  overflow: hidden;
 }
 
-/* Sarah is the SMALL video */
-.call-screen__remote-video--small {
-  inset: auto;
 
-  right: 25px;
-  bottom: 25px;
+/* =========================
+   VIDEO STAGE
+========================= */
 
-  width: 320px;
-  height: 220px;
+.call-screen__video-stage {
+  position: absolute;
+  inset: 0;
 
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+
   overflow: hidden;
 
-  z-index: 5;
-
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  background: #222;
 }
 
-/* Keep Sarah's content centered */
-.call-screen__remote-video--small h2,
-.call-screen__remote-video--small p {
-  text-align: center;
-  margin-left: 0;
-  margin-right: 0;
-}
 
 /* =========================
    YOUR CAMERA
 ========================= */
 
-.call-screen__self-view video {
+.call-screen__self-video {
+  position: absolute;
+
+  overflow: hidden;
+
+  background: #111;
+
+  cursor: pointer;
+
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease,
+    inset 0.3s ease;
+
+  z-index: 2;
+}
+
+
+/* YOUR CAMERA - MAIN */
+
+.call-screen__self-video.is-main {
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 0;
+
+  z-index: 1;
+}
+
+
+/* YOUR CAMERA - SMALL */
+
+.call-screen__self-video.is-small {
+  right: 30px;
+  bottom: 100px;
+
+  width: 360px;
+  height: 240px;
+
+  border-radius: 16px;
+
+  border: 2px solid white;
+
+  z-index: 5;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+}
+
+
+/* =========================
+   CAMERA VIDEO
+========================= */
+
+.call-screen__camera-video {
   width: 100%;
   height: 100%;
 
   object-fit: cover;
+
+  display: block;
 }
 
-/* Your camera when it becomes main */
 
-.call-screen__main-video.call-screen__self-view video {
+/* =========================
+   SARAH
+========================= */
+
+.call-screen__remote-video {
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #222;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease,
+    inset 0.3s ease;
+
+  z-index: 2;
+}
+
+
+/* SARAH - MAIN */
+
+.call-screen__remote-video.is-main {
+  inset: 0;
+
   width: 100%;
   height: 100%;
 
-  object-fit: cover;
+  border-radius: 0;
+
+  z-index: 1;
 }
+
+
+/* SARAH - SMALL */
+
+.call-screen__remote-video.is-small {
+  right: 30px;
+  bottom: 100px;
+
+  width: 360px;
+  height: 240px;
+
+  border-radius: 16px;
+
+  border: 2px solid white;
+
+  z-index: 5;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+}
+
+
+/* =========================
+   SARAH TEXT
+========================= */
+
+.call-screen__remote-video h2 {
+  margin: 12px 0 5px;
+
+  font-size: 24px;
+
+  text-align: center;
+}
+
+.call-screen__remote-video p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #ccc;
+
+  text-align: center;
+}
+
 
 /* =========================
    CAMERA OFF
 ========================= */
 
-.call-screen__self-camera-off {
+.call-screen__camera-off {
   width: 100%;
   height: 100%;
 
   display: flex;
+  flex-direction: column;
 
   align-items: center;
   justify-content: center;
 
+  gap: 10px;
+
   background: #333;
 
-  color: white;
-
-  font-size: 14px;
+  text-align: center;
 }
 
+
 /* =========================
-   CALL INFORMATION
+   CALL INFO
 ========================= */
 
 .call-screen__info {
@@ -90,42 +227,19 @@
 
   z-index: 10;
 
+  min-width: 180px;
+
+  padding: 10px 20px;
+
   text-align: center;
 
   background: rgba(0, 0, 0, 0.45);
 
-  padding: 10px 20px;
-
   border-radius: 12px;
 
   backdrop-filter: blur(8px);
-
-  min-width: 180px;
 }
 
-.call-screen__info h2 {
-  margin: 0;
-
-  font-size: 20px;
-}
-
-.call-screen__info p {
-  margin: 5px 0 0;
-
-  font-size: 14px;
-
-  opacity: 0.8;
-}
-
-.call-screen__info span {
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 13px;
-
-  opacity: 0.7;
-}
 
 /* =========================
    CONTROLS
@@ -150,23 +264,18 @@
 
   padding: 12px 18px;
 
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.55);
 
   border-radius: 20px;
 
   backdrop-filter: blur(10px);
 }
 
-/* =========================
-   ALL BUTTONS
-========================= */
-
 .call-screen__controls button {
   width: 58px;
   height: 58px;
 
   border: none;
-
   border-radius: 50%;
 
   background: rgba(255, 255, 255, 0.18);
@@ -174,24 +283,13 @@
   color: white;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
 
   font-size: 13px;
-
-  transition: 0.2s;
 }
-
-.call-screen__controls button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* =========================
-   END CALL
-========================= */
 
 .call-screen__end {
   background: #e63946 !important;
@@ -201,11 +299,14 @@
   background: #c92f3b !important;
 }
 
+
 /* =========================
    VOICE CALL
 ========================= */
 
 .call-screen--voice {
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -218,3 +319,4 @@
   align-items: center;
   justify-content: center;
 }
+
