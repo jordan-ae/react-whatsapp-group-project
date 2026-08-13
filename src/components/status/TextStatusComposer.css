@@ -11,24 +11,32 @@
 
 .text-status-composer__header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 16px;
   padding: 20px;
 }
 
-.text-status-composer__header h2 {
-  margin: 0;
-  font-size: 20px;
-}
-
 .text-status-composer__close {
+  height: 36px;
+  width: 36px;
   border: none;
   background: transparent;
   color: white;
   font-size: 32px;
   cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
 }
 
+.text-status-composer__close:hover {
+  background-color: #ffffff36;
+  border-radius: 50%;
+}
 .text-status-composer__content {
   flex: 1;
   display: flex;
@@ -56,10 +64,11 @@
 
 .text-status-composer__bottom {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
   gap: 20px;
   padding: 20px;
+  margin: 40px 30px;
 }
 
 .text-status-composer__colors {
@@ -69,15 +78,24 @@
 }
 
 .text-status-composer__color {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 2px solid white;
   border-radius: 50%;
   cursor: pointer;
+  transition: transform 0.15s ease;
 }
 
 .text-status-composer__color:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+}
+
+.text-status-composer__color-palette{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 30px;
 }
 
 .text-status-composer__color-button {
@@ -85,12 +103,46 @@
   height: 48px;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.25);
+  background: transparent;
   color: white;
   font-size: 22px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.text-status-composer__color-button:hover {
+  background-color: #ffffff36; 
+  border-radius: 50%;
 }
 
 .text-status-composer__preview {
   display: none;
 }
+
+.status-composer__send-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+background-color: rgba(255, 255, 255, 0.363);
+  color: rgba(44, 43, 43, 0.836);
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 5px; */
+}
+
+.status-composer__send-button svg {
+  transform: translateX(2px); 
+}
+
+.status-composer__send-button.active{
+  background-color: #ffffff;
+  color: #111111;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+

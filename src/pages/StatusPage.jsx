@@ -1,5 +1,5 @@
 import { useApp } from '../contexts/AppContext';
-import { useStatus } from '../hooks/useStatus';
+
 import { useState } from 'react';
 import Avatar from '../components/common/Avatar';
 import { formatStatusTime } from '../utils/formatDate';
@@ -8,12 +8,22 @@ import StatusViewer from '../components/status/StatusViewer';
 import Modal from '../components/common/Modal';
 import TextStatusComposer from "../components/status/TextStatusComposer";
 
+import { useStatusContext } from '../contexts/StatusContext';
+
 export default function StatusPage() {
   const { currentUser } = useApp();
-  const { myStatus, recentStatus, viewedStatus, loading } = useStatus();
+  
   const [selectedStatus, setSelectedStatus] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  
+  const { myStatus, recentStatus, viewedStatus, loading, addMyStatus } = useStatusContext();
+
+  const handleStatusCreated = (newStatus) => {
+    addMyStatus(newStatus, currentUser)
+    setShowModal(false);
+    };
+    
   const renderStatusItem = (statusItem) => (
     <div 
       key={statusItem.id} 
@@ -40,11 +50,21 @@ export default function StatusPage() {
         <h2 className="status-page__title">Status</h2>
       </div>
 
-      <div className="status-page__my-status">
+      <div className="status-page__my-status" onClick={() => {
+      
+        if(myStatus) {
+        setSelectedStatus(myStatus)
+      }else{
+        setShowModal(true)
+      }}}>
         <div className="status-page__my-avatar">
-          <Avatar name={currentUser?.name || "You"} size="lg" />
+          <Avatar name={currentUser?.name || "You"} size="lg" ring={myStatus ? 'unviewed' : 'none'}/>
           <div className="status-page__add-btn">
-            <button className="status-add" onClick={() => setShowModal(true)} aria-label="Add a status update">
+            <button className="status-add" onClick={(e) => {
+              
+              e.stopPropagation();
+              
+              setShowModal(true)} }aria-label="Add a status update">
             <svg 
                viewBox="0 0 24 24" 
                width="16" 
@@ -101,8 +121,10 @@ export default function StatusPage() {
              >
             <TextStatusComposer
               onClose={() => setShowModal(false)}
+              onStatusCreated={handleStatusCreated}
             />
           </Modal>
     </div>
   );
 }
+

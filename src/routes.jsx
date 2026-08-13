@@ -7,10 +7,12 @@ import CallsPage from "./pages/CallsPage";
 import StatusPage from "./pages/StatusPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { StatusProvider } from "./contexts/StatusContext";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
+    <StatusProvider>
       <ThemeProvider>
         <AppProvider>
           <Routes>
@@ -26,6 +28,7 @@ export default function AppRoutes() {
           </Routes>
         </AppProvider>
       </ThemeProvider>
+    </StatusProvider>
     </BrowserRouter>
   );
 }
