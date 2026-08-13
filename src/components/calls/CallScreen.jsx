@@ -31,9 +31,7 @@ export default function CallScreen({ contact, type, onEnd }) {
                 audio: true,
               };
 
-        const stream = await navigator.mediaDevices.getUserMedia(
-          constraints
-        );
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
         if (!mounted) {
           stream.getTracks().forEach((track) => track.stop());
@@ -68,7 +66,7 @@ export default function CallScreen({ contact, type, onEnd }) {
         setStatus(
           type === "video"
             ? "Camera or microphone access denied"
-            : "Microphone access denied"
+            : "Microphone access denied",
         );
       }
     };
@@ -101,14 +99,14 @@ export default function CallScreen({ contact, type, onEnd }) {
   };
 
   const handleCameraToggle = () => {
-  const videoTrack = streamRef.current?.getVideoTracks()[0];
+    const videoTrack = streamRef.current?.getVideoTracks()[0];
 
-  if (!videoTrack) return;
+    if (!videoTrack) return;
 
-  videoTrack.enabled = !videoTrack.enabled;
+    videoTrack.enabled = !videoTrack.enabled;
 
-  setIsCameraOn(videoTrack.enabled);
-};
+    setIsCameraOn(videoTrack.enabled);
+  };
 
   const handleSwitch = () => {
     setIsSelfMain((prev) => !prev);
@@ -136,35 +134,31 @@ export default function CallScreen({ contact, type, onEnd }) {
     <div className={`call-screen call-screen--${type}`}>
       {type === "video" ? (
         <div className="call-screen__video-stage">
-
           {/* =========================
               YOUR CAMERA
           ========================= */}
 
           <div
-  className={`call-screen__self-video ${
-    isSelfMain ? "is-main" : "is-small"
-  }`}
-  onClick={handleSwitch}
->
-  <video
-    ref={mainVideoRef}
-    className="call-screen__camera-video"
-    autoPlay
-    playsInline
-    muted
-  />
+            className={`call-screen__self-video ${
+              isSelfMain ? "is-main" : "is-small"
+            }`}
+            onClick={handleSwitch}
+          >
+            <video
+              ref={mainVideoRef}
+              className="call-screen__camera-video"
+              autoPlay
+              playsInline
+              muted
+            />
 
-  {!isCameraOn && (
-    <div className="call-screen__camera-off">
-      <Avatar
-        name="You"
-        size={isSelfMain ? "xl" : "lg"}
-      />
-      <span>Camera off</span>
-    </div>
-  )}
-</div>
+            {!isCameraOn && (
+              <div className="call-screen__camera-off">
+                <Avatar name="You" size={isSelfMain ? "xl" : "lg"} />
+                <span>Camera off</span>
+              </div>
+            )}
+          </div>
 
           {/* =========================
               SARAH
@@ -176,16 +170,12 @@ export default function CallScreen({ contact, type, onEnd }) {
             }`}
             onClick={handleSwitch}
           >
-            <Avatar
-              name={contact.name}
-              size={isSelfMain ? "lg" : "xl"}
-            />
+            <Avatar name={contact.name} size={isSelfMain ? "lg" : "xl"} />
 
             <h2>{contact.name}</h2>
 
             <p>Video call</p>
           </div>
-
         </div>
       ) : (
         <div className="call-screen__voice">
@@ -200,15 +190,11 @@ export default function CallScreen({ contact, type, onEnd }) {
       <div className="call-screen__info">
         <h2>{contact.name}</h2>
 
-        <p>
-          {type === "video" ? "Video call" : "Voice call"}
-        </p>
+        <p>{type === "video" ? "Video call" : "Voice call"}</p>
 
         <p>{status}</p>
 
-        {status === "Connected" && (
-          <span>{formatDuration(duration)}</span>
-        )}
+        {status === "Connected" && <span>{formatDuration(duration)}</span>}
       </div>
 
       {/* =========================
@@ -216,9 +202,7 @@ export default function CallScreen({ contact, type, onEnd }) {
       ========================= */}
 
       <div className="call-screen__controls">
-        <button onClick={handleMute}>
-          {isMuted ? "Unmute" : "Mute"}
-        </button>
+        <button onClick={handleMute}>{isMuted ? "Unmute" : "Mute"}</button>
 
         {type === "video" && (
           <button onClick={handleCameraToggle}>
@@ -226,10 +210,7 @@ export default function CallScreen({ contact, type, onEnd }) {
           </button>
         )}
 
-        <button
-          className="call-screen__end"
-          onClick={handleEndCall}
-        >
+        <button className="call-screen__end" onClick={handleEndCall}>
           End call
         </button>
       </div>
