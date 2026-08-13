@@ -74,8 +74,3 @@
   margin-left: 8px;
 }
 
-.message-input {
-  display: flex;
-  min-height: var(--compose-height);
-  align-items: center;
-}

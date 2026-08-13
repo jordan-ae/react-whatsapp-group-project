@@ -145,7 +145,7 @@
 }
 
 .message-bubble__quoted {
-  background: var(--color-bg-tinted);
+  background: var(--color-bg-chat-alt);
   border-left: 3px solid var(--color-accent);
   border-radius: 4px;
   padding: 4px 8px;
