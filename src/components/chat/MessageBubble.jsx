@@ -74,31 +74,6 @@ export default function MessageBubble({
     }
   };
 
-  // function renderStatusIcon(status) {
-  //   switch (status) {
-  //     case MESSAGE_STATUS.READ:
-  //       return (
-  //         <>
-  //           <DoubleCheckIcon read />
-  //           <DoubleCheckIcon read />
-  //         </>
-  //       );
-  //     case MESSAGE_STATUS.DELIVERED:
-  //       return (
-  //         <>
-  //           <DoubleCheckIcon />
-  //           <DoubleCheckIcon />
-  //         </>
-  //       );
-  //     case MESSAGE_STATUS.SENT:
-  //       return <SingleCheckIcon />;
-  //     case MESSAGE_STATUS.FAILED:
-  //       return "!";
-  //     default:
-  //       return null;
-  //   }
-  // }
-
   if (message.type === MESSAGE_TYPES.SYSTEM) {
     return (
       <div className="message-bubble message-bubble--system">
@@ -134,14 +109,6 @@ export default function MessageBubble({
           <span
             className={`message-bubble__status message-bubble__status--${message.status}`}
           >
-
-        {/* {isOwn && (
-          <span
-            className={`message-bubble__status message-bubble__status--${message.status}`}
-          >
-            {renderStatusIcon(message.status)}
-            {/* </span>
-          )} */} 
 
             {message.status === MESSAGE_STATUS.READ && (
               <>
@@ -203,7 +170,7 @@ export default function MessageBubble({
       <button
         className="message-bubble__actions"
         onClick={() => onReply(message)}
-        aria-label="Message actions"
+        aria-label="Reply to message"
       >
         REPLY
       </button>
