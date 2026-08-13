@@ -3,11 +3,12 @@ import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import { useTheme } from "../contexts/ThemeContext";
 import Avatar from "../components/common/Avatar";
+import AvatarPicker from "../components/profile/AvatarPicker";
 import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser, setCurrentUser, updateAbout } = useApp();
+  const { currentUser, setCurrentUser, updateAbout, updateAvatar } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -16,6 +17,17 @@ export default function ProfilePage() {
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setAbout] = useState("");
   const { theme, toggleTheme } = useTheme();
+
+  const presetColors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#bb8fce", "#f7dc6f", "#dda0dd", "#ffeaa7", "#96ceb4"];
+  const presetEmojis = ["😀", "😎", "🐱", "🐶", "🦊", "🐼", "🐸", "🤖"];
+
+  const presetAvatars = [
+    ...presetColors.map((value) => ({ type: "color", value })),
+    ...presetEmojis.map((value) => ({ type: "emoji", value })),
+  ];
+  const [newAvatarUrl, setNewAvatarUrl] = useState(
+    presetAvatars.find((option) => option.value === currentUser?.avatar) || presetAvatars[0]
+  );
 
   const settingsRows = [
     { id: "privacy", label: "Privacy" },
@@ -49,6 +61,15 @@ export default function ProfilePage() {
   async function saveAbout() {
     await updateAbout(about);
     setIsEditingAbout(false);
+  }
+
+  function handleSelectAvatar(option) {
+    setNewAvatarUrl(option);
+  }
+
+  async function handleApplyAvatar() {
+    await updateAvatar(newAvatarUrl.value);
+    setIsModalOpen(false);
   }
 
   if (!currentUser) {
@@ -95,7 +116,12 @@ export default function ProfilePage() {
           <Avatar name={currentUser.name} src={currentUser?.avatar} size="xl" />
           <button
             className="profile-page__avatar-edit"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setNewAvatarUrl(
+                presetAvatars.find((option) => option.value === currentUser?.avatar) || presetAvatars[0]
+              );
+              setIsModalOpen(true);
+            }}
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
               <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
@@ -211,12 +237,13 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Change profile photo"
-      >
-        <p>Photo picker coming</p>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Change profile photo">
+        <AvatarPicker
+          presetAvatars={presetAvatars}
+          newAvatarUrl={newAvatarUrl}
+          onSelect={handleSelectAvatar}
+          onApply={handleApplyAvatar}
+        />
       </Modal>
     </div>
   );
