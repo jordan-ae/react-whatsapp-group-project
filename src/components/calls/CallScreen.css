@@ -3,66 +3,218 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 20px;
-  min-height: 220px;
-  background-color: var(--color-bg-default);
-  border-radius: var(--radius-lg);
+
   text-align: center;
+  background: #222;
+
+  z-index: 1;
 }
 
-.call-screen__header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+/* Sarah is the SMALL video */
+.call-screen__remote-video--small {
+  inset: auto;
+
+  right: 25px;
+  bottom: 25px;
+
+  width: 320px;
+  height: 220px;
+
+  border-radius: 12px;
+  overflow: hidden;
+
+  z-index: 5;
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
+
+/* Keep Sarah's content centered */
+.call-screen__remote-video--small h2,
+.call-screen__remote-video--small p {
+  text-align: center;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* =========================
+   YOUR CAMERA
+========================= */
+
+.call-screen__self-view video {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* Your camera when it becomes main */
+
+.call-screen__main-video.call-screen__self-view video {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* =========================
+   CAMERA OFF
+========================= */
+
+.call-screen__self-camera-off {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #333;
+
+  color: white;
+
+  font-size: 14px;
+}
+
+/* =========================
+   CALL INFORMATION
+========================= */
 
 .call-screen__info {
+  position: absolute;
+
+  top: 30px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 10;
+
+  text-align: center;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  padding: 10px 20px;
+
+  border-radius: 12px;
+
+  backdrop-filter: blur(8px);
+
+  min-width: 180px;
+}
+
+.call-screen__info h2 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+.call-screen__info p {
+  margin: 5px 0 0;
+
+  font-size: 14px;
+
+  opacity: 0.8;
+}
+
+.call-screen__info span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 13px;
+
+  opacity: 0.7;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.call-screen__controls {
+  position: absolute;
+
+  bottom: 30px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 20;
+
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  padding: 12px 18px;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  border-radius: 20px;
+
+  backdrop-filter: blur(10px);
 }
 
-.call-screen__title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
+/* =========================
+   ALL BUTTONS
+========================= */
 
-.call-screen__subtitle {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
+.call-screen__controls button {
+  width: 58px;
+  height: 58px;
 
-.call-screen__end-btn {
-  appearance: none;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 10px 18px;
-  background-color: var(--color-danger);
-  color: var(--color-white);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.18);
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
-  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.18);
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+
+  font-size: 13px;
+
+  transition: 0.2s;
 }
 
-.call-screen__end-btn:hover,
-.call-screen__end-btn:focus-visible {
-  background-color: var(--color-danger-dark);
-  transform: translateY(-1px);
+.call-screen__controls button:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.call-screen__end-btn:active {
-  background-color: #dc2626;
-  transform: none;
-  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.22);
+/* =========================
+   END CALL
+========================= */
+
+.call-screen__end {
+  background: #e63946 !important;
 }
 
-.call-screen__end-btn:focus-visible {
-  outline: 3px solid rgba(239, 68, 68, 0.3);
-  outline-offset: 3px;
+.call-screen__end:hover {
+  background: #c92f3b !important;
+}
+
+/* =========================
+   VOICE CALL
+========================= */
+
+.call-screen--voice {
+  align-items: center;
+  justify-content: center;
+
+  background: #111;
+}
+
+.call-screen__voice {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 }
