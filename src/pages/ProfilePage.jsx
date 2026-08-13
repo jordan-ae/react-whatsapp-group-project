@@ -6,7 +6,7 @@ import Avatar from "../components/common/Avatar";
 import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
-export default function ProfilePage() {
+export default function ProfilePage() { 
   const { currentUser, setCurrentUser, updateAbout } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -54,6 +54,9 @@ export default function ProfilePage() {
   if (!currentUser) {
     return (
       <div className="profile-page">
+        <div className="profile-page__header">
+          <h2 className="profile-page__title">Profile</h2>
+        </div>
         <div className="profile-page__avatar-section">
           <div className="skeleton skeleton--avatar-xl" />
         </div>
@@ -82,6 +85,9 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
+        <div className="profile-page__header">
+          <h2 className="profile-page__title">Profile</h2>
+        </div>
       <div className="profile-page__avatar-section">
         <div className="profile-page__avatar-wrapper">
           <Avatar name={currentUser.name} src={currentUser?.avatar} size="xl" />

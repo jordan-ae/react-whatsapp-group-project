@@ -1,19 +1,17 @@
 import Avatar from '../common/Avatar';
 import './SidebarHeader.css';
-import { useState } from 'react';
 import { useApp } from '../../contexts/AppContext'
-import ProfilePage from '../../pages/ProfilePage';
-import Modal from '../common/Modal';
+import { useNavigate } from 'react-router-dom';
 
 export default function SidebarHeader() {
+  const navigate = useNavigate();
   const { currentUser } = useApp();
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   return (
     <div className="sidebar-header">
       <button className="sidebar-header__avatar-btn"
       aria-label="Open your profile"
-      onClick={() => setIsProfileModalOpen(true)}
+      onClick={() => navigate('/profile')}
       >
         <Avatar name ={currentUser?.name} src={currentUser?.avatar} size="md" online />
       </button>
@@ -34,14 +32,6 @@ export default function SidebarHeader() {
           </svg>
         </button>
       </div>
-
-      <Modal 
-        isOpen={isProfileModalOpen} 
-        onClose={() => setIsProfileModalOpen(false)} 
-        title="My Profile"
-      >
-        <ProfilePage />
-      </Modal>
     </div>
   );
 }
