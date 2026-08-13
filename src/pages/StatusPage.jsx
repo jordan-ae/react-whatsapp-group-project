@@ -1,130 +1,45 @@
-import { useApp } from '../contexts/AppContext';
-
-import { useState } from 'react';
-import Avatar from '../components/common/Avatar';
-import { formatStatusTime } from '../utils/formatDate';
-import './StatusPage.css';
-import StatusViewer from '../components/status/StatusViewer';
-import Modal from '../components/common/Modal';
+import { useState } from "react";
+import { Pencil } from "lucide-react";
+import "./StatusPage.css";
+import Modal from "../components/common/Modal";
 import TextStatusComposer from "../components/status/TextStatusComposer";
 
-import { useStatusContext } from '../contexts/StatusContext';
-
 export default function StatusPage() {
-  const { currentUser } = useApp();
-  
-  const [selectedStatus, setSelectedStatus] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
-  
-  const { myStatus, recentStatus, viewedStatus, loading, addMyStatus } = useStatusContext();
-
-  const handleStatusCreated = (newStatus) => {
-    addMyStatus(newStatus, currentUser)
-    setShowModal(false);
-    };
-    
-  const renderStatusItem = (statusItem) => (
-    <div 
-      key={statusItem.id} 
-      className="status-page__item"
-      onClick={() => setSelectedStatus(statusItem)}
-    >
-      <Avatar
-        name={statusItem.name}
-        size="lg"
-        ring={statusItem.viewed ? 'viewed' : 'unviewed'}
-      />
-      <div className="status-page__item-content">
-        <span className="status-page__item-name">{statusItem.name}</span>
-        <span className="status-page__item-time">
-          {formatStatusTime(statusItem.timestamp)}
-        </span>
-      </div>
-    </div>
-  );
 
   return (
     <div className="status-page">
-      <div className="status-page__header">
-        <h2 className="status-page__title">Status</h2>
-      </div>
+      <main className="status-page__main">
+        <div className="status-page__welcome">
+          <h2 className="status-page__welcome-title">
+            Share a status
+          </h2>
 
-      <div className="status-page__my-status" onClick={() => {
-      
-        if(myStatus) {
-        setSelectedStatus(myStatus)
-      }else{
-        setShowModal(true)
-      }}}>
-        <div className="status-page__my-avatar">
-          <Avatar name={currentUser?.name || "You"} size="lg" ring={myStatus ? 'unviewed' : 'none'}/>
-          <div className="status-page__add-btn">
-            <button className="status-add" onClick={(e) => {
-              
-              e.stopPropagation();
-              
-              setShowModal(true)} }aria-label="Add a status update">
-            <svg 
-               viewBox="0 0 24 24" 
-               width="16" 
-               height="16" 
-               fill="white"
-               >
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-            </svg>
-            </button>
-          </div>
-        </div>
-        <div className="status-page__my-content">
-          <span className="status-page__my-name">My status</span>
-          <span className="status-page__my-time">
-            {myStatus ? formatStatusTime(myStatus.timestamp) : "Tap to add status update"}
-          </span>
-        </div>
-      </div>
+          <p className="status-page__welcome-text">
+            Share a text update with your contacts.
+          </p>
 
-      <div className="status-page__section">
-        <h3 className="status-page__section-title">Recent updates</h3>
-        <div className="status-page__list">
-          {loading ? (
-            <div className="status-page__loading">Loading...</div>
-          ) : recentStatus.length === 0 ? (
-            <p className="status-page__empty-text">No recent status updates</p>
-          ) : (
-            recentStatus.map(renderStatusItem)
-          )}
+          <button
+            type="button"
+            className="status-page__text-btn"
+            onClick={() => setShowModal(true)}
+          >
+            <Pencil size={20} strokeWidth={1.8} />
+            <span>Write a text status</span>
+          </button>
         </div>
-      </div>
+      </main>
 
-      {viewedStatus.length > 0 && (
-        <div className="status-page__section">
-          <h3 className="status-page__section-title">Viewed updates</h3>
-          <div className="status-page__list">
-            {viewedStatus.map(renderStatusItem)}
-          </div>
-        </div>
-      )}
-
-      {selectedStatus && (
-        <StatusViewer
-           status={selectedStatus}
-           onClose={() => setSelectedStatus(null)}
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="New status"
+        fullScreen
+      >
+        <TextStatusComposer
+          onClose={() => setShowModal(false)}
         />
-      )}
-
-          <Modal 
-             isOpen={showModal}
-             onClose={() => setShowModal(false)}
-             title="New status"
-             fullScreen
-             >
-            <TextStatusComposer
-              onClose={() => setShowModal(false)}
-              onStatusCreated={handleStatusCreated}
-            />
-          </Modal>
+      </Modal>
     </div>
   );
 }
-
