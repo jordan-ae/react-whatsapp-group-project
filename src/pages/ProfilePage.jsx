@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -17,6 +17,7 @@ export default function ProfilePage() {
   const [about, setAbout] = useState("");
   const [nameError, setNameError] = useState("");
   const { theme, toggleTheme } = useTheme();
+  const errorTimeoutRef = useRef(null);
 
   const settingsRows = [
     { id: "privacy", label: "Privacy" },
@@ -35,12 +36,23 @@ export default function ProfilePage() {
     const trimmedName = name.trim();
     if (trimmedName === "") {
       setNameError("Name cannot be empty");
+      errorTimeoutRef.current = setTimeout(() =>{
+        handleCancelEdit();
+      }, 2000);
       return "empty";
     }
 
     if (trimmedName.length > 20) {
       setNameError("Name cannot exceed 20 characters");
+      errorTimeoutRef.current = setTimeout(() =>{
+        handleCancelEdit();
+      }, 2000);
       return "too_long";
+    }
+
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+      errorTimeoutRef.current = null;
     }
 
     setNameError("");
@@ -50,6 +62,10 @@ export default function ProfilePage() {
   }
 
   function handleCancelEdit() {
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+      errorTimeoutRef.current = null;
+    }
     setName(currentUser?.name || "");
     setNameError("");
     setIsEditing(false);
@@ -133,16 +149,12 @@ export default function ProfilePage() {
                   onChange={(e) => {
                     setName(e.target.value);
                     if (nameError) setNameError("");
-                  }}
-                  onBlur={async () => {
-                    const result = await handleSave();
-
-                    if (result === "empty" || result === "too_long") {
-                      setTimeout(() => {
-                        handleCancelEdit();
-                      }, 2000);
+                    if (errorTimeoutRef.current) {
+                      clearTimeout(errorTimeoutRef.current);
+                      errorTimeoutRef.current = null;
                     }
                   }}
+                  onBlur={handleSave}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSave();
                     if (e.key === 'Escape') handleCancelEdit();
