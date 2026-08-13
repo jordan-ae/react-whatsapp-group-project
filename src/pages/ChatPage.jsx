@@ -10,6 +10,7 @@ import { formatDateLabel } from "../utils/formatDate";
 import Modal from "../components/common/Modal";
 import { CHAT_TYPES } from "../utils/constants";
 import "./ChatPage.css";
+import getPreviewText from "../utils/messagePreviews";
 
 export default function ChatPage() {
   const { chats } = useChats();
@@ -21,6 +22,7 @@ export default function ChatPage() {
   const [isCallActive, setCallActive] = useState(false);
   const [sentMessages, setSentMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [replyingTo, setReplyingTo] = useState(null);
 
   const allMessages = [...messages, ...sentMessages];
   const bottomRef = useRef(null);
@@ -28,6 +30,16 @@ export default function ChatPage() {
   const handleSent = (newMsg) => {
     setSentMessages((prev) => [...prev, newMsg]);
   };
+
+  function handleReply(message) {
+  setReplyingTo({
+    id: message.id,
+    senderId: message.senderId,
+    authorName: message.senderId === "user_me" ? 'You' : message.authorName,
+    type: message.type,
+    text: message.type === 'text' ? message.text : getPreviewText(message)
+  });
+}
 
   const chat = selectedChatId
     ? chats.find((c) => c.id === selectedChatId)
@@ -161,6 +173,7 @@ export default function ChatPage() {
                   grouped={grouped}
                   senderName={userNames[msg.senderId]}
                   isGroup={chat.type === CHAT_TYPES.GROUP}
+                  onReply={() => handleReply(msg)}
                 />
               </Fragment>
             );
@@ -170,7 +183,15 @@ export default function ChatPage() {
         <div ref={bottomRef}></div>
       </div>
 
-      <MessageInput onSent={handleSent} />
+      <MessageInput 
+        // onSent={handleSent} 
+        replyingTo={replyingTo}
+        onCancelReply={() => setReplyingTo(null)}
+        onSent={(msg) => {
+          setReplyingTo(null);
+          handleSent(msg);
+        }}
+      />
 
       {isCallActive && (
         <Modal
