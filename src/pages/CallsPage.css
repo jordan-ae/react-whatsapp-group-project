@@ -178,3 +178,10 @@
   outline: 2px solid var(--color-primary, #00a884);
   outline-offset: 2px;
 }
+
+/* Ensure missed call indicators inside CallsPage follow the danger color */
+.calls-page .calls-panel__icon--missed,
+.calls-page .calls-panel__item-type--missed,
+.calls-page .calls-page__missed {
+  color: var(--color-danger, #ea0038) !important;
+}

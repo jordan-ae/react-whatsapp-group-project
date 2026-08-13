@@ -94,7 +94,8 @@ export default function CallsPage() {
           <div className="create-link-modal__link-box">
             <span className="create-link-modal__link-text">{callLink}</span>
             <button className="create-link-modal__copy-btn" 
-            onClick={handleCopyLink}>
+            onClick={handleCopyLink}
+            title={copied ? 'Link copied' : 'Copy link to clipboard'}>
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
@@ -121,6 +122,7 @@ export default function CallsPage() {
                     type="button"
                     className="calls-page__contact-btn calls-page__contact-btn--voice"
                     onClick={() => handleStartCall(user, 'voice')}
+                    title={`Start voice call with ${user.name}`}
                   >
                     Voice
                   </button>
@@ -128,6 +130,7 @@ export default function CallsPage() {
                     type="button"
                     className="calls-page__contact-btn calls-page__contact-btn--video"
                     onClick={() => handleStartCall(user, 'video')}
+                    title={`Start video call with ${user.name}`}
                   >
                     Video
                   </button>
