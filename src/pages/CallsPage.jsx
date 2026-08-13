@@ -6,6 +6,7 @@ import Avatar from "../components/common/Avatar";
 import EmptyState from "../components/common/EmptyState";
 import { formatTime, formatDuration } from "../utils/formatDate";
 import { CALL_DIRECTIONS } from "../utils/constants";
+import CallScreen from "../components/calls/CallScreen";
 import "./CallsPage.css";
 
 export default function CallsPage() {
