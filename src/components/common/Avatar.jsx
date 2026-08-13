@@ -14,10 +14,20 @@ export default function Avatar({ src, name, size = 'md', online, status, onClick
   const colorIndex = name ? name.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % colors.length : 0;
   const bgColor = colors[colorIndex];
 
+  const isImageUrl = src && (src.startsWith('http') || src.startsWith('data:') || src.startsWith('/'));
+  const isColorHex = src && src.startsWith('#');
+  const isEmoji = src && !isImageUrl && !isColorHex;
+
   return (
-    <div className={`avatar avatar--${size} ${ring ? 'avatar--has-ring': ''} ${ ring === 'viewed' ? 'avatar--viewed': ''}`} onClick={onClick} >
-      {src ? (
+    <div className={`avatar avatar--${size} ${ring ? 'avatar--has-ring' : ''} ${ring === 'viewed' ? 'avatar--viewed' : ''}`} onClick={onClick}>
+      {isImageUrl ? (
         <img src={src} alt={name} className="avatar__img" />
+      ) : isColorHex ? (
+        <div className="avatar__fallback" style={{ backgroundColor: src }} />
+      ) : isEmoji ? (
+        <div className="avatar__fallback" style={{ backgroundColor: bgColor }}>
+          {src}
+        </div>
       ) : (
         <div className="avatar__fallback" style={{ backgroundColor: bgColor }}>
           {initials}

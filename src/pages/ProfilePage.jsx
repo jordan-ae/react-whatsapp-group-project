@@ -3,11 +3,12 @@ import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import { useTheme } from "../contexts/ThemeContext";
 import Avatar from "../components/common/Avatar";
+import AvatarPicker from "../components/profile/AvatarPicker";
 import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser, setCurrentUser, updateAbout } = useApp();
+  const { currentUser, setCurrentUser, updateAbout, updateAvatar } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -16,6 +17,15 @@ export default function ProfilePage() {
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setAbout] = useState("");
   const { theme, toggleTheme } = useTheme();
+
+  const presetColors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#bb8fce", "#f7dc6f", "#dda0dd", "#ffeaa7", "#96ceb4"];
+  const presetEmojis = ["😀", "😎", "🐱", "🐶", "🦊", "🐼", "🐸", "🤖"];
+
+  const presetAvatars = [
+    ...presetColors.map((value) => ({ type: "color", value })),
+    ...presetEmojis.map((value) => ({ type: "emoji", value })),
+  ];
+  const [newAvatarUrl, setNewAvatarUrl] = useState(presetAvatars[0]);
 
   const settingsRows = [
     { id: "privacy", label: "Privacy" },
@@ -49,6 +59,17 @@ export default function ProfilePage() {
   async function saveAbout() {
     await updateAbout(about);
     setIsEditingAbout(false);
+  }
+
+  function handleSelectAvatar(option) {
+    setNewAvatarUrl(option);
+  }
+
+  async function handleApplyAvatar() {
+    console.log('1. handleApplyAvatar called, newAvatarUrl:', newAvatarUrl);
+    await updateAvatar(newAvatarUrl.value);
+    console.log('2. updateAvatar finished');
+    setIsModalOpen(false);
   }
 
   if (!currentUser) {
@@ -211,12 +232,13 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Change profile photo"
-      >
-        <p>Photo picker coming</p>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Change profile photo">
+        <AvatarPicker
+          presetAvatars={presetAvatars}
+          newAvatarUrl={newAvatarUrl}
+          onSelect={handleSelectAvatar}
+          onApply={handleApplyAvatar}
+        />
       </Modal>
     </div>
   );
