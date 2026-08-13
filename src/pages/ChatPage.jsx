@@ -33,6 +33,13 @@ export default function ChatPage() {
     ? chats.find((c) => c.id === selectedChatId)
     : null;
 
+  const callContacts = chats
+    .filter((item) => item.type === "individual")
+    .map((item) => ({
+      ...item,
+      id: item.userId || item.id,
+    }));
+
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
       setSelectedChatId(chatId);
@@ -107,7 +114,10 @@ export default function ChatPage() {
             onClick={() =>
               setActiveCall({
                 type: "voice",
-                contact: chat,
+                contact: {
+                  ...chat,
+                  id: chat.userId || chat.id,
+                },
               })
             }
           >
@@ -121,7 +131,10 @@ export default function ChatPage() {
             onClick={() =>
               setActiveCall({
                 type: "video",
-                contact: chat,
+                contact: {
+                  ...chat,
+                  id: chat.userId || chat.id,
+                },
               })
             }
           >
@@ -184,6 +197,7 @@ export default function ChatPage() {
         <CallScreen
           contact={activeCall.contact}
           type={activeCall.type}
+          contacts={callContacts}
           onEnd={(summary) => {
             console.log("Call ended:", summary);
             setActiveCall(null);

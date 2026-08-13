@@ -1,30 +1,37 @@
+/* ==================================================
+   CALL SCREEN
+================================================== */
+
 .call-screen {
   position: fixed;
   inset: 0;
 
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+  z-index: 9999;
 
-  z-index: 999999;
+  width: 100%;
+  height: 100%;
 
   background: #111;
   color: white;
+
+  display: flex;
+  flex-direction: column;
 
   overflow: hidden;
 }
 
 
-/* =========================
+/* ==================================================
    VIDEO STAGE
-========================= */
+================================================== */
 
 .call-screen__video-stage {
-  position: absolute;
-  inset: 0;
+  position: relative;
 
   width: 100%;
   height: 100%;
+
+  flex: 1;
 
   overflow: hidden;
 
@@ -32,16 +39,22 @@
 }
 
 
-/* =========================
-   YOUR CAMERA
-========================= */
+/* ==================================================
+   YOUR VIDEO
+================================================== */
 
-.call-screen__self-video {
+.call-screen__self {
   position: absolute;
+
+  padding: 0;
+
+  border: none;
 
   overflow: hidden;
 
-  background: #111;
+  background: #333;
+
+  color: white;
 
   cursor: pointer;
 
@@ -50,65 +63,154 @@
     height 0.3s ease,
     right 0.3s ease,
     bottom 0.3s ease,
-    inset 0.3s ease;
+    border-radius 0.3s ease;
 
-  z-index: 2;
+  z-index: 3;
 }
 
 
-/* YOUR CAMERA - MAIN */
+/* Your video as MAIN */
 
-.call-screen__self-video.is-main {
+.call-screen__self--main {
   inset: 0;
 
   width: 100%;
   height: 100%;
 
   border-radius: 0;
-
-  z-index: 1;
 }
 
 
-/* YOUR CAMERA - SMALL */
+/* Your video as SMALL */
 
-.call-screen__self-video.is-small {
+.call-screen__self--small {
   right: 30px;
-  bottom: 100px;
+  bottom: 110px;
 
   width: 360px;
   height: 240px;
 
   border-radius: 16px;
 
-  border: 2px solid white;
+  border: 2px solid rgba(255, 255, 255, 0.8);
 
-  z-index: 5;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.6);
 
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+  z-index: 6;
 }
 
 
-/* =========================
+/* ==================================================
    CAMERA VIDEO
-========================= */
+================================================== */
 
-.call-screen__camera-video {
+.call-screen__camera {
   width: 100%;
   height: 100%;
 
+  display: block;
+
   object-fit: cover;
 
-  display: block;
+  background: #222;
 }
 
 
-/* =========================
-   SARAH
-========================= */
+/* ==================================================
+   CAMERA OFF
+================================================== */
 
-.call-screen__remote-video {
+.call-screen__camera-off {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  background: #333;
+
+  color: white;
+
+  text-align: center;
+}
+
+
+/* ==================================================
+   REMOTE VIDEO BUTTON
+================================================== */
+
+.call-screen__remote-button {
   position: absolute;
+
+  padding: 0;
+
+  border: none;
+
+  color: white;
+
+  cursor: pointer;
+
+  background: transparent;
+
+  overflow: hidden;
+
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease;
+
+  z-index: 4;
+}
+
+
+/* ==================================================
+   REMOTE MAIN
+================================================== */
+
+.call-screen__remote-button--main {
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ==================================================
+   REMOTE SMALL
+================================================== */
+
+.call-screen__remote-button--small {
+  right: 30px;
+  bottom: 110px;
+
+  width: 360px;
+  height: 240px;
+
+  border-radius: 16px;
+
+  border: 2px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.6);
+
+  z-index: 6;
+}
+
+
+/* ==================================================
+   REMOTE CONTENT
+================================================== */
+
+.call-screen__remote {
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
@@ -120,67 +222,38 @@
 
   background: #222;
 
-  cursor: pointer;
-
-  overflow: hidden;
-
-  transition:
-    width 0.3s ease,
-    height 0.3s ease,
-    right 0.3s ease,
-    bottom 0.3s ease,
-    inset 0.3s ease;
-
-  z-index: 2;
+  box-sizing: border-box;
 }
 
 
-/* SARAH - MAIN */
+/* Main remote */
 
-.call-screen__remote-video.is-main {
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  border-radius: 0;
-
-  z-index: 1;
+.call-screen__remote--main {
+  padding: 30px;
 }
 
 
-/* SARAH - SMALL */
+/* Small remote */
 
-.call-screen__remote-video.is-small {
-  right: 30px;
-  bottom: 100px;
-
-  width: 360px;
-  height: 240px;
-
-  border-radius: 16px;
-
-  border: 2px solid white;
-
-  z-index: 5;
-
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+.call-screen__remote--small {
+  padding: 15px;
 }
 
 
-/* =========================
-   SARAH TEXT
-========================= */
+/* ==================================================
+   REMOTE TEXT
+================================================== */
 
-.call-screen__remote-video h2 {
-  margin: 12px 0 5px;
+.call-screen__remote h2 {
+  margin: 15px 0 5px;
 
   font-size: 24px;
 
   text-align: center;
 }
 
-.call-screen__remote-video p {
+
+.call-screen__remote p {
   margin: 0;
 
   font-size: 14px;
@@ -191,47 +264,19 @@
 }
 
 
-/* =========================
-   CAMERA OFF
-========================= */
-
-.call-screen__camera-off {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  background: #333;
-
-  color: white;
-
-  text-align: center;
-
-  z-index: 2;
-}
-
-/* =========================
-   CALL INFO
-========================= */
+/* ==================================================
+   CALL INFORMATION
+================================================== */
 
 .call-screen__info {
   position: absolute;
 
-  top: 30px;
+  top: 25px;
   left: 50%;
 
   transform: translateX(-50%);
 
-  z-index: 10;
+  z-index: 20;
 
   min-width: 180px;
 
@@ -247,41 +292,118 @@
 }
 
 
-/* =========================
+.call-screen__info h2 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+
+.call-screen__info p {
+  margin: 5px 0 0;
+
+  font-size: 14px;
+
+  opacity: 0.8;
+}
+
+
+.call-screen__info span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 13px;
+
+  opacity: 0.7;
+}
+
+
+/* ==================================================
+   PARTICIPANTS DISPLAY
+================================================== */
+
+.call-screen__participants {
+  position: absolute;
+
+  top: 25px;
+  left: 25px;
+
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  padding: 10px;
+
+  max-height: 250px;
+
+  overflow-y: auto;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  border-radius: 12px;
+
+  backdrop-filter: blur(8px);
+}
+
+
+.call-screen__participant {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+}
+
+
+/* ==================================================
    CONTROLS
-========================= */
+================================================== */
 
 .call-screen__controls {
   position: absolute;
 
-  bottom: 30px;
   left: 50%;
+  bottom: 25px;
 
   transform: translateX(-50%);
 
-  z-index: 20;
+  z-index: 30;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  gap: 18px;
+  gap: 14px;
 
   padding: 12px 18px;
 
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.5);
 
   border-radius: 20px;
 
   backdrop-filter: blur(10px);
 }
 
+
+/* ==================================================
+   CONTROL BUTTONS
+================================================== */
+
 .call-screen__controls button {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
+
+  padding: 8px;
 
   border: none;
+
   border-radius: 50%;
 
   background: rgba(255, 255, 255, 0.18);
@@ -289,40 +411,186 @@
   color: white;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
+  text-align: center;
+
+  font-size: 12px;
+
   cursor: pointer;
 
-  font-size: 13px;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
+
+
+.call-screen__controls button:hover {
+  background: rgba(255, 255, 255, 0.3);
+
+  transform: translateY(-2px);
+}
+
+
+.call-screen__controls button:focus-visible,
+.call-screen__self:focus-visible,
+.call-screen__remote-button:focus-visible,
+.call-screen__contact:focus-visible {
+  outline: 3px solid #4da6ff;
+
+  outline-offset: 3px;
+}
+
+
+/* ==================================================
+   END CALL
+================================================== */
 
 .call-screen__end {
   background: #e63946 !important;
 }
+
 
 .call-screen__end:hover {
   background: #c92f3b !important;
 }
 
 
-/* =========================
+/* ==================================================
    VOICE CALL
-========================= */
+================================================== */
 
 .call-screen--voice {
-  display: flex;
-
   align-items: center;
   justify-content: center;
 
   background: #111;
 }
 
+
 .call-screen__voice {
+  width: 100%;
+  height: 100%;
+
   display: flex;
 
   align-items: center;
   justify-content: center;
 }
 
+
+/* ==================================================
+   ADD PARTICIPANT
+================================================== */
+
+.call-screen__contact-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  max-height: 400px;
+
+  overflow-y: auto;
+}
+
+
+.call-screen__contact {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+
+.call-screen__contact:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+
+.call-screen__contact span:nth-child(2) {
+  flex: 1;
+
+  font-size: 15px;
+}
+
+
+.call-screen__add-label {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  opacity: 0.7;
+}
+
+
+.call-screen__no-contacts {
+  padding: 20px;
+
+  text-align: center;
+
+  color: #666;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 700px) {
+  .call-screen__self--small,
+  .call-screen__remote-button--small {
+    right: 15px;
+    bottom: 100px;
+
+    width: 220px;
+    height: 160px;
+
+    border-radius: 12px;
+  }
+
+  .call-screen__controls {
+    bottom: 15px;
+
+    gap: 8px;
+
+    padding: 10px;
+  }
+
+  .call-screen__controls button {
+    width: 52px;
+    height: 52px;
+
+    font-size: 10px;
+  }
+
+  .call-screen__info {
+    top: 15px;
+
+    padding: 8px 14px;
+  }
+
+  .call-screen__participants {
+    top: 15px;
+    left: 15px;
+  }
+}
