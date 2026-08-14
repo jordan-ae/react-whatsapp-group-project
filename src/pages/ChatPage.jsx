@@ -7,7 +7,7 @@ import EmptyState from "../components/common/EmptyState";
 import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import { formatDateLabel } from "../utils/formatDate";
-import Modal from "../components/common/Modal";
+import CallScreen from "../components/calls/CallScreen";
 import { CHAT_TYPES } from "../utils/constants";
 import users from "../data/users.js";
 import "./ChatPage.css";
@@ -20,7 +20,7 @@ export default function ChatPage() {
   const { messages, loading, refetch } = useChatMessages(selectedChatId);
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const [isCallActive, setCallActive] = useState(false);
+  const [activeCall, setActiveCall] = useState(null);
   const [sentMessages, setSentMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
@@ -39,6 +39,13 @@ export default function ChatPage() {
   if (chat && chat.type !== "group") {
     User = users.find((u) => u.id === chat.userId) || null;
   }
+
+  const callContacts = chats
+    .filter((item) => item.type === "individual")
+    .map((item) => ({
+      ...item,
+      id: item.userId || item.id,
+    }));
 
   useEffect(() => {
     if (chatId && chatId !== selectedChatId) {
@@ -113,7 +120,13 @@ export default function ChatPage() {
             title="Voice call"
             onClick={(event) => {
               event.stopPropagation();
-              setCallActive(true);
+              setActiveCall({
+                type: "voice",
+                contact: {
+                  ...chat,
+                  id: chat.userId || chat.id,
+                },
+              });
             }}
           >
             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -125,7 +138,13 @@ export default function ChatPage() {
             title="Video call"
             onClick={(event) => {
               event.stopPropagation();
-              setCallActive(true);
+              setActiveCall({
+                type: "video",
+                contact: {
+                  ...chat,
+                  id: chat.userId || chat.id,
+                },
+              });
             }}
           >
             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -180,17 +199,16 @@ export default function ChatPage() {
 
       <MessageInput onSent={handleSent} />
 
-      {isCallActive && (
-        <Modal
-          isOpen={isCallActive}
-          onClose={() => setCallActive(false)}
-          title={`Calling ${chat.name}...`}
-        >
-          <div className="call-modal-content">
-            <Avatar name={chat.name} size="xl" />
-            <p>{chat.online ? "Ringing..." : "Unavailable"}</p>
-          </div>
-        </Modal>
+      {activeCall && (
+        <CallScreen
+          contact={activeCall.contact}
+          type={activeCall.type}
+          contacts={callContacts}
+          onEnd={(summary) => {
+            console.log("Call ended:", summary);
+            setActiveCall(null);
+          }}
+        />
       )}
 
       {infoOpen && (

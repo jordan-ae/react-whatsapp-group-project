@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useApi } from "../hooks/useApi";
 import Modal from "../components/common/Modal";
-import { useCalls } from "../hooks/useCalls"; // Imported here
+import { useCalls } from "../hooks/useCalls";
 import Avatar from "../components/common/Avatar";
 import EmptyState from "../components/common/EmptyState";
 import { formatTime, formatDuration } from "../utils/formatDate";
@@ -57,7 +57,11 @@ export default function CallsPage() {
   const safeCalls = Array.isArray(calls) ? calls : [];
 
   const handleStartCall = (user, type) => {
-    setSelectedCall({ user, type });
+    setSelectedCall({
+      user,
+      type,
+    });
+
     setIsPickerOpen(false);
     logCall({
       userId: user.id,
@@ -67,7 +71,8 @@ export default function CallsPage() {
     });
   };
 
-  const handleEndCall = () => {
+  const handleEndCall = (summary) => {
+    console.log("Call ended:", summary);
     setSelectedCall(null);
   };
 
@@ -77,7 +82,12 @@ export default function CallsPage() {
         <h2 className="calls-page__title">Calls</h2>
       </div>
       {selectedCall ? (
-        <CallScreen call={selectedCall} onEnd={handleEndCall} />
+        <CallScreen
+          contact={selectedCall.user}
+          type={selectedCall.type}
+          contacts={safeUsers}
+          onEnd={handleEndCall}
+        />
       ) : (
         <>
           <div className="calls-page__actions">
@@ -206,7 +216,21 @@ export default function CallsPage() {
                         )}
                     </div>
                   </div>
-                  <button className="calls-page__call-btn" title="Call">
+                  <button
+                    className="calls-page__call-btn"
+                    title="Call"
+                    type="button"
+                    onClick={() =>
+                      handleStartCall(
+                        {
+                          id: group.userId,
+                          name: group.name,
+                          avatar: group.avatar,
+                        },
+                        group.latestCall.type === "video" ? "video" : "voice"
+                      )
+                    }
+                  >
                     <svg
                       viewBox="0 0 24 24"
                       width="20"
@@ -233,8 +257,7 @@ export default function CallsPage() {
                   className="create-link-modal__copy-btn"
                   onClick={handleCopyLink}
                 >
-                  {" "}
-                  {copied ? "Copied!" : "Copy"}{" "}
+                  {copied ? "Copied!" : "Copy"}
                 </button>
               </div>
             </div>
@@ -260,16 +283,14 @@ export default function CallsPage() {
                         className="calls-page__contact-btn calls-page__contact-btn--voice"
                         onClick={() => handleStartCall(user, "voice")}
                       >
-                        {" "}
-                        Voice{" "}
+                        Voice
                       </button>
                       <button
                         type="button"
                         className="calls-page__contact-btn calls-page__contact-btn--video"
                         onClick={() => handleStartCall(user, "video")}
                       >
-                        {" "}
-                        Video{" "}
+                        Video
                       </button>
                     </div>
                   </div>

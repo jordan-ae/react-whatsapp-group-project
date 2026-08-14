@@ -1,116 +1,589 @@
+/* ==================================================
+   CALL SCREEN
+================================================== */
+
 .call-screen {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  width: 100%;
+  height: 100%;
+
+  background: #111;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+/* ==================================================
+   VIDEO STAGE
+================================================== */
+
+.call-screen__video-stage {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  flex: 1;
+
+  overflow: hidden;
+
+  background: #222;
+}
+
+
+/* ==================================================
+   YOUR VIDEO
+================================================== */
+
+.call-screen__self {
+  position: absolute;
+
+  padding: 0;
+
+  border: none;
+
+  overflow: hidden;
+
+  background: #333;
+
+  color: white;
+
+  cursor: pointer;
+
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease,
+    border-radius 0.3s ease;
+
+  z-index: 3;
+}
+
+
+/* Your video as MAIN */
+
+.call-screen__self--main {
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 0;
+}
+
+
+/* Your video as SMALL */
+
+.call-screen__self--small {
+  right: 30px;
+  bottom: 110px;
+
+  width: 360px;
+  height: 240px;
+
+  border-radius: 16px;
+
+  border: 2px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.6);
+
+  z-index: 6;
+}
+
+
+/* ==================================================
+   CAMERA VIDEO
+================================================== */
+
+.call-screen__camera {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  background: #222;
+}
+
+
+/*  CAMERA OFF */
+
+.call-screen__camera-off {
+  position: absolute;
+  inset: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 20px;
-  min-height: 220px;
-  background-color: var(--color-bg-default);
-  border-radius: var(--radius-lg);
+
+  background: #202c33;
+  color: white;
+  gap: 10px;
+}
+
+
+/* ==================================================
+   REMOTE VIDEO BUTTON
+================================================== */
+
+.call-screen__remote-button {
+  position: absolute;
+
+  padding: 0;
+
+  border: none;
+
+  color: white;
+
+  cursor: pointer;
+
+  background: transparent;
+
+  overflow: hidden;
+
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease;
+
+  z-index: 4;
+}
+
+
+/* ==================================================
+   REMOTE MAIN
+================================================== */
+
+.call-screen__remote-button--main {
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ==================================================
+   REMOTE SMALL
+================================================== */
+
+.call-screen__remote-button--small {
+  right: 30px;
+  bottom: 110px;
+
+  width: 360px;
+  height: 240px;
+
+  border-radius: 16px;
+
+  border: 2px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.6);
+
+  z-index: 6;
+}
+
+
+/* ==================================================
+   REMOTE CONTENT
+================================================== */
+
+.call-screen__remote {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #222;
+
+  box-sizing: border-box;
+}
+
+
+/* Main remote */
+
+.call-screen__remote--main {
+  padding: 30px;
+}
+
+
+/* Small remote */
+
+.call-screen__remote--small {
+  padding: 15px;
+}
+
+
+/* ==================================================
+   REMOTE TEXT
+================================================== */
+
+.call-screen__remote h2 {
+  margin: 15px 0 5px;
+
+  font-size: 24px;
+
   text-align: center;
 }
 
-.call-screen__header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+
+.call-screen__remote p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #ccc;
+
+  text-align: center;
 }
+
+
+/* ==================================================
+   CALL INFORMATION
+================================================== */
 
 .call-screen__info {
+  position: absolute;
+
+  top: 25px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 20;
+
+  min-width: 180px;
+
+  padding: 10px 20px;
+
+  text-align: center;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  border-radius: 12px;
+
+  backdrop-filter: blur(8px);
+}
+
+
+.call-screen__info h2 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+
+.call-screen__info p {
+  margin: 5px 0 0;
+
+  font-size: 14px;
+
+  opacity: 0.8;
+}
+
+
+.call-screen__info span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 13px;
+
+  opacity: 0.7;
+}
+
+
+/* ==================================================
+   PARTICIPANTS DISPLAY
+================================================== */
+
+.call-screen__participants {
+  position: absolute;
+
+  top: 25px;
+  left: 25px;
+
+  z-index: 20;
+
   display: flex;
   flex-direction: column;
-  gap: 6px;
+
+  gap: 8px;
+
+  padding: 10px;
+
+  max-height: 250px;
+
+  overflow-y: auto;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  border-radius: 12px;
+
+  backdrop-filter: blur(8px);
 }
 
-.call-screen__title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+
+.call-screen__participant {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
 }
 
-.call-screen__subtitle {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
 
-.call-screen__meta {
-  margin-bottom: 14px;
-}
-
-.call-screen__timer {
-  display: inline-block;
-  font-family: var(--font-family);
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  background: rgba(0, 0, 0, 0.03);
-  padding: 6px 10px;
-  border-radius: 999px;
-}
+/* ==================================================
+   CONTROLS
+================================================== */
 
 .call-screen__controls {
+  position: absolute;
+
+  left: 50%;
+  bottom: 25px;
+
+  transform: translateX(-50%);
+
+  z-index: 30;
+
   display: flex;
-  gap: 12px;
+
   align-items: center;
   justify-content: center;
-  margin-top: 8px;
+
+  gap: 14px;
+
+  padding: 12px 18px;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  border-radius: 20px;
+
+  backdrop-filter: blur(10px);
 }
 
-.call-screen__control-btn {
+
+/* ==================================================
+   CONTROL BUTTONS
+================================================== */
+
+.call-screen__controls button {
+  width: 60px;
+  height: 60px;
+
+  padding: 8px;
+
   border: none;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--font-size-sm);
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.18);
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  font-size: 12px;
+
   cursor: pointer;
-  transition: transform var(--transition-fast), background-color var(--transition-fast);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.call-screen__control-btn:active {
-  transform: translateY(1px);
+
+.call-screen__controls button:hover {
+  background: rgba(255, 255, 255, 0.3);
+
+  transform: translateY(-2px);
 }
 
-.call-screen__control-btn.call-screen__end-btn {
-  background: var(--color-danger);
-  color: var(--color-white);
-  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.14);
-}
 
-.call-screen__mute.is-muted {
-  background: rgba(0, 0, 0, 0.06);
-  color: var(--color-text);
-}
+.call-screen__controls button:focus-visible,
+.call-screen__self:focus-visible,
+.call-screen__remote-button:focus-visible,
+.call-screen__contact:focus-visible {
+  outline: 3px solid #4da6ff;
 
-.call-screen__end-btn {
-  appearance: none;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 10px 18px;
-  background-color: var(--color-danger);
-  color: var(--color-white);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
-  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.18);
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.call-screen__end-btn:hover,
-.call-screen__end-btn:focus-visible {
-  background-color: var(--color-danger-dark);
-  transform: translateY(-1px);
-}
-
-.call-screen__end-btn:active {
-  background-color: #dc2626;
-  transform: none;
-  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.22);
-}
-
-.call-screen__end-btn:focus-visible {
-  outline: 3px solid rgba(239, 68, 68, 0.3);
   outline-offset: 3px;
+}
+
+
+/* ==================================================
+   END CALL
+================================================== */
+
+.call-screen__end {
+  background: #e63946 !important;
+}
+
+
+.call-screen__end:hover {
+  background: #c92f3b !important;
+}
+
+
+/* ==================================================
+   VOICE CALL
+================================================== */
+
+.call-screen--voice {
+  align-items: center;
+  justify-content: center;
+
+  background: #111;
+}
+
+
+.call-screen__voice {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ==================================================
+   ADD PARTICIPANT
+================================================== */
+
+.call-screen__contact-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  max-height: 400px;
+
+  overflow-y: auto;
+}
+
+
+.call-screen__contact {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+
+.call-screen__contact:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+
+.call-screen__contact span:nth-child(2) {
+  flex: 1;
+
+  font-size: 15px;
+}
+
+
+.call-screen__add-label {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  opacity: 0.7;
+}
+
+
+.call-screen__no-contacts {
+  padding: 20px;
+
+  text-align: center;
+
+  color: #666;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 700px) {
+  .call-screen__self--small,
+  .call-screen__remote-button--small {
+    right: 15px;
+    bottom: 100px;
+
+    width: 220px;
+    height: 160px;
+
+    border-radius: 12px;
+  }
+
+  .call-screen__controls {
+    bottom: 15px;
+
+    gap: 8px;
+
+    padding: 10px;
+  }
+
+  .call-screen__controls button {
+    width: 52px;
+    height: 52px;
+
+    font-size: 10px;
+  }
+
+  .call-screen__info {
+    top: 15px;
+
+    padding: 8px 14px;
+  }
+
+  .call-screen__participants {
+    top: 15px;
+    left: 15px;
+  }
 }
