@@ -37,6 +37,18 @@ export function AppProvider({ children }) {
     }
   };
 
+  const updateName = async (newName) => {
+    try {
+      await mockFetch(`/users/${currentUser.id}/profile`, {
+        method: "PUT",
+        body: JSON.stringify({ name: newName }),
+      });
+      setCurrentUser((prev) => ({ ...prev, name: newName }));
+    } catch (err) {
+      console.error("updateName failed:", err);
+    }
+  };
+
   const updateAvatar = async (newAvatarUrl) => {
     try {
       await mockFetch(`/users/${currentUser.id}/profile`, {
@@ -52,6 +64,7 @@ export function AppProvider({ children }) {
   const value = {
     currentUser,
     setCurrentUser,
+    updateName,
     updateAbout,
     updateAvatar,
     activeTab,

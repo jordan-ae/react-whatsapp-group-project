@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { mockFetch } from "../utils/mockFetch";
 import { useApp } from "../contexts/AppContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -8,7 +8,7 @@ import Modal from "../components/common/Modal";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { currentUser, setCurrentUser, updateAbout, updateAvatar } = useApp();
+  const { currentUser, setCurrentUser, updateName, updateAbout, updateAvatar } = useApp();
 
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -16,7 +16,9 @@ export default function ProfilePage() {
 
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [about, setAbout] = useState("");
+  const [nameError, setNameError] = useState("");
   const { theme, toggleTheme } = useTheme();
+  const errorTimeoutRef = useRef(null);
 
   const presetColors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#bb8fce", "#f7dc6f", "#dda0dd", "#ffeaa7", "#96ceb4"];
   const presetEmojis = ["😀", "😎", "🐱", "🐶", "🦊", "🐼", "🐸", "🤖"];
@@ -43,18 +45,41 @@ export default function ProfilePage() {
   }, [currentUser]);
 
   async function handleSave() {
-    await mockFetch(`/users/${currentUser.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        name,
-      }),
-    });
+    const trimmedName = name.trim();
+    if (trimmedName === "") {
+      setNameError("Name cannot be empty");
+      errorTimeoutRef.current = setTimeout(() =>{
+        handleCancelEdit();
+      }, 2000);
+      return "empty";
+    }
 
-    setCurrentUser({
-      ...currentUser,
-      name,
-    });
+    if (trimmedName.length > 20) {
+      setNameError("Name cannot exceed 20 characters");
+      errorTimeoutRef.current = setTimeout(() =>{
+        handleCancelEdit();
+      }, 2000);
+      return "too_long";
+    }
 
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+      errorTimeoutRef.current = null;
+    }
+
+    setNameError("");
+    await updateName(trimmedName);
+    setIsEditing(false);
+    return "success";
+  }
+
+  function handleCancelEdit() {
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+      errorTimeoutRef.current = null;
+    }
+    setName(currentUser?.name || "");
+    setNameError("");
     setIsEditing(false);
   }
 
@@ -143,29 +168,42 @@ export default function ProfilePage() {
 
           <div className="profile-page__field-value">
             {isEditing ? (
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={handleSave}
-              />
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    if (nameError) setNameError("");
+                    if (errorTimeoutRef.current) {
+                      clearTimeout(errorTimeoutRef.current);
+                      errorTimeoutRef.current = null;
+                    }
+                  }}
+                  onBlur={handleSave}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSave();
+                    if (e.key === 'Escape') handleCancelEdit();
+                  }}
+                  autoFocus
+                  className={nameError ? "profile-page__input--error" : ""}
+                />
+                {nameError && <span className="profile-page__error-text">{nameError}</span>}
+              </div>
             ) : (
               <span>{currentUser.name}</span>
             )}
 
-            <button
-              className="profile-page__edit-btn"
-              onClick={() => setIsEditing(true)}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="currentColor"
+            {!isEditing && (
+              <button
+                className="profile-page__edit-btn"
+                onClick={() => setIsEditing(true)}
               >
-                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-              </svg>
-            </button>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
@@ -179,6 +217,13 @@ export default function ProfilePage() {
               value={about}
               onChange={(e) => setAbout(e.target.value)}
               onBlur={saveAbout}
+              onKeyDown={(e) => {
+                  if (e.key === 'Enter') saveAbout();
+                  if (e.key === 'Escape') {
+                    setAbout(currentUser.about || "");
+                    setIsEditingAbout(false);
+                  }
+                }}
               autoFocus
               />
             ) :(
@@ -187,6 +232,7 @@ export default function ProfilePage() {
             </span>
             )}
 
+          {!isEditingAbout && (
             <button
               className="profile-page__edit-btn"
               onClick={() => setIsEditingAbout(true)}
@@ -200,6 +246,7 @@ export default function ProfilePage() {
                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
               </svg>
             </button>
+          )}
           </div>
         </div>
 
