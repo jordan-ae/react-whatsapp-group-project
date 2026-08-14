@@ -183,8 +183,7 @@ export default function ChatPage() {
         <div ref={bottomRef}></div>
       </div>
 
-      <MessageInput 
-        // onSent={handleSent} 
+      <MessageInput  
         replyingTo={replyingTo}
         onCancelReply={() => setReplyingTo(null)}
         onSent={(msg) => {
