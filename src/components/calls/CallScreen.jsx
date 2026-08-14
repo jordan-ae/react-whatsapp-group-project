@@ -12,8 +12,6 @@ export default function CallScreen({
   onEnd,
   connected = false,
 }) {
-  /* PARTICIPANTS*/
-
   const initialParticipants = useMemo(() => {
     if (!contact) return [];
 
@@ -24,31 +22,42 @@ export default function CallScreen({
     return [contact];
   }, [contact]);
 
-  const [participants, setParticipants] = useState(initialParticipants);
-
-  /* VIDEO / MEDIA REFS*/
+  const [participants, setParticipants] = useState(
+    initialParticipants
+  );
 
   const mainVideoRef = useRef(null);
   const streamRef = useRef(null);
   const timerRef = useRef(null);
-  const connectTimerRef = useRef(null);
-
-  /*STATE*/
 
   const [isMuted, setIsMuted] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [duration, setDuration] = useState(0);
+  const [isSelfMain, setIsSelfMain] = useState(true);
+  const [isParticipantModalOpen, setIsParticipantModalOpen] =
+    useState(false);
+
+  const mainContact = participants[0] || contact;
 
   const [status, setStatus] = useState(
-    initialParticipants[0]?.online ? "Ringing..." : "Calling...",
+    mainContact?.online ? "Ringing..." : "Calling..."
   );
 
-  const [isSelfMain, setIsSelfMain] = useState(true);
+  /*
+   * Attach the current stream whenever a video
+   * element is mounted.
+   */
+  const attachVideo = (node) => {
+    mainVideoRef.current = node;
 
-  const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
+    if (node && streamRef.current) {
+      node.srcObject = streamRef.current;
+    }
+  };
 
-  /* START LOCAL MEDIA*/
-
+  /*
+   * Start local microphone/camera.
+   */
   useEffect(() => {
     let mounted = true;
 
@@ -64,7 +73,10 @@ export default function CallScreen({
                 audio: true,
               };
 
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const stream =
+          await navigator.mediaDevices.getUserMedia(
+            constraints
+          );
 
         if (!mounted) {
           stream.getTracks().forEach((track) => {
@@ -76,29 +88,32 @@ export default function CallScreen({
 
         streamRef.current = stream;
 
-        if (type === "video" && mainVideoRef.current) {
+        /*
+         * Attach the stream to the video if it already exists.
+         */
+        if (mainVideoRef.current) {
           mainVideoRef.current.srcObject = stream;
         }
 
-        /* Local media permission does NOT mean
-          that the remote person answered.
-          We therefore keep the call as
-          Calling/Ringing until a real connection
-          is supplied through the `connected` prop.
+        /*
+         * Getting camera/microphone permission does NOT
+         * mean that the other person answered.
          */
-
-        if (initialParticipants[0]?.online) {
-          setStatus("Ringing...");
-        } else {
-          setStatus("Calling...");
-        }
+        setStatus(
+          mainContact?.online
+            ? "Ringing..."
+            : "Calling..."
+        );
       } catch (error) {
-        console.error("Call media access failed:", error);
+        console.error(
+          "Call media access failed:",
+          error
+        );
 
         setStatus(
           type === "video"
             ? "Camera or microphone access denied"
-            : "Microphone access denied",
+            : "Microphone access denied"
         );
       }
     };
@@ -109,48 +124,54 @@ export default function CallScreen({
       mounted = false;
 
       clearInterval(timerRef.current);
-      clearTimeout(connectTimerRef.current);
 
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => {
-          track.stop();
-        });
+        streamRef.current
+          .getTracks()
+          .forEach((track) => track.stop());
 
         streamRef.current = null;
       }
     };
-  }, [type, initialParticipants]);
+  }, [type]);
 
-  /* REAL CONNECTION STATE,
-    `connected` should eventually come from the
-    WebRTC/signaling layer.
+  /*
+   * Handle real call connection state.
    */
-
   useEffect(() => {
-    if (!connected) {
-      clearInterval(timerRef.current);
-      setDuration(0);
-
-      return;
-    }
-
-    setStatus("Connected");
-
     clearInterval(timerRef.current);
 
-    timerRef.current = setInterval(() => {
-      setDuration((prev) => prev + 1);
-    }, 1000);
+    if (connected) {
+      setStatus("Connected");
+
+      timerRef.current = setInterval(() => {
+        setDuration((prev) => prev + 1);
+      }, 1000);
+
+      return () => {
+        clearInterval(timerRef.current);
+      };
+    }
+
+    setDuration(0);
+
+    setStatus(
+      mainContact?.online
+        ? "Ringing..."
+        : "Calling..."
+    );
 
     return () => {
       clearInterval(timerRef.current);
     };
-  }, [connected]);
+  }, [connected, mainContact]);
 
-  /*MUTE*/
-
+  /*
+   * Mute / unmute microphone.
+   */
   const handleMute = () => {
-    const audioTrack = streamRef.current?.getAudioTracks()[0];
+    const audioTrack =
+      streamRef.current?.getAudioTracks()[0];
 
     if (!audioTrack) return;
 
@@ -161,47 +182,55 @@ export default function CallScreen({
     setIsMuted(nextMuted);
   };
 
-  /*CAMERA*/
-
+  /*
+   * Turn camera off/on.
+   *
+   * IMPORTANT:
+   * We do NOT stop the track.
+   * We only disable/enable it.
+   */
   const handleCameraToggle = () => {
-    const videoTrack = streamRef.current?.getVideoTracks()[0];
+  const videoTrack = streamRef.current?.getVideoTracks()[0];
 
-    if (!videoTrack) return;
+  if (!videoTrack) return;
 
-    const nextCameraState = !isCameraOn;
+  videoTrack.enabled = !videoTrack.enabled;
 
-    videoTrack.enabled = nextCameraState;
+  setIsCameraOn(videoTrack.enabled);
+};
 
-    setIsCameraOn(nextCameraState);
-  };
-
-  /* SWITCH MAIN / SMALL*/
-
+  /*
+   * Switch between your camera and the contact.
+   */
   const handleSwitch = () => {
     setIsSelfMain((prev) => !prev);
   };
 
-  /* AVAILABLE PARTICIPANTS
-    Anyone already inside the call is removed.*/
-
+  /*
+   * Only show contacts that aren't already
+   * participating in the call.
+   */
   const availableParticipants = useMemo(() => {
     return contacts.filter((candidate) => {
       if (!candidate?.id) return false;
 
       return !participants.some(
-        (participant) => participant?.id === candidate.id,
+        (participant) =>
+          participant?.id === candidate.id
       );
     });
   }, [contacts, participants]);
 
-  /* ADD PARTICIPANT */
-
+  /*
+   * Add participant.
+   */
   const handleAddParticipant = (candidate) => {
     if (!candidate?.id) return;
 
     setParticipants((prev) => {
       const alreadyExists = prev.some(
-        (participant) => participant?.id === candidate.id,
+        (participant) =>
+          participant?.id === candidate.id
       );
 
       if (alreadyExists) {
@@ -214,16 +243,16 @@ export default function CallScreen({
     setIsParticipantModalOpen(false);
   };
 
-  /* END CALL */
-
+  /*
+   * End call.
+   */
   const handleEndCall = () => {
     clearInterval(timerRef.current);
-    clearTimeout(connectTimerRef.current);
 
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => {
-        track.stop();
-      });
+      streamRef.current
+        .getTracks()
+        .forEach((track) => track.stop());
 
       streamRef.current = null;
     }
@@ -231,146 +260,146 @@ export default function CallScreen({
     onEnd?.({
       type,
       durationSeconds: duration,
-
-      /* Only true when the real connection says
-        that the call was connected.*/
-
       answered: connected,
-
       participants,
     });
   };
 
-  /* DISPLAY CONTACT*/
-
-  const mainContact = participants[0] || contact;
-
-  /* REMOTE PLACEHOLDER*/
-
-  const RemoteVideo = ({ small = false }) => (
-    <div
-      className={`call-screen__remote ${
-        small ? "call-screen__remote--small" : "call-screen__remote--main"
-      }`}
-    >
-      <Avatar
-        name={mainContact?.name || "Contact"}
-        size={small ? "lg" : "xl"}
-      />
-
-      {!small && (
-        <>
-          <h2>{mainContact?.name || "Contact"}</h2>
-
-          <p>
-            {connected
-              ? "Connected"
-              : type === "video"
-                ? "Video call"
-                : "Voice call"}
-          </p>
-        </>
-      )}
-    </div>
-  );
-
-  /* SELF VIDEO*/
-
-  const SelfVideo = ({ small = false }) => (
-    <button
-      type="button"
-      className={`call-screen__self ${
-        small ? "call-screen__self--small" : "call-screen__self--main"
-      }`}
-      onClick={handleSwitch}
-      aria-label={
-        small
-          ? "Make your video the main view"
-          : "Make your video the small view"
-      }
-    >
-      {isCameraOn ? (
-        <video
-          ref={!small ? mainVideoRef : null}
-          className="call-screen__camera"
-          autoPlay
-          playsInline
-          muted
-        />
-      ) : (
-        <div className="call-screen__camera-off">
-          <Avatar name="You" size={small ? "lg" : "xl"} />
-
-          <span>Camera off</span>
-        </div>
-      )}
-    </button>
-  );
-
-  /*VIDEO LAYOUT*/
-
-  const videoContent = isSelfMain ? (
-    <>
-      <SelfVideo />
-
-      <button
-        type="button"
-        className="call-screen__remote-button call-screen__remote-button--small"
-        onClick={handleSwitch}
-        aria-label={`Make ${mainContact?.name || "contact"} the main view`}
-      >
-        <RemoteVideo small />
-      </button>
-    </>
-  ) : (
-    <>
-      <button
-        type="button"
-        className="call-screen__remote-button call-screen__remote-button--main"
-        onClick={handleSwitch}
-        aria-label={`Make ${mainContact?.name || "contact"} the small view`}
-      >
-        <RemoteVideo />
-      </button>
-
-      <SelfVideo small />
-    </>
-  );
-
-  /*
-   *CALL UI*/
-
   const callUI = (
     <div className={`call-screen call-screen--${type}`}>
       {type === "video" ? (
-        <div className="call-screen__video-stage">{videoContent}</div>
+        <div className="call-screen__video-stage">
+
+          {/* =========================
+              CONTACT MAIN
+          ========================= */}
+
+          {!isSelfMain && (
+            <button
+              type="button"
+              className="call-screen__remote-button call-screen__remote-button--main"
+              onClick={handleSwitch}
+              aria-label={`Make ${mainContact?.name || "contact"} the small view`}
+            >
+              <div className="call-screen__remote call-screen__remote--main">
+                <Avatar
+                  name={mainContact?.name || "Contact"}
+                  size="xl"
+                />
+
+                <h2>
+                  {mainContact?.name || "Contact"}
+                </h2>
+
+                <p>
+                  {connected
+                    ? "Connected"
+                    : type === "video"
+                    }
+                </p>
+              </div>
+            </button>
+          )}
+
+          {/* =========================
+              SELF VIDEO
+          ========================= */}
+
+          <button
+            type="button"
+            className={`call-screen__self ${
+              isSelfMain
+                ? "call-screen__self--main"
+                : "call-screen__self--small"
+            }`}
+            onClick={handleSwitch}
+            aria-label={
+              isSelfMain
+                ? "Make your video the small view"
+                : "Make your video the main view"
+            }
+          >
+            {/* Keep video mounted at all times */}
+            <video
+              ref={attachVideo}
+              className="call-screen__camera"
+              autoPlay
+              playsInline
+              muted
+            />
+
+            {!isCameraOn && (
+  <div className="call-screen__camera-off">
+    <Avatar name="You" size="xl" />
+  </div>
+)}
+          </button>
+
+          {/* =========================
+              CONTACT SMALL
+          ========================= */}
+
+          {isSelfMain && (
+            <button
+              type="button"
+              className="call-screen__remote-button call-screen__remote-button--small"
+              onClick={handleSwitch}
+              aria-label={`Make ${mainContact?.name || "contact"} the main view`}
+            >
+              <div className="call-screen__remote call-screen__remote--small">
+                <Avatar
+                  name={mainContact?.name || "Contact"}
+                  size="lg"
+                />
+              </div>
+            </button>
+          )}
+        </div>
       ) : (
         <div className="call-screen__voice">
-          <Avatar name={mainContact?.name || "Contact"} size="xl" />
+          <Avatar
+            name={mainContact?.name || "Contact"}
+            size="xl"
+          />
         </div>
       )}
 
-      {/* CALL INFORMATION */}
+      {/* =========================
+          CALL INFORMATION
+      ========================= */}
 
       <div className="call-screen__info">
         <h2>
           {mainContact?.name || "Contact"}
 
-          {participants.length > 1 && ` + ${participants.length - 1}`}
+          {participants.length > 1 &&
+            ` + ${participants.length - 1}`}
         </h2>
 
         <p>{status}</p>
 
-        {connected && <span>{formatDuration(duration)}</span>}
+        {connected && (
+          <span>
+            {formatDuration(duration)}
+          </span>
+        )}
       </div>
 
-      {/* PARTICIPANT LIST */}
+      {/* =========================
+          PARTICIPANTS
+      ========================= */}
 
       {participants.length > 1 && (
         <div className="call-screen__participants">
           {participants.map((participant) => (
-            <div key={participant.id} className="call-screen__participant">
-              <Avatar name={participant.name} size="sm" />
+            <div
+              key={participant.id}
+              className="call-screen__participant"
+            >
+              <Avatar
+                name={participant.name}
+                size="sm"
+              />
 
               <span>{participant.name}</span>
             </div>
@@ -378,13 +407,19 @@ export default function CallScreen({
         </div>
       )}
 
-      {/* CONTROLS */}
+      {/* =========================
+          CONTROLS
+      ========================= */}
 
       <div className="call-screen__controls">
         <button
           type="button"
           onClick={handleMute}
-          aria-label={isMuted ? "Unmute microphone" : "Mute microphone"}
+          aria-label={
+            isMuted
+              ? "Unmute microphone"
+              : "Mute microphone"
+          }
         >
           {isMuted ? "Unmute" : "Mute"}
         </button>
@@ -393,15 +428,23 @@ export default function CallScreen({
           <button
             type="button"
             onClick={handleCameraToggle}
-            aria-label={isCameraOn ? "Turn camera off" : "Turn camera on"}
+            aria-label={
+              isCameraOn
+                ? "Turn camera off"
+                : "Turn camera on"
+            }
           >
-            {isCameraOn ? "Camera off" : "Camera on"}
+            {isCameraOn
+              ? "Camera off"
+              : "Camera on"}
           </button>
         )}
 
         <button
           type="button"
-          onClick={() => setIsParticipantModalOpen(true)}
+          onClick={() =>
+            setIsParticipantModalOpen(true)
+          }
           aria-label="Add participant"
         >
           Add
@@ -417,38 +460,59 @@ export default function CallScreen({
         </button>
       </div>
 
-      {/* ADD PARTICIPANT MODAL */}
+      {/* =========================
+          ADD PARTICIPANT MODAL
+      ========================= */}
 
       <Modal
         isOpen={isParticipantModalOpen}
-        onClose={() => setIsParticipantModalOpen(false)}
+        onClose={() =>
+          setIsParticipantModalOpen(false)
+        }
         title="Add participant"
       >
         {availableParticipants.length === 0 ? (
           <div className="call-screen__no-contacts">
-            <p>There are no other contacts available to add.</p>
+            <p>
+              There are no other contacts available
+              to add.
+            </p>
           </div>
         ) : (
           <div className="call-screen__contact-list">
-            {availableParticipants.map((candidate) => (
-              <button
-                type="button"
-                key={candidate.id}
-                className="call-screen__contact"
-                onClick={() => handleAddParticipant(candidate)}
-              >
-                <Avatar name={candidate.name} size="md" />
+            {availableParticipants.map(
+              (candidate) => (
+                <button
+                  type="button"
+                  key={candidate.id}
+                  className="call-screen__contact"
+                  onClick={() =>
+                    handleAddParticipant(candidate)
+                  }
+                >
+                  <Avatar
+                    name={candidate.name}
+                    size="md"
+                  />
 
-                <span>{candidate.name}</span>
+                  <span>
+                    {candidate.name}
+                  </span>
 
-                <span className="call-screen__add-label">Add</span>
-              </button>
-            ))}
+                  <span className="call-screen__add-label">
+                    Add
+                  </span>
+                </button>
+              )
+            )}
           </div>
         )}
       </Modal>
     </div>
   );
 
-  return createPortal(callUI, document.body);
+  return createPortal(
+    callUI,
+    document.body
+  );
 }
