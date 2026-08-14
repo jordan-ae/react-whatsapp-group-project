@@ -15,6 +15,12 @@ export function AppProvider({ children }) {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [loggedCalls, setLoggedCalls] = useState([]);
+  const [readChatIds, setReadChatIds] = useState(() => new Set());
+
+  const markChatRead = useCallback((id) => {
+    if (!id) return;
+    setReadChatIds((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  }, []);
 
   useEffect(() => {
     mockFetch("/me").then(setCurrentUser);
@@ -87,6 +93,8 @@ export function AppProvider({ children }) {
     setSearchQuery,
     loggedCalls,
     logCall,
+    readChatIds,
+    markChatRead,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
