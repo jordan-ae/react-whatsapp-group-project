@@ -292,10 +292,7 @@ export default function CallScreen({
                 </h2>
 
                 <p>
-                  {connected
-                    ? "Connected"
-                    : type === "video"
-                    }
+                  {connected ? "Connected" : "Video call"}
                 </p>
               </div>
             </button>
