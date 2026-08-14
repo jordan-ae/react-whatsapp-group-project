@@ -1,28 +1,38 @@
 import { useMemo } from 'react';
 import { useApi } from './useApi';
+import { useApp } from '../contexts/AppContext';
 
 export function useCalls() {
   const { data: calls, loading, error, refetch } = useApi('/calls');
+  const { loggedCalls } = useApp();
 
   const groupedCalls = useMemo(() => {
-    if (!calls) return [];
+    // Calls placed in-app (logged to context) sit alongside the ones the
+    // mock API returns, so a call you just made shows up in the history.
+    const all = [...loggedCalls, ...(calls ?? [])];
+    if (all.length === 0) return [];
 
     const grouped = {};
-    calls.forEach((call) => {
+    all.forEach((call) => {
       if (!grouped[call.userId]) {
         grouped[call.userId] = [];
       }
       grouped[call.userId].push(call);
     });
 
-    return Object.entries(grouped).map(([userId, userCalls]) => ({
-      userId,
-      name: userCalls[0].name,
-      avatar: userCalls[0].avatar,
-      calls: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
-      latestCall: userCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0],
-    }));
-  }, [calls]);
+    return Object.entries(grouped).map(([userId, userCalls]) => {
+      const byNewest = [...userCalls].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+      return {
+        userId,
+        name: byNewest[0].name,
+        avatar: byNewest[0].avatar,
+        calls: byNewest,
+        latestCall: byNewest[0],
+      };
+    });
+  }, [calls, loggedCalls]);
 
   const sortedCalls = useMemo(() => {
     return [...groupedCalls].sort(

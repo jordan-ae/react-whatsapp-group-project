@@ -7,9 +7,11 @@ import EmptyState from "../components/common/EmptyState";
 import { formatTime, formatDuration } from "../utils/formatDate";
 import { CALL_DIRECTIONS } from "../utils/constants";
 import CallScreen from "../components/calls/CallScreen";
+import { useApp } from "../contexts/AppContext";
 import "./CallsPage.css";
 
 export default function CallsPage() {
+  const { logCall } = useApp();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [callLink, setCallLink] = useState("");
@@ -57,6 +59,12 @@ export default function CallsPage() {
   const handleStartCall = (user, type) => {
     setSelectedCall({ user, type });
     setIsPickerOpen(false);
+    logCall({
+      userId: user.id,
+      name: user.name,
+      type: type,
+      duration: 0,
+    });
   };
 
   const handleEndCall = () => {

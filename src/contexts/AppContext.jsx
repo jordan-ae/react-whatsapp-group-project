@@ -14,15 +14,10 @@ export function AppProvider({ children }) {
   const [activeTab, setActiveTab] = useState("chats");
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [readChatIds, setReadChatIds] = useState(() => new Set());
+  const [loggedCalls, setLoggedCalls] = useState([]);
 
   useEffect(() => {
     mockFetch("/me").then(setCurrentUser);
-  }, []);
-
-  const markChatRead = useCallback((id) => {
-    if (!id) return;
-    setReadChatIds((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
   }, []);
 
   const updateAbout = async (newAbout) => {
@@ -61,6 +56,23 @@ export function AppProvider({ children }) {
     }
   };
 
+  const logCall = useCallback(({ userId, name, type, duration = 0 }) => {
+    setLoggedCalls((prev) => [
+      {
+        id: `call_${Date.now()}`,
+        userId,
+        name,
+        avatar: null,
+        type,
+        direction: 'outgoing',
+        duration,
+        timestamp: new Date().toISOString(),
+        answered: duration > 0,
+      },
+      ...prev,
+    ]);
+  }, []);
+
   const value = {
     currentUser,
     setCurrentUser,
@@ -73,9 +85,8 @@ export function AppProvider({ children }) {
     setSelectedChatId,
     searchQuery,
     setSearchQuery,
-    readChatIds,
-    setReadChatIds,
-    markChatRead,
+    loggedCalls,
+    logCall,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
