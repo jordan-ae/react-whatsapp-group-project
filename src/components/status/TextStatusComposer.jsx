@@ -11,12 +11,13 @@ export default function TextStatusComposer({ onClose, onStatusCreated }) {
 
   const handleStatusPost = async () => {
 
-    if(!statusText.trim) return;
+    if (!statusText.trim()) return;
 
     try {
 
       setIsSubmitting(true)
       
+      console.log('posting status', { text: statusText, backgroundColor })
 
       const newStatus = await mockFetch('/status', {
         method: 'POST',
@@ -100,7 +101,7 @@ export default function TextStatusComposer({ onClose, onStatusCreated }) {
         <button
           type="button"
           className={`status-composer__send-button ${statusText.trim() ? 'active'  : '' }`}
-          onClick={handleStatusPost}
+          onClick={() => handleStatusPost()}
           disabled={isSubmitting}
           aria-label="Send status update"
         >

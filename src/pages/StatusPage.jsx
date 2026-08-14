@@ -3,9 +3,18 @@ import { Pencil } from "lucide-react";
 import "./StatusPage.css";
 import Modal from "../components/common/Modal";
 import TextStatusComposer from "../components/status/TextStatusComposer";
+import { useStatusContext } from "../contexts/StatusContext";
+import { useApp } from "../contexts/AppContext";
 
 export default function StatusPage() {
   const [showModal, setShowModal] = useState(false);
+  const { addMyStatus } = useStatusContext();
+  const { currentUser } = useApp();
+
+  const handleStatusCreated = (newStatus) => {
+    addMyStatus(newStatus, currentUser);
+    setShowModal(false);
+  };
 
   return (
     <div className="status-page">
@@ -38,6 +47,7 @@ export default function StatusPage() {
       >
         <TextStatusComposer
           onClose={() => setShowModal(false)}
+          onStatusCreated={handleStatusCreated}
         />
       </Modal>
     </div>
