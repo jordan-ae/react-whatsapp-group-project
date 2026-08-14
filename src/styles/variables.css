@@ -2,6 +2,7 @@
   --color-primary: #00a884;
   --color-primary-dark: #008069;
   --color-primary-light: #e7fcee;
+  --chat-bg-image: url(../../public/images/chat-bg-light.png);
 
   --color-bg: #efeae2;
   --color-bg-dark: #e8e4dc;
@@ -60,6 +61,7 @@
   --z-header: 20;
   --z-modal: 100;
   --z-toast: 200;
+  --z-status: 300;
 
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
@@ -70,7 +72,8 @@
 [data-theme="dark"] {
   --color-primary: #00a884;
   --color-primary-dark: #008069;
-  --color-primary-light:#05291f;
+  --color-primary-light: #05291f;
+  --chat-bg-image: url(../../public/images/chat-bg-dark.png);
 
   --color-bg: #0b141a;
   --color-bg-dark: #0a1014;
@@ -102,5 +105,3 @@
 
   --bd-main: #111b21;
 }
-
-

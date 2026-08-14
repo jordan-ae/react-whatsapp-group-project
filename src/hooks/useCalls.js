@@ -7,36 +7,38 @@ export function useCalls() {
   const { loggedCalls } = useApp();
 
   const groupedCalls = useMemo(() => {
+    // Calls placed in-app (logged to context) sit alongside the ones the
+    // mock API returns, so a call you just made shows up in the history.
     const all = [...loggedCalls, ...(calls ?? [])];
     if (all.length === 0) return [];
 
-    const sortedAll = [...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-    const result = [];
-    let currentGroup = null;
-
-    sortedAll.forEach((call) => {
-      if (
-        currentGroup &&
-        currentGroup.userId === call.userId &&
-        currentGroup.latestCall.type === call.type &&
-        currentGroup.latestCall.direction === call.direction
-      ) {
-        currentGroup.calls.push(call);
-      } else {
-        currentGroup = {
-          userId: call.userId,
-          name: call.name,
-          avatar: call.avatar,
-          calls: [call],
-          latestCall: call,
-        };
-        result.push(currentGroup);
+    const grouped = {};
+    all.forEach((call) => {
+      if (!grouped[call.userId]) {
+        grouped[call.userId] = [];
       }
+      grouped[call.userId].push(call);
     });
 
-    return result;
+    return Object.entries(grouped).map(([userId, userCalls]) => {
+      const byNewest = [...userCalls].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+      return {
+        userId,
+        name: byNewest[0].name,
+        avatar: byNewest[0].avatar,
+        calls: byNewest,
+        latestCall: byNewest[0],
+      };
+    });
   }, [calls, loggedCalls]);
 
-  return { calls: groupedCalls, loading, error, refetch };
+  const sortedCalls = useMemo(() => {
+    return [...groupedCalls].sort(
+      (a, b) => new Date(b.latestCall.timestamp) - new Date(a.latestCall.timestamp)
+    );
+  }, [groupedCalls]);
+
+  return { calls: sortedCalls, loading, error, refetch };
 }
