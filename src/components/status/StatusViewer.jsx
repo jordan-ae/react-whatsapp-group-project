@@ -209,11 +209,8 @@ export default function StatusViewer({ status, onClose }) {
             >
               <EllipsisVertical size={20} />
             </button>
-
           </div>
-
         </div>
-
         <div className="status-viewer__content">
 
           {currentItem.type === STATUS_TYPES.TEXT && (
@@ -262,12 +259,9 @@ export default function StatusViewer({ status, onClose }) {
 
                 </div>
               )}
-
             </div>
           )}
-
         </div>
-
         <button
           type="button"
           className="status-viewer__navigation status-viewer__navigation--previous"
