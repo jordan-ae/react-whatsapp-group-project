@@ -1,138 +1,442 @@
 .status-viewer {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
+  inset: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  z-index: 0000;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #111;
+  overflow: hidden;
+  z-index: var(--z-status);
 }
 
-.status-viewer h2 {
+.status-viewer__background {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #111;
+  filter: blur(24px);
+  transform: scale(1.08);
+  z-index: 0;
+}
+
+.status-viewer__background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+}
+
+.status-viewer__background-text {
+  width: 100%;
+  height: 100%;
+}
+
+.status-viewer__background-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  z-index: 1;
+}
+
+.status-viewer__back {
+  position: absolute;
+  top: 56px;
+  left: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
   color: white;
-  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.status-viewer__back:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
 }
 
 .status-viewer__close {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 55px;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+
+.status-viewer__close:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
+}
+
+.status-viewer__card {
+  position: relative;
+  width: min(493px, 48vw);
+  height: min(878px, 92vh);
+  background: #111;
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.55);
+  z-index: 5;
+}
+
+.status-viewer__progress {
+  position: absolute;
+  top: 16px;
+  left: 34px;
+  right: 34px;
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+}
+
+.status-viewer__progress-segment {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.status-viewer__progress-fill {
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  border-radius: inherit;
+}
+
+.status-viewer__progress-fill.is-active {
+  background: white;
+  transform: scaleX(0);
+  animation-name: statusProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+
+.status-viewer__progress-fill.is-complete {
+  background: white;
+  transform: scaleX(1);
+}
+
+.status-viewer__progress-fill.is-upcoming {
+  background: transparent;
+  transform: scaleX(0);
+}
+
+@keyframes statusProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.status-viewer__header {
+  position: absolute;
+  top: 30px;
+  left: 34px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.status-viewer__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-viewer__user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-viewer__name {
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.status-viewer__time {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+}
+
+.status-viewer__actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-viewer__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
   background: transparent;
   color: white;
-  font-size: 30px;
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.status-viewer__action:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(1.06);
+}
+
+.status-viewer__content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status-viewer__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  max-width: 500px;
+  height: 100%;
+  padding: 100px 45px 140px;
+  box-sizing: border-box;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: center;
+  word-break: break-word;
+}
+
+.status-viewer__text span {
+  max-width: 90%;
+}
+
+.status-viewer__image-wrapper {
+  position: relative;
+  width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 24px;
-  text-align: center;
-  border-radius: 12px;
-  padding: 20px;
+  justify-content: center;
+  overflow: hidden;
+  background: #111;
 }
 
 .status-viewer__image {
-  max-height: 70vh;
-  object-fit: contain;
-  width: 80vw;
-  max-width: 500px;
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.status-viewer__image-text{
-  color: #ffff;
-  margin-top: 12px;
-  font-size: 20px;
-}
-
-.status-viewer__image-wrapper p {
+.status-viewer__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 74px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  padding: 14px 25px 18px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.65)
+  );
   color: white;
-  margin-top: 16px;
   text-align: center;
-
+  z-index: 4;
 }
 
-.previous,
-.next {
+.status-viewer__caption h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.status-viewer__caption p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.status-viewer__navigation {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: 45px;
-  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.28);
   color: white;
-  font-size: 24px;
   cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  z-index: 10;
 }
 
-.previous {
-  left: 20px;
+.status-viewer__navigation--previous {
+  left: 14px;
 }
 
-.next {
-  right: 20px;
+.status-viewer__navigation--next {
+  right: 14px;
 }
 
-.previous:hover,
-.next:hover {
-  background: rgba(0, 0, 0, 0.8);
+.status-viewer__navigation:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.55);
+  transform: translateY(-50%) scale(1.05);
 }
 
-.status-progress-bar-container {
+.status-viewer__navigation:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.status-viewer__reply {
   position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 15px;
   display: flex;
-  top: 15px;
-  right: 15px;
-  left: 15px;
-  z-index: 100;
-  gap: 4px;
-
-
+  align-items: center;
+  gap: 7px;
+  z-index: 10;
 }
 
-.status-progress-bar {
-  height: 4px;
+.status-viewer__reply-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.status-viewer__reply-icon:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(1.05);
+}
+
+.status-viewer__reply-input {
   flex: 1;
-  background-color: rgba(255,255,255, 0.35);
-  border-radius: 3px;
-  overflow: hidden;
+  min-width: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 7px;
+  background: rgba(25, 25, 25, 0.78);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  backdrop-filter: blur(10px);
 }
 
-.status-progress-bar__fill {
-  height: 100%;
-  background-color: rgb(255, 255, 255);
-  width: 0%;
+.status-viewer__send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.status-progress-bar.active .status-progress-bar__fill {
-  animation: fillProgress var(--fill-ms) linear forwards;
+
+.status-viewer__send:hover {
+  background: rgba(255, 255, 255, 0.14);
+
+  transform: scale(1.08);
 }
 
-.status-progress-bar.complete .status-progress-bar__fill {
-  width: 100%;
-}
+@media (max-width: 700px) {
+  .status-viewer__card {
+    width: 100vw;
+    height: 100vh;
 
-@keyframes fillProgress {
-  from {
-    width: 0%;
+    border-radius: 0;
   }
-  to {
-    width: 100%;
+
+  .status-viewer__back {
+    top: 20px;
+    left: 12px;
+  }
+
+  .status-viewer__close {
+    top: 20px;
+    right: 12px;
+  }
+
+  .status-viewer__progress {
+    top: 10px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .status-viewer__header {
+    top: 30px;
+    left: 20px;
+    right: 12px;
+  }
+
+  .status-viewer__navigation--previous {
+    left: 5px;
+  }
+
+  .status-viewer__navigation--next {
+    right: 5px;
   }
 }
