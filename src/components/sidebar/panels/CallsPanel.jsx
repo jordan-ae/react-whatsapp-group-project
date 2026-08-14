@@ -76,22 +76,25 @@ export default function CallsPanel() {
 
       <div className="calls-panel__log-list">
         {filteredGroups.map((group) => {
-          const isExpanded = expandedContactId === group.userId;
-          const nestedListId = `nested-list-${group.userId}`;
+          const uniqueGroupId = group.latestCall.id;
+          const isExpanded = expandedContactId === uniqueGroupId;
+          const nestedListId = `nested-list-${uniqueGroupId}`;
 
           const displayCall = activeTab === 'missed'
             ? (group.calls?.find((call) => call.direction === CALL_DIRECTIONS.MISSED) || group.latestCall)
             : group.latestCall;
 
+          const callCount = group.calls?.length || 1;
+
           return (
-            <div key={group.userId} className="calls-panel__log-group">
+            <div key={uniqueGroupId} className="calls-panel__log-group">
               <div 
                 className={`calls-panel__item ${isExpanded ? 'calls-panel__item--expanded' : ''}`}
-                onClick={() => setExpandedContactId(isExpanded ? null : group.userId)}
+                onClick={() => setExpandedContactId(isExpanded ? null : uniqueGroupId)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    setExpandedContactId(isExpanded ? null : group.userId);
+                    setExpandedContactId(isExpanded ? null : uniqueGroupId);
                   }
                 }}
                 role="button"
@@ -101,15 +104,20 @@ export default function CallsPanel() {
                 style={{ cursor: 'pointer' }}
               >
                 <Avatar name={group.name} size="md" />
-                
+
                 <div className="calls-panel__item-content">
                   <div className="calls-panel__item-top">
-                    <span className="calls-panel__item-name">{group.name}</span>
+                    <span className="calls-panel__item-name">
+                      {group.name}
+                      {group.calls?.length > 1 && (
+                        <span className="calls-panel__item-count">{group.calls.length}</span>
+                      )}
+                    </span>
                     <span className="calls-panel__item-time">
                       {formatTime(displayCall.timestamp)}
                     </span>
                   </div>
-                  
+
                   <div className="calls-panel__item-bottom">
                     <div className="calls-panel__item-meta">
                       {(() => {

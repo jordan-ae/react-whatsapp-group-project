@@ -5,124 +5,122 @@
   background-color: var(--color-white);
 }
 
-.status-page__header {
-  display: flex;
-  align-items: center;
-  padding: 16px 20px 8px;
-}
-
-.status-page__title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.status-page__my-status {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.status-page__my-status:hover {
-  background-color: var(--color-sidebar-item-hover);
-}
-
-.status-page__my-avatar {
-  position: relative;
-  flex-shrink: 0;
-}
-
-.status-page__add-btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-primary);
+.status-page__main {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--color-white);
-  cursor: pointer;
-  padding: 0;
+  min-height: calc(100vh - 70px);
+  padding: 40px;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(37, 211, 102, 0.08),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(18, 140, 254, 0.08),
+      transparent 35%
+    ),
+    var(--background-primary);
 }
 
-.status-page__my-content {
-  flex: 1;
-}
-
-.status-page__my-name {
-  display: block;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.status-page__my-time {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.status-page__section {
-  margin-top: 16px;
-}
-
-.status-page__section-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  padding: 8px 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-page__list {
+.status-page__welcome {
   display: flex;
   flex-direction: column;
-}
-
-.status-page__loading {
-  padding: 32px;
+  align-items: center;
+  width: min(420px, 100%);
+  padding: 48px 32px;
   text-align: center;
-  color: var(--color-text-muted);
 }
 
-.status-page__empty-text {
-  padding: 16px 20px;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-}
-
-.status-page__item {
+.status-page__welcome-icon {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 20px;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 24px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #25d366,
+    #128c7e
+  );
+  color: white;
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  box-shadow:
+    0 12px 30px rgba(37, 211, 102, 0.2);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
 
-.status-page__item:hover {
-  background-color: var(--color-sidebar-item-hover);
+.status-page__welcome-icon:hover {
+  transform: translateY(-5px) scale(1.06);
+  box-shadow:
+    0 18px 35px rgba(37, 211, 102, 0.3);
+  filter: brightness(1.08);
 }
 
-.status-page__item-content {
-  flex: 1;
-  min-width: 0;
+.status-page__welcome-icon:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
-.status-page__item-name {
-  display: block;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+.status-page__welcome-icon svg {
+  transition: transform 0.25s ease;
 }
 
-.status-page__item-time {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+.status-page__welcome-icon:hover svg {
+  transform: rotate(-8deg);
+}
+
+.status-page__welcome-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.status-page__welcome-text {
+  max-width: 340px;
+  margin: 10px 0 28px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.status-page__text-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 24px;
+  background: #25d366;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 6px 18px rgba(37, 211, 102, 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.status-page__text-btn:hover {
+  background: #20bd5a;
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 24px rgba(37, 211, 102, 0.28);
+}
+
+.status-page__text-btn:active {
+  transform: translateY(0);
 }

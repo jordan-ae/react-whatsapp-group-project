@@ -14,15 +14,16 @@ export function AppProvider({ children }) {
   const [activeTab, setActiveTab] = useState("chats");
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loggedCalls, setLoggedCalls] = useState([]);
   const [readChatIds, setReadChatIds] = useState(() => new Set());
-
-  useEffect(() => {
-    mockFetch("/me").then(setCurrentUser);
-  }, []);
 
   const markChatRead = useCallback((id) => {
     if (!id) return;
     setReadChatIds((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  }, []);
+
+  useEffect(() => {
+    mockFetch("/me").then(setCurrentUser);
   }, []);
 
   const updateAbout = async (newAbout) => {
@@ -34,6 +35,18 @@ export function AppProvider({ children }) {
       setCurrentUser((prev) => ({ ...prev, about: newAbout }));
     } catch (err) {
       console.error("updateAbout failed:", err);
+    }
+  };
+
+  const updateName = async (newName) => {
+    try {
+      await mockFetch(`/users/${currentUser.id}/profile`, {
+        method: "PUT",
+        body: JSON.stringify({ name: newName }),
+      });
+      setCurrentUser((prev) => ({ ...prev, name: newName }));
+    } catch (err) {
+      console.error("updateName failed:", err);
     }
   };
 
@@ -49,9 +62,27 @@ export function AppProvider({ children }) {
     }
   };
 
+  const logCall = useCallback(({ userId, name, type, duration = 0 }) => {
+    setLoggedCalls((prev) => [
+      {
+        id: `call_${Date.now()}`,
+        userId,
+        name,
+        avatar: null,
+        type,
+        direction: 'outgoing',
+        duration,
+        timestamp: new Date().toISOString(),
+        answered: duration > 0,
+      },
+      ...prev,
+    ]);
+  }, []);
+
   const value = {
     currentUser,
     setCurrentUser,
+    updateName,
     updateAbout,
     updateAvatar,
     activeTab,
@@ -60,8 +91,9 @@ export function AppProvider({ children }) {
     setSelectedChatId,
     searchQuery,
     setSearchQuery,
+    loggedCalls,
+    logCall,
     readChatIds,
-    setReadChatIds,
     markChatRead,
   };
 

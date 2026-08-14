@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useApi } from "../hooks/useApi";
 import Modal from "../components/common/Modal";
+import { useCalls } from "../hooks/useCalls";
 import Avatar from "../components/common/Avatar";
+import EmptyState from "../components/common/EmptyState";
+import { formatTime, formatDuration } from "../utils/formatDate";
+import { CALL_DIRECTIONS } from "../utils/constants";
 import CallScreen from "../components/calls/CallScreen";
+import { useApp } from "../contexts/AppContext";
 import "./CallsPage.css";
 
 export default function CallsPage() {
+  const { logCall } = useApp();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [callLink, setCallLink] = useState("");
-
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [selectedCall, setSelectedCall] = useState(null);
-
-  const { data: users, loading: usersLoading } = useApi("/users");
-  const safeUsers = Array.isArray(users) ? users : [];
 
   const generateFallbackId = () => {
     return Math.random().toString(36).substring(2, 10);
@@ -25,7 +25,6 @@ export default function CallsPage() {
       typeof crypto !== "undefined" && crypto.randomUUID
         ? crypto.randomUUID().slice(0, 8)
         : generateFallbackId();
-
     setCallLink(`https://call.whatsapp-clone.dev/${randomId}`);
     setIsCreateModalOpen(true);
   };
@@ -39,15 +38,23 @@ export default function CallsPage() {
     try {
       await navigator.clipboard.writeText(callLink);
       setCopied(true);
-
       setTimeout(() => {
         setCopied(false);
       }, 2000);
     } catch (err) {
-      console.error("Clipboard copy failed:", err);
+      console.error("Clipboard action blocked or failed:", err);
       setCopied(false);
     }
   };
+
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [selectedCall, setSelectedCall] = useState(null);
+
+  const { data: users, loading: usersLoading } = useApi("/users");
+  const safeUsers = Array.isArray(users) ? users : [];
+
+  const { data: calls, loading } = useCalls();
+  const safeCalls = Array.isArray(calls) ? calls : [];
 
   const handleStartCall = (user, type) => {
     setSelectedCall({
@@ -56,6 +63,12 @@ export default function CallsPage() {
     });
 
     setIsPickerOpen(false);
+    logCall({
+      userId: user.id,
+      name: user.name,
+      type: type,
+      duration: 0,
+    });
   };
 
   const handleEndCall = (summary) => {
@@ -68,8 +81,6 @@ export default function CallsPage() {
       <div className="calls-page__header">
         <h2 className="calls-page__title">Calls</h2>
       </div>
-
-      {/* Show CallScreen when a call is active */}
       {selectedCall ? (
         <CallScreen
           contact={selectedCall.user}
@@ -96,7 +107,6 @@ export default function CallsPage() {
               </svg>
               Create call link
             </button>
-
             <button
               className="calls-page__new-call"
               type="button"
@@ -114,8 +124,126 @@ export default function CallsPage() {
               New call
             </button>
           </div>
-
-          {/* Create call link modal */}
+          <div className="calls-page__list">
+            {loading ? (
+              <div className="calls-page__loading">Loading...</div>
+            ) : safeCalls.length === 0 ? (
+              <EmptyState
+                icon={
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="48"
+                    height="48"
+                    fill="currentColor"
+                  >
+                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                  </svg>
+                }
+                title="No calls yet"
+                subtitle="Your call history will appear here"
+              />
+            ) : (
+              safeCalls.map((group) => (
+                <div key={group.userId} className="calls-page__item">
+                  <Avatar name={group.name} size="md" />
+                  <div className="calls-page__item-content">
+                    <div className="calls-page__item-top">
+                      <span className="calls-page__item-name">
+                        {" "}
+                        {group.name}{" "}
+                      </span>
+                      <span className="calls-page__item-time">
+                        {" "}
+                        {formatTime(group.latestCall.timestamp)}{" "}
+                      </span>
+                    </div>
+                    <div className="calls-page__item-bottom">
+                      <div className="calls-page__item-type">
+                        {group.latestCall.direction ===
+                          CALL_DIRECTIONS.INCOMING && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                          >
+                            <path d="M19 15l-6-6-4 4-4-4" />
+                          </svg>
+                        )}
+                        {group.latestCall.direction ===
+                          CALL_DIRECTIONS.OUTGOING && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                          >
+                            <path d="M5 9l6 6 4-4 4 4" />
+                          </svg>
+                        )}
+                        {group.latestCall.direction ===
+                          CALL_DIRECTIONS.MISSED && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="calls-page__missed"
+                          >
+                            <path d="M19 15l-6-6-4 4-4-4" />
+                          </svg>
+                        )}
+                        <span
+                          className={
+                            group.latestCall.direction ===
+                            CALL_DIRECTIONS.MISSED
+                              ? "calls-page__missed-text"
+                              : ""
+                          }
+                        >
+                          {" "}
+                          {group.latestCall.type === "video"
+                            ? "Video call"
+                            : "Voice call"}{" "}
+                        </span>
+                      </div>
+                      {group.latestCall.answered &&
+                        group.latestCall.duration > 0 && (
+                          <span className="calls-page__duration">
+                            {" "}
+                            {formatDuration(group.latestCall.duration)}{" "}
+                          </span>
+                        )}
+                    </div>
+                  </div>
+                  <button
+                    className="calls-page__call-btn"
+                    title="Call"
+                    type="button"
+                    onClick={() =>
+                      handleStartCall(
+                        {
+                          id: group.userId,
+                          name: group.name,
+                          avatar: group.avatar,
+                        },
+                        group.latestCall.type === "video" ? "video" : "voice"
+                      )
+                    }
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                    >
+                      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                    </svg>
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
           <Modal
             isOpen={isCreateModalOpen}
             onClose={handleCloseModal}
@@ -123,10 +251,8 @@ export default function CallsPage() {
           >
             <div className="create-link-modal-content">
               <p>Share a link to invite people to this WhatsApp call.</p>
-
               <div className="create-link-modal__link-box">
                 <span className="create-link-modal__link-text">{callLink}</span>
-
                 <button
                   className="create-link-modal__copy-btn"
                   onClick={handleCopyLink}
@@ -136,8 +262,6 @@ export default function CallsPage() {
               </div>
             </div>
           </Modal>
-
-          {/* Contact picker */}
           <Modal
             isOpen={isPickerOpen}
             onClose={() => setIsPickerOpen(false)}
@@ -151,10 +275,8 @@ export default function CallsPage() {
                   <div key={user.id} className="calls-page__contact">
                     <div className="calls-page__contact-info">
                       <Avatar name={user.name} size="md" />
-
                       <span>{user.name}</span>
                     </div>
-
                     <div className="calls-page__contact-actions">
                       <button
                         type="button"
@@ -163,7 +285,6 @@ export default function CallsPage() {
                       >
                         Voice
                       </button>
-
                       <button
                         type="button"
                         className="calls-page__contact-btn calls-page__contact-btn--video"
