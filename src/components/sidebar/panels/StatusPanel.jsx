@@ -13,6 +13,8 @@
 //   3. Add a StatusPanel.css next to this file for any status-specific styles.
 import { useState } from "react";
 import { useStatus } from "../../../hooks/useStatus";
+import { useStatusContext } from "../../../contexts/StatusContext";
+import { useApp } from "../../../contexts/AppContext";
 import Avatar from "../../common/Avatar";
 import { formatStatusTime } from "../../../utils/formatDate";
 import StatusViewer from "../../status/StatusViewer";
@@ -21,14 +23,18 @@ import TextStatusComposer from "../../status/TextStatusComposer";
 import "./StatusPanel.css";
 
 export default function StatusPanel() {
-  const {
-    myStatus,
-    recentStatus,
-    viewedStatus,
-    loading,
-  } = useStatus();
+  // Other people's statuses come from the API; your own comes from
+  // StatusContext, which is what the composer writes to and persists.
+  const { recentStatus, viewedStatus, loading } = useStatus();
+  const { myStatus, addMyStatus } = useStatusContext();
+  const { currentUser } = useApp();
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const handleStatusCreated = (newStatus) => {
+    addMyStatus(newStatus, currentUser);
+    setShowModal(false);
+  };
   const hasRecentStatus = recentStatus && recentStatus.length > 0;
   const hasViewedStatus = viewedStatus && viewedStatus.length > 0;
 
@@ -187,6 +193,7 @@ export default function StatusPanel() {
       >
         <TextStatusComposer
           onClose={() => setShowModal(false)}
+          onStatusCreated={handleStatusCreated}
         />
       </Modal>
     </>
